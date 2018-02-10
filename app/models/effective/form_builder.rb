@@ -19,6 +19,10 @@ module Effective
       Effective::FormInputs::EmailField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def submit(name, options = {})
+      Effective::FormInputs::Submit.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
     def text_field(name, options = {})
       Effective::FormInputs::TextField.new(name, options, builder: self).to_html { super(name, options) }
     end

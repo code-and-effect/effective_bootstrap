@@ -77,8 +77,8 @@ module Effective
         options[:input][:class] = [options[:input][:class], (has_error?(name) ? 'is-invalid' : 'is-valid')].compact.join(' ')
       end
 
-      if is_required?
-        options[:input][:required] = true
+      if is_required?(name)
+        options[:input].reverse_merge!(required: 'required')
       end
 
       capture(&block)
@@ -108,14 +108,13 @@ module Effective
       name ? object.errors[name].present? : object.errors.present?
     end
 
-    def is_required?(obj, attribute)
-      return false unless obj and attribute
+    def is_required?(name)
+      return false unless object && name
 
-      target = (obj.class == Class) ? obj : obj.class
+      target = (object.class == Class) ? object : object.class
+      return false unless target.respond_to?(:validators_on)
 
-      validators = Array((target.validators_on(attribute).map(&:class) if target.respond_to?(:validators_on)))
-
-      validators.include?(ActiveModel::Validations::PresenceValidator)
+      target.validators_on(name).any? { |v| v.kind_of?(ActiveRecord::Validations::PresenceValidator) }
     end
 
     private
@@ -170,6 +169,8 @@ module Effective
         raise 'unexpected object'
       end
     end
+
+
 
   end
 end
