@@ -18,6 +18,8 @@ module Effective
       case layout
       when :horizontal
         { class: 'form-group row' }
+      when :inline
+        false
       else
         { class: 'form-group' }
       end
@@ -27,6 +29,8 @@ module Effective
       case layout
       when :horizontal
         { class: 'col-sm-2 col-form-label'}
+      when :inline
+        { class: 'sr-only' }
       else
         { }
       end
@@ -55,18 +59,23 @@ module Effective
     protected
 
     def form_group(&block)
-      content_tag(:div, options[:wrapper]) do
-        label = build_label
-        input = build_input(&block)
-        hint = build_hint
-        feedback = build_feedback
+      case layout
+      when :inline
+        build_content(&block)
+      when :horizontal
+        content_tag(:div, options[:wrapper]) do
+          build_label + content_tag(:div, (build_input(&block) + build_hint + build_feedback), class: 'col-sm-10')
+        end
+      else # Vertical
+        content_tag(:div, options[:wrapper]) { build_content(&block) }
+      end.html_safe
+    end
 
-        case layout
-        when :horizontal
-          label + content_tag(:div, (input + hint + feedback), class: 'col-sm-10')
-        else
-          (label_position == :before ? (label + input) : (input + label)) + hint + feedback
-        end.html_safe
+    def build_content(&block)
+      if label_position == :before
+        build_label + build_input(&block) + build_hint + build_feedback
+      else
+        build_input(&block) + build_label + build_hint + build_feedback
       end
     end
 
@@ -105,6 +114,7 @@ module Effective
 
     def build_feedback
       return '' unless has_error?
+      return '' if layout == :inline
 
       if has_error?(name)
         content_tag(:div, object.errors[name].to_sentence, class: 'invalid-feedback')
@@ -177,8 +187,6 @@ module Effective
         raise 'unexpected object'
       end
     end
-
-
 
   end
 end

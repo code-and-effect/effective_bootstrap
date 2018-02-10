@@ -1,6 +1,10 @@
 module EffectiveFormBuilderHelper
   def effective_form_with(**options, &block)
 
+    if options[:layout] == :inline
+      options[:class] = [options[:class], 'form-inline'].compact.join(' ')
+    end
+
     without_error_proc do
       form_with(**options.merge(builder: Effective::FormBuilder), &block)
     end

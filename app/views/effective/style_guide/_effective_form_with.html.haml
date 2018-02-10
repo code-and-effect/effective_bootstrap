@@ -1,31 +1,33 @@
 - model = Effective::StyleGuide.new
 
-%h3 Vertical
+%h4 Vertical
 = effective_form_with model: model, url: '/' do |f|
   = render 'fields', f: f
+%hr
 
-%h3 Horizontal
-
+%h4 Horizontal
 = effective_form_with model: model, layout: :horizontal, url: '/' do |f|
   = render 'fields', f: f
-
-%h3 Inline
-
-= effective_form_with model: model, layout: :inline , url: '/' do |f|
-  = render 'fields', f: f
-
 %hr
+
+%h4 Inline
+= effective_form_with model: model, layout: :inline , url: '/' do |f|
+  = render 'inline_fields', f: f
+%hr
+
 - model.valid?
 
-%h3 Vertical
+%h4 Invalid Vertical
 = effective_form_with model: model, url: '/' do |f|
   = render 'fields', f: f
+%hr
 
-%h3 Horizontal
+%h4 Invalid Horizontal
 = effective_form_with model: model, layout: :horizontal, url: '/' do |f|
   = render 'fields', f: f
+%hr
 
-%h3 Inline
-
+%h4 Invalid Inline
 = effective_form_with model: model, layout: :inline , url: '/' do |f|
-  = render 'fields', f: f
+  = render 'inline_fields', f: f
+

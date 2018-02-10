@@ -2,33 +2,43 @@ module Effective
   module FormInputs
     class CheckBox < Effective::FormInput
 
+      def form_group(&block)
+        case layout
+        when :inline
+          content_tag(:div, build_content(&block), options[:wrapper])
+        when :horizontal
+          content_tag(:div, options[:wrapper]) do
+            content_tag(:div, '', class: 'col-sm-2') +
+            content_tag(:div, '', class: 'col-sm-10') do
+              content_tag(:div, build_content(&block), class: 'form-check')
+            end
+          end
+        else # Vertical
+          super
+        end
+      end
+
       def label_position
         :after
       end
 
       def label_options
-        if options[:inline]
-          { class: 'form-check-label' }
-        else
-          { class: 'custom-control-label' }
-        end
+        { class: 'form-check-label' }
       end
 
       def input_html_options
-        if options[:inline]
-          { class: 'form-check-input' }
-        else
-          { class: 'custom-control-input' }
-        end
+        { class: 'form-check-input' }
       end
 
       def wrapper_options
-        if options[:inline]
-          { class: 'form-check-inline form-check' }
+        case layout
+        when :inline
+          { class: 'form-check mb-2 mr-sm-2' }
+        when :horizontal
+          { class: 'form-group row' }
         else
-          { class: 'custom-control custom-checkbox' }
+          options[:inline] ? { class: 'form-check form-check-inline' } : { class: 'form-check' }
         end
-
       end
 
     end
