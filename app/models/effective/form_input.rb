@@ -64,8 +64,8 @@ module Effective
 
       text = (options[:label].delete(:text) || object.class.human_attribute_name(name)).html_safe
 
-      if options[:id]
-        options[:label][:for] = options[:id]
+      if options[:input][:id]
+        options[:label][:for] = options[:input][:id]
       end
 
       label(name, text, options[:label])
@@ -80,7 +80,7 @@ module Effective
     end
 
     def build_hint
-      return unless options[:hint] && options[:hint][:text]
+      return '' unless options[:hint] && options[:hint][:text]
 
       text = options[:hint].delete(:text).html_safe
 
@@ -118,28 +118,28 @@ module Effective
       input_js = options.delete(:input_js) || {} # Hash
 
       # Every other option goes to input
-      input = html_options || options
+      @options = input = (html_options || options)
+
+      # Merge all the default objects, and intialize everything
+      layout ||= :vertical
+      wrapper = merge_defaults!(wrapper, wrapper_options)
+      label = merge_defaults!(label, label_options)
+      hint = merge_defaults!(hint, hint_options)
 
       # Merge input_html: {}, defaults, and add all class: keys together
       input.merge!(input_html.except(:class))
       merge_defaults!(input, input_html_options.except(:class))
       input[:class] = [input[:class], input_html[:class], input_html_options[:class]].compact.join(' ')
 
-      # Merge input_js: {} and defaults
-      if merge_defaults!(input_js, input_js_options).present?
-        input['data-input-js-options'] = JSON.generate(input_js)
-      end
+      merge_defaults!(input_js, input_js_options)
+      input['data-input-js-options'] = JSON.generate(input_js) if input_js.present?
 
-      {
-        layout: (layout || :vertical),
-        wrapper: merge_defaults!(wrapper, wrapper_options),
-        label: merge_defaults!(label, label_options),
-        hint: (hint ? merge_defaults!(hint, hint_options) : false),
-        input: input
-      }
+      { layout: layout, wrapper: wrapper, label: label, hint: hint, input: input }
     end
 
     def merge_defaults!(obj, defaults)
+      defaults ||= {}
+
       case obj
       when false
         false
@@ -149,6 +149,8 @@ module Effective
         defaults.merge(text: obj)
       when Hash
         obj.reverse_merge!(defaults)
+      else
+        raise 'unexpected object'
       end
     end
 

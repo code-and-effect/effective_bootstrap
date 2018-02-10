@@ -7,19 +7,32 @@ module Effective
       end
 
       def label_options
-        { class: 'custom-control-label' }
+        if options[:inline]
+          { class: 'form-check-label' }
+        else
+          { class: 'custom-control-label' }
+        end
       end
 
       def input_html_options
-        { class: 'custom-control-input' }
+        if options[:inline]
+          { class: 'form-check-input' }
+        else
+          { class: 'custom-control-input' }
+        end
       end
 
       def input_js_options
-        { doit: 'good' }
+        {}
       end
 
       def wrapper_options
-        { class: 'custom-control custom-checkbox' }
+        if options[:inline]
+          { class: 'form-check-inline form-check' }
+        else
+          { class: 'custom-control custom-checkbox' }
+        end
+
       end
 
     end
