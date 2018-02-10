@@ -53,26 +53,30 @@ module Effective
     end
 
     def to_html(&block)
-      form_group(&block)
+      wrap(&block)
     end
 
     protected
 
-    def form_group(&block)
+    def wrap(&block)
       case layout
       when :inline
         build_content(&block)
       when :horizontal
-        content_tag(:div, options[:wrapper]) do
-          build_label + content_tag(:div, (build_input(&block) + build_hint + build_feedback), class: 'col-sm-10')
-        end
+        build_wrapper { build_label + content_tag(:div, build_content(&block), class: 'col-sm-10') }
       else # Vertical
-        content_tag(:div, options[:wrapper]) { build_content(&block) }
+        build_wrapper { build_content(&block) }
       end.html_safe
     end
 
+    def build_wrapper(&block)
+      content_tag(:div, yield, options[:wrapper])
+    end
+
     def build_content(&block)
-      if label_position == :before
+      if layout == :horizontal
+        build_input(&block) + build_hint + build_feedback
+      elsif label_position == :before
         build_label + build_input(&block) + build_hint + build_feedback
       else
         build_input(&block) + build_label + build_hint + build_feedback

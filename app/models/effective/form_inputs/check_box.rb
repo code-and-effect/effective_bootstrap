@@ -2,14 +2,14 @@ module Effective
   module FormInputs
     class CheckBox < Effective::FormInput
 
-      def form_group(&block)
+      def wrap(&block)
         case layout
         when :inline
-          content_tag(:div, build_content(&block), options[:wrapper])
+          build_wrapper { build_content(&block) }
         when :horizontal
-          content_tag(:div, options[:wrapper]) do
+          build_wrapper do
             content_tag(:div, '', class: 'col-sm-2') +
-            content_tag(:div, '', class: 'col-sm-10') do
+            content_tag(:div, class: 'col-sm-10') do
               content_tag(:div, build_content(&block), class: 'form-check')
             end
           end
