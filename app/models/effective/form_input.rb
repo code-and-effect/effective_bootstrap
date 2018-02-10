@@ -15,7 +15,7 @@ module Effective
     end
 
     def wrapper_options
-      { class: 'form-group'}
+      { class: 'form-group' }
     end
 
     def label_options
@@ -27,7 +27,7 @@ module Effective
     end
 
     def hint_options
-      { class: 'form-text text-muted' }
+      { tag: :small, class: 'form-text text-muted' }
     end
 
     def input_html_options
@@ -49,11 +49,12 @@ module Effective
         label = build_label
         input = build_input(&block)
         hint = build_hint
+        feedback = build_feedback
 
         if label_position == :before
-          (label + input + hint).html_safe
+          (label + input + hint + feedback).html_safe
         else
-          (input + label + hint).html_safe
+          (input + label + hint + feedback).html_safe
         end
 
       end
@@ -72,8 +73,12 @@ module Effective
     end
 
     def build_input(&block)
-      if has_error?(name)
-        options[:input][:class] = [options[:input][:class], 'is-invalid'].compact.join(' ')
+      if has_error?
+        options[:input][:class] = [options[:input][:class], (has_error?(name) ? 'is-invalid' : 'is-valid')].compact.join(' ')
+      end
+
+      if is_required?
+        options[:input][:required] = true
       end
 
       capture(&block)
@@ -82,13 +87,25 @@ module Effective
     def build_hint
       return '' unless options[:hint] && options[:hint][:text]
 
+      tag = options[:hint].delete(:tag)
       text = options[:hint].delete(:text).html_safe
 
-      content_tag(:small, text, options[:hint])
+      content_tag(tag, text, options[:hint])
     end
 
-    def has_error?(name)
-      object.respond_to?(:errors) && !(name.nil? || object.errors[name].empty?)
+    def build_feedback
+      return '' unless has_error?
+
+      if has_error?(name)
+        content_tag(:div, object.errors[name].to_sentence, class: 'invalid-feedback')
+      else
+        content_tag(:div, 'Looks good!', class: 'valid-feedback')
+      end
+    end
+
+    def has_error?(name = nil)
+      return false unless object.respond_to?(:errors)
+      name ? object.errors[name].present? : object.errors.present?
     end
 
     def is_required?(obj, attribute)

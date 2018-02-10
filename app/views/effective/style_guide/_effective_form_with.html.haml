@@ -1,0 +1,10 @@
+- model = Effective::StyleGuide.new
+
+= effective_form_with model: model, url: '/' do |f|
+  = render 'fields', f: f
+
+%hr
+- model.valid?
+
+= effective_form_with model: model, url: '/' do |f|
+  = render 'fields', f: f

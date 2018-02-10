@@ -22,10 +22,6 @@ module Effective
         end
       end
 
-      def input_js_options
-        {}
-      end
-
       def wrapper_options
         if options[:inline]
           { class: 'form-check-inline form-check' }
