@@ -2,7 +2,7 @@ module Effective
   class FormInput
     attr_accessor :name, :options
 
-    delegate :object, :label, to: :@builder
+    delegate :object, :layout, :label, to: :@builder
     delegate :capture, :content_tag, :link_to, to: :@template
 
     # So this takes in the options for an entire form group.
@@ -15,11 +15,21 @@ module Effective
     end
 
     def wrapper_options
-      { class: 'form-group' }
+      case layout
+      when :horizontal
+        { class: 'form-group row' }
+      else
+        { class: 'form-group' }
+      end
     end
 
     def label_options
-      { }  # Before or after input in the markup
+      case layout
+      when :horizontal
+        { class: 'col-sm-2 col-form-label'}
+      else
+        { }
+      end
     end
 
     def label_position
@@ -51,12 +61,12 @@ module Effective
         hint = build_hint
         feedback = build_feedback
 
-        if label_position == :before
-          (label + input + hint + feedback).html_safe
+        case layout
+        when :horizontal
+          label + content_tag(:div, (input + hint + feedback), class: 'col-sm-10')
         else
-          (input + label + hint + feedback).html_safe
-        end
-
+          (label_position == :before ? (label + input) : (input + label)) + hint + feedback
+        end.html_safe
       end
     end
 
@@ -126,7 +136,6 @@ module Effective
       html_options.symbolize_keys! if html_options
 
       # effective_bootstrap specific options
-      layout = options.delete(:layout) # Symbol
       wrapper = options.delete(:wrapper) # Hash
       label = options.delete(:label) # String or Hash
       hint = options.delete(:hint) # String or Hash
@@ -137,7 +146,6 @@ module Effective
       @options = input = (html_options || options)
 
       # Merge all the default objects, and intialize everything
-      layout ||= :vertical
       wrapper = merge_defaults!(wrapper, wrapper_options)
       label = merge_defaults!(label, label_options)
       hint = merge_defaults!(hint, hint_options)
@@ -150,7 +158,7 @@ module Effective
       merge_defaults!(input_js, input_js_options)
       input['data-input-js-options'] = JSON.generate(input_js) if input_js.present?
 
-      { layout: layout, wrapper: wrapper, label: label, hint: hint, input: input }
+      { wrapper: wrapper, label: label, hint: hint, input: input }
     end
 
     def merge_defaults!(obj, defaults)

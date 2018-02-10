@@ -7,7 +7,7 @@ module Effective
 
     def initialize(object_name, object, template, options)
       @template = template
-      @layout = options.delete(:layout)
+      @layout = (options.delete(:layout) || :vertical).to_sym
       super
     end
 
