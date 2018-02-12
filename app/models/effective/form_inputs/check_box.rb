@@ -2,46 +2,59 @@ module Effective
   module FormInputs
     class CheckBox < Effective::FormInput
 
-      def wrap(&block)
+      def to_html(&block)
         case layout
-        when :inline
-          build_wrapper { build_content(&block) }
         when :horizontal
           build_wrapper do
             content_tag(:div, '', class: 'col-sm-2') + content_tag(:div, class: 'col-sm-10') do
-              content_tag(:div, build_item_content(&block), class: 'form-check')
+              build_content(&block)
             end
           end
-        else # Vertical
-          super
+        else
+          build_content(&block)
         end
       end
 
-      def build_item_content(&block)
-        (build_input(&block) + build_label + build_hint + build_feedback).html_safe
+      def build_content(&block)
+        build_check_box_wrap {
+          build_input(&block) + build_label + build_hint + build_feedback
+        }
       end
 
-      def label_position
-        :after
+      def build_check_box_wrap(&block)
+        if custom?
+          content_tag(:div, yield, class: 'form-group custom-control custom-checkbox' + (inline? ? ' custom-control-inline' : ''))
+        else
+          content_tag(:div, yield, class: 'form-check' + (inline? ? ' form-check-inline' : ''))
+        end
       end
 
       def label_options
-        { class: 'form-check-label' }
+        if custom?
+          { class: 'custom-control-label' }
+        else
+          { class: 'form-check-label' }
+        end
       end
 
       def input_html_options
-        { class: 'form-check-input' }
+        if custom?
+          { class: 'custom-control-input' }
+        else
+          { class: 'form-check-input' }
+        end
       end
 
-      def wrapper_options
-        case layout
-        when :inline
-          { class: 'form-check mb-2 mr-sm-2' }
-        when :horizontal
-          { class: 'form-group row' }
-        else
-          options[:inline] ? { class: 'form-check form-check-inline' } : { class: 'form-check' }
-        end
+      private
+
+      def inline?
+        return @inline unless @inline.nil?
+        @inline = (options[:input].delete(:inline) == true)
+      end
+
+      def custom? # default true
+        return @custom unless @custom.nil?
+        @custom = (options.delete(:custom) != false)
       end
 
     end

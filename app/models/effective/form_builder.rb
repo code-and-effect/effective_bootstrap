@@ -19,12 +19,20 @@ module Effective
       Effective::FormInputs::EmailField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def form_group(name = nil, options = {}, &block)
+      Effective::FormInputs::FormGroup.new(name, options, builder: self).to_html(&block)
+    end
+
     def select(name, choices = nil, options = {}, html_options = {}, &block)
       Effective::FormInputs::Select.new(name, options, html_options: html_options, builder: self).to_html { super(name, choices, options, html_options, &block) }
     end
 
     def submit(name = 'Submit', options = {})
       Effective::FormInputs::Submit.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
+    def text_area(name, options = {})
+      Effective::FormInputs::TextArea.new(name, options, builder: self).to_html { super(name, options) }
     end
 
     def text_field(name, options = {})

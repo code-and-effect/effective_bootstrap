@@ -4,7 +4,7 @@ module Effective
 
     BLANK = ''.html_safe
 
-    delegate :object, :layout, :label, to: :@builder
+    delegate :object, :label, to: :@builder
     delegate :capture, :content_tag, :link_to, to: :@template
 
     # So this takes in the options for an entire form group.
@@ -113,12 +113,12 @@ module Effective
       end
 
       if is_required?(name)
-        options[:input].reverse_merge!(required: 'required')
+        options[:input][:required] = 'required'
       end
 
       if options[:input][:readonly]
         options[:input][:readonly] = 'readonly'
-        options[:input][:class] = options[:input][:class].gsub('form-control', 'form-control-plaintext')
+        options[:input][:class] = options[:input][:class].to_s.gsub('form-control', 'form-control-plaintext')
       end
 
       if options[:hint] && options[:hint][:text] && options[:hint][:id]
@@ -139,7 +139,7 @@ module Effective
 
     def build_feedback
       return BLANK if options[:feedback] == false
-      return BLANK unless has_error? # Errors anywhere
+      return BLANK unless has_error? # Are there errors anywhere in this model?
 
       if has_error?(name) && options[:feedback][:invalid]
         content_tag(:div, object.errors[name].to_sentence, options[:feedback][:invalid])
@@ -171,6 +171,7 @@ module Effective
       html_options.symbolize_keys! if html_options
 
       # effective_bootstrap specific options
+      layout = options.delete(:layout) # Symbol
       wrapper = options.delete(:wrapper) # Hash
       feedback = options.delete(:feedback) # Hash
       label = options.delete(:label) # String or Hash
@@ -195,7 +196,7 @@ module Effective
       merge_defaults!(input_js, input_js_options)
       input['data-input-js-options'] = JSON.generate(input_js) if input_js.present?
 
-      { wrapper: wrapper, label: label, hint: hint, input: input, feedback: feedback }
+      { layout: layout, wrapper: wrapper, label: label, hint: hint, input: input, feedback: feedback }
     end
 
     def merge_defaults!(obj, defaults)
@@ -213,6 +214,10 @@ module Effective
       else
         raise 'unexpected object'
       end
+    end
+
+    def layout
+      options[:layout] || @builder.layout
     end
 
     # https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/base.rb#L120
