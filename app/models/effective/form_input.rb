@@ -49,7 +49,12 @@ module Effective
     end
 
     def hint_options
-      { tag: :small, class: 'form-text text-muted', id: "#{tag_id}_hint" }
+      case layout
+      when :inline
+        { tag: :small, class: 'text-muted', id: "#{tag_id}_hint" }
+      else
+        { tag: :small, class: 'form-text text-muted', id: "#{tag_id}_hint" }
+      end
     end
 
     def wrapper_options
