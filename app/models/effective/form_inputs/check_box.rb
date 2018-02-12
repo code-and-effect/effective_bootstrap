@@ -8,14 +8,17 @@ module Effective
           build_wrapper { build_content(&block) }
         when :horizontal
           build_wrapper do
-            content_tag(:div, '', class: 'col-sm-2') +
-            content_tag(:div, class: 'col-sm-10') do
-              content_tag(:div, build_content(&block), class: 'form-check')
+            content_tag(:div, '', class: 'col-sm-2') + content_tag(:div, class: 'col-sm-10') do
+              content_tag(:div, build_item_content(&block), class: 'form-check')
             end
           end
         else # Vertical
           super
         end
+      end
+
+      def build_item_content(&block)
+        (build_input(&block) + build_label + build_hint + build_feedback).html_safe
       end
 
       def label_position

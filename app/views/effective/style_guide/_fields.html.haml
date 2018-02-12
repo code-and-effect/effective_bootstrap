@@ -1,4 +1,13 @@
 = f.text_field :title, hint: 'This is a text field from effective_bootstrap'
 = f.email_field :email, hint: 'This is an email field from effective_bootstrap'
 = f.check_box :archived, hint: 'This is a checkbox from effective_bootstrap'
-= f.submit 'Save and Continue'
+
+- f.object.food = 'eggs'
+- f.object.color = 'orange'
+- f.object.color2 = 'orange'
+
+= f.select :food, EffectiveStyleGuide.foods
+= f.select :color, EffectiveStyleGuide.colors
+= f.select :color2, EffectiveStyleGuide.grouped_colors
+
+= f.submit
