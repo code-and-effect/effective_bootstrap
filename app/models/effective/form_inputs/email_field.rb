@@ -6,6 +6,10 @@ module Effective
         { class: 'form-control', placeholder: 'someone@example.com' }
       end
 
+      def input_group_options
+        { input_group: { class: 'input-group' }, prepend: content_tag(:span, '@', class: 'input-group-text') }
+      end
+
     end
   end
 end

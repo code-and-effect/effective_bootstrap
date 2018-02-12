@@ -23,6 +23,10 @@ module Effective
       Effective::FormInputs::FormGroup.new(name, options, builder: self).to_html(&block)
     end
 
+    def price_field(name, options = {})
+      Effective::FormInputs::PriceField.new(name, options, builder: self).to_html {}
+    end
+
     def select(name, choices = nil, options = {}, html_options = {}, &block)
       Effective::FormInputs::Select.new(name, options, html_options: html_options, builder: self).to_html { super(name, choices, options, html_options, &block) }
     end

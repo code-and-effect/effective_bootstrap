@@ -16,6 +16,10 @@ module Effective
       @options = extract_options!(options, html_options)
     end
 
+    def input_group_options
+      { input_group: { class: 'input-group' }, prepend: false, append: false }
+    end
+
     def input_html_options
       { class: 'form-control' }
     end
@@ -91,13 +95,33 @@ module Effective
     end
 
     def build_content(&block)
+      return build_input_group_content(&block) if input_group?
+
       if layout == :horizontal
-        build_input(&block) + build_hint + build_feedback
+        build_input(&block) + build_feedback + build_hint
       elsif label_position == :before
         build_label + build_input(&block) + build_feedback + build_hint
       else
         build_input(&block) + build_label + build_feedback + build_hint
-      end.html_safe
+      end
+    end
+
+    def build_input_group_content(&block) # S
+      if layout == :horizontal
+        build_input_group { build_input(&block) + build_feedback } + build_hint
+      else
+        build_label + build_input_group { build_input(&block) + build_feedback } + build_hint
+      end
+    end
+
+    def build_input_group(&block) # Includes input and feedback
+      content_tag(:div, '', options[:input_group][:input_group]) do # Twice here, kind of weird.
+        [
+          (content_tag(:div, options[:input_group][:prepend], class: 'input-group-prepend') if options[:input_group][:prepend]),
+          build_input(&block),
+          (content_tag(:div, options[:input_group][:append], class: 'input-group-append') if options[:input_group][:append]),
+        ].compact.join.html_safe
+      end
     end
 
     def build_label
@@ -172,6 +196,14 @@ module Effective
       obj.validators_on(name).any? { |v| v.kind_of?(ActiveRecord::Validations::PresenceValidator) }
     end
 
+    def input_group?
+      (options[:input_group][:append] || options[:input_group][:prepend]).present?
+    end
+
+    def value
+      object.public_send(name) if object.respond_to?(:name)
+    end
+
     private
 
     # Here we split them into { wrapper: {}, label: {}, hint: {}, input: {} }
@@ -183,9 +215,12 @@ module Effective
       # effective_bootstrap specific options
       layout = options.delete(:layout) # Symbol
       wrapper = options.delete(:wrapper) # Hash
+      input_group = { append: options.delete(:append), prepend: options.delete(:prepend), input_group: options.delete(:input_group) }.compact
+
       feedback = options.delete(:feedback) # Hash
       label = options.delete(:label) # String or Hash
       hint = options.delete(:hint) # String or Hash
+
       input_html = options.delete(:input_html) || {} # Hash
       input_js = options.delete(:input_js) || {} # Hash
 
@@ -194,6 +229,7 @@ module Effective
 
       # Merge all the default objects, and intialize everything
       wrapper = merge_defaults!(wrapper, wrapper_options)
+      input_group = merge_defaults!(input_group, input_group_options)
       feedback = merge_defaults!(feedback, feedback_options)
       label = merge_defaults!(label, label_options)
       hint = merge_defaults!(hint, hint_options)
@@ -206,7 +242,7 @@ module Effective
       merge_defaults!(input_js, input_js_options)
       input['data-input-js-options'] = JSON.generate(input_js) if input_js.present?
 
-      { layout: layout, wrapper: wrapper, label: label, hint: hint, input: input, feedback: feedback }
+      { layout: layout, wrapper: wrapper, input_group: input_group, label: label, hint: hint, input: input, feedback: feedback }
     end
 
     def merge_defaults!(obj, defaults)
