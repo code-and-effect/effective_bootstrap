@@ -17,7 +17,7 @@ module Effective
 
       def build_content(&block)
         build_check_box_wrap {
-          build_input(&block) + build_label + build_hint + build_feedback
+          build_input(&block) + build_label + build_feedback + build_hint
         }
       end
 

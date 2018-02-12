@@ -89,9 +89,9 @@ module Effective
       if layout == :horizontal
         build_input(&block) + build_hint + build_feedback
       elsif label_position == :before
-        build_label + build_input(&block) + build_hint + build_feedback
+        build_label + build_input(&block) + build_feedback + build_hint
       else
-        build_input(&block) + build_label + build_hint + build_feedback
+        build_input(&block) + build_label + build_feedback + build_hint
       end.html_safe
     end
 
