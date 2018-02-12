@@ -1,4 +1,4 @@
 = f.text_field :title
 = f.email_field :email
-= f.check_box :archived
+= f.check_box :archived, id: "archived_#{uid}"
 = f.submit 'Save and Continue'

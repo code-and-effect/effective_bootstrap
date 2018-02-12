@@ -5,10 +5,17 @@ module EffectiveFormBuilderHelper
       options[:class] = [options[:class], 'form-inline'].compact.join(' ')
     end
 
+    if options[:model].respond_to?(:errors)
+      options[:class] = [options[:class], 'needs-validation'].compact.join(' ')
+    end
+
+    if options[:model].respond_to?(:errors) && options[:model].errors.present?
+      options[:class] = [options[:class], 'was-validated'].compact.join(' ')
+    end
+
     without_error_proc do
       form_with(**options.merge(builder: Effective::FormBuilder), &block)
     end
-
   end
 
   private

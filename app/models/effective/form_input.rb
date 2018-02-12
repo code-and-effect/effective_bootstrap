@@ -108,9 +108,10 @@ module Effective
     end
 
     def build_input(&block)
-      if has_error? && options[:feedback]
-        options[:input][:class] = [options[:input][:class], (has_error?(name) ? 'is-invalid' : 'is-valid')].compact.join(' ')
-      end
+      # Server side validation
+      # if has_error? && options[:feedback]
+      #   options[:input][:class] = [options[:input][:class], (has_error?(name) ? 'is-invalid' : 'is-valid')].compact.join(' ')
+      # end
 
       if is_required?(name)
         options[:input][:required] = 'required'
@@ -141,11 +142,15 @@ module Effective
       return BLANK if options[:feedback] == false
       return BLANK unless has_error? # Are there errors anywhere in this model?
 
-      if has_error?(name) && options[:feedback][:invalid]
-        content_tag(:div, object.errors[name].to_sentence, options[:feedback][:invalid])
-      elsif options[:feedback][:valid]
-        content_tag(:div, 'Looks good!', options[:feedback][:valid])
-      end
+      content_tag(:div, object.errors[name].to_sentence, options[:feedback][:invalid]) +
+      content_tag(:div, 'Looks good!', options[:feedback][:valid])
+
+      # Server side
+      # if has_error?(name) && options[:feedback][:invalid]
+      #   content_tag(:div, object.errors[name].to_sentence, options[:feedback][:invalid])
+      # elsif options[:feedback][:valid]
+      #   content_tag(:div, 'Looks good!', options[:feedback][:valid])
+      # end
     end
 
     def has_error?(name = nil)
