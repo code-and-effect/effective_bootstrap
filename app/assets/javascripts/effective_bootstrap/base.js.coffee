@@ -8,7 +8,6 @@ this.EffectiveBootstrap ||= new class
       delete options['method_name']
 
       EffectiveBootstrap[method_name].call(this, $element, options)
-
       $element.addClass('initialized')
 
 $ -> EffectiveBootstrap.initialize()

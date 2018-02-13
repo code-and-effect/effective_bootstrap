@@ -8,12 +8,12 @@ module Effective
     delegate :capture, :content_tag, :link_to, to: :@template
 
     # So this takes in the options for an entire form group.
-    def initialize(name, options, builder:, html_options: nil)
+    def initialize(name, options, builder:, choices: nil, html_options: nil)
       @builder = builder
       @template = builder.template
 
       @name = name
-      @options = extract_options!(options, html_options)
+      @options = extract_options!(options, choices: choices, html_options: html_options)
       apply_input_options!
     end
 
@@ -191,9 +191,10 @@ module Effective
 
     # Here we split them into { wrapper: {}, label: {}, hint: {}, input: {} }
     # And make sure to keep any additional options on the input: {}
-    def extract_options!(options, html_options = nil)
+    def extract_options!(options, choices: nil, html_options: nil)
       options.symbolize_keys!
       html_options.symbolize_keys! if html_options
+      options[:collection] ||= choices if choices
 
       # effective_bootstrap specific options
       layout = options.delete(:layout) # Symbol
