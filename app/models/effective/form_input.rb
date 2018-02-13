@@ -8,12 +8,12 @@ module Effective
     delegate :capture, :content_tag, :link_to, to: :@template
 
     # So this takes in the options for an entire form group.
-    def initialize(name, options, builder:, choices: nil, html_options: nil)
+    def initialize(name, options, builder:, html_options: nil)
       @builder = builder
       @template = builder.template
 
       @name = name
-      @options = extract_options!(options, choices: choices, html_options: html_options)
+      @options = extract_options!(options, html_options: html_options)
       apply_input_options!
     end
 
@@ -154,7 +154,9 @@ module Effective
       return BLANK if options[:feedback] == false
       return BLANK unless has_error? # Are there errors anywhere in this model?
 
-      content_tag(:div, object.errors[name].to_sentence, options[:feedback][:invalid]) +
+      invalid = object.errors[name].to_sentence.presence || ("can't be blank" if required?(name)) || 'is invalid'
+
+      content_tag(:div, invalid, options[:feedback][:invalid]) +
       content_tag(:div, 'Looks good!', options[:feedback][:valid])
 
       # Server side
@@ -170,7 +172,7 @@ module Effective
       name ? object.errors[name].present? : object.errors.present?
     end
 
-    def is_required?(name)
+    def required?(name)
       return false unless object && name
 
       obj = (object.class == Class) ? object : object.class
@@ -191,10 +193,9 @@ module Effective
 
     # Here we split them into { wrapper: {}, label: {}, hint: {}, input: {} }
     # And make sure to keep any additional options on the input: {}
-    def extract_options!(options, choices: nil, html_options: nil)
+    def extract_options!(options, html_options: nil)
       options.symbolize_keys!
       html_options.symbolize_keys! if html_options
-      options[:collection] ||= choices if choices
 
       # effective_bootstrap specific options
       layout = options.delete(:layout) # Symbol
@@ -239,7 +240,7 @@ module Effective
       #   options[:input][:class] = [options[:input][:class], (has_error?(name) ? 'is-invalid' : 'is-valid')].compact.join(' ')
       # end
 
-      if is_required?(name)
+      if required?(name)
         options[:input][:required] = 'required'
       end
 

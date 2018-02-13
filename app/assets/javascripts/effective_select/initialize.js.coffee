@@ -40,6 +40,5 @@ $(document).on 'select2:select', 'select', (event) ->
 
   if $el.closest('select').hasClass('tags-input')
     $(this).append($el.detach()).trigger('change')
-
   true
 

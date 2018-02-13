@@ -33,8 +33,9 @@ module Effective
       Effective::FormInputs::PriceField.new(name, options, builder: self).to_html {}
     end
 
-    def select(name, choices = nil, options = {}, html_options = {}, &block)
-      Effective::FormInputs::Select.new(name, options, html_options: html_options, builder: self).to_html { super(name, choices, options, html_options, &block) }
+    def select(name, choices = nil, *args, &block)
+      options = args.extract_options!.merge!(collection: choices)
+      Effective::FormInputs::Select.new(name, options, builder: self).to_html { super(name, options.delete(:collection), {}, options, &block) }
     end
 
     def submit(name = 'Submit', options = {})

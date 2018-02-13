@@ -27,8 +27,8 @@
   outline: 0 none;
 }
 
-.select2-container--focus > .selection > .select2-selection {
-  border: 1px solid #9cd5fe !important;
+.select2-container--focus {
+  .select2-selection { border: 1px solid #9cd5fe; }
 }
 
 // effective_select option "hide_disabled: true"
@@ -40,4 +40,27 @@ form.form-inline .select2-container--bootstrap {
   display: inline-block;
   width: auto;
   max-width: 300px;
+}
+
+// Bootstrap 4 Feedback
+.was-validated .form-control:invalid ~ .select2 {
+  .select2-selection { border: 1px solid #dc3545; }
+}
+
+.was-validated .form-control:valid ~ .select2 {
+  .select2-selection { border: 1px solid #28a745; }
+}
+
+.was-validated .form-control:valid ~ .select2-container--focus {
+  .select2-selection {
+    border: 1px solid #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+  }
+}
+
+.was-validated .form-control:invalid ~ .select2-container--focus {
+  .select2-selection {
+    border: 1px solid #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  }
 }
