@@ -47,7 +47,7 @@ module Effective
 
       private
 
-      def inline?
+      def inline? # default false
         return @inline unless @inline.nil?
         @inline = (options[:input].delete(:inline) == true)
       end
