@@ -23,6 +23,12 @@ module Effective
       Effective::FormInputs::FormGroup.new(name, options, builder: self).to_html(&block)
     end
 
+    def phone_field(name, options = {})
+      Effective::FormInputs::PhoneField.new(name, options, builder: self).to_html { super(name, options) }
+    end
+    alias_method :tel_field, :phone_field
+    alias_method :telephone_field, :phone_field
+
     def price_field(name, options = {})
       Effective::FormInputs::PriceField.new(name, options, builder: self).to_html {}
     end

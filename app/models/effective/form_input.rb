@@ -240,7 +240,11 @@ module Effective
       input[:class] = [input[:class], input_html[:class], input_html_options[:class]].compact.join(' ')
 
       merge_defaults!(input_js, input_js_options)
-      input['data-input-js-options'] = JSON.generate(input_js) if input_js.present?
+
+      if input_js.present?
+        merge_defaults!(input_js, input_js_options_method_name)
+        input['data-input-js-options'] = JSON.generate(input_js)
+      end
 
       { layout: layout, wrapper: wrapper, input_group: input_group, label: label, hint: hint, input: input, feedback: feedback }
     end
@@ -285,6 +289,10 @@ module Effective
 
     def sanitized_method_name
       name.to_s.sub(/\?$/, "")
+    end
+
+    def input_js_options_method_name
+      { method_name: "effective_#{self.class.name.split('::').last.underscore.chomp('_field')}" }
     end
 
   end

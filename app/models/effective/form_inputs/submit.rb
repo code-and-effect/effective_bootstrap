@@ -22,10 +22,6 @@ module Effective
         false
       end
 
-      # def to_html(&block)
-      #   capture(&block)
-      # end
-
     end
   end
 end

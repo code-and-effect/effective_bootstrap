@@ -1,21 +1,23 @@
+- url = effective_style_guide.style_guide_path
+
 %h4 Vertical
-= effective_form_with model: Effective::StyleGuide.new, url: '/' do |f|
+= effective_form_with model: Effective::StyleGuide.new, url: url do |f|
   = render 'fields', f: f, uid: 1
 %hr
-= effective_form_with model: Effective::StyleGuide.new.tap { |s| s.valid? }, url: '/' do |f|
+= effective_form_with model: Effective::StyleGuide.new.tap { |s| s.valid? }, url: url do |f|
   = render 'fields', f: f, uid: 2
 %hr
 
-= effective_form_with model: Effective::StyleGuide.new, url: '/', layout: :horizontal do |f|
+= effective_form_with model: Effective::StyleGuide.new, url: url, layout: :horizontal do |f|
   = render 'fields', f: f, uid: 2
 %hr
-= effective_form_with model: Effective::StyleGuide.new.tap { |s| s.valid? }, url: '/', layout: :horizontal do |f|
+= effective_form_with model: Effective::StyleGuide.new.tap { |s| s.valid? }, url: url, layout: :horizontal do |f|
   = render 'fields', f: f, uid: 3
 %hr
 
 %h4 Inline
-= effective_form_with model: Effective::StyleGuide.new, url: '/', layout: :inline do |f|
+= effective_form_with model: Effective::StyleGuide.new, url: url, layout: :inline do |f|
   = render 'inline_fields', f: f, uid: 4
 %hr
-= effective_form_with model: Effective::StyleGuide.new.tap { |s| s.valid? }, url: '/', layout: :inline do |f|
+= effective_form_with model: Effective::StyleGuide.new.tap { |s| s.valid? }, url: url, layout: :inline do |f|
   = render 'inline_fields', f: f, uid: 5

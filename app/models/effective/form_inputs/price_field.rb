@@ -3,8 +3,8 @@ module Effective
     class PriceField < Effective::FormInput
 
       def build_input(&block)
-        @template.hidden_field_tag(name, price, id: tag_id + '_value_as_integer') +
-        @template.text_field_tag(name, @template.number_to_currency(currency, unit: ''), options[:input].merge(name: nil, id: tag_id))
+        @builder.hidden_field(name, value: price, id: tag_id + '_value_as_integer') +
+        @template.text_field_tag(name, @template.number_to_currency(currency, unit: ''), options[:input].merge(id: tag_id, name: nil))
       end
 
       def input_group_options
@@ -12,7 +12,7 @@ module Effective
       end
 
       def input_html_options
-        { class: 'form-control', maxlength: 14, autocomplete: 'off' }
+        { class: 'form-control effective_price', maxlength: 14, autocomplete: 'off', 'data-include-blank': include_blank? }
       end
 
       private
@@ -29,7 +29,7 @@ module Effective
 
       def include_blank? # default false
         return @include_blank unless @include_blank.nil?
-        @include_blank = (options.delete(:custom) || false)
+        @include_blank = (options.delete(:include_blank) || false)
       end
 
     end
