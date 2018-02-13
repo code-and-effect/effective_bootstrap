@@ -14,6 +14,7 @@ module Effective
 
       @name = name
       @options = extract_options!(options, html_options)
+      apply_input_options!
     end
 
     def input_group_options
@@ -137,24 +138,6 @@ module Effective
     end
 
     def build_input(&block)
-      # Server side validation
-      # if has_error? && options[:feedback]
-      #   options[:input][:class] = [options[:input][:class], (has_error?(name) ? 'is-invalid' : 'is-valid')].compact.join(' ')
-      # end
-
-      if is_required?(name)
-        options[:input][:required] = 'required'
-      end
-
-      if options[:input][:readonly]
-        options[:input][:readonly] = 'readonly'
-        options[:input][:class] = options[:input][:class].to_s.gsub('form-control', 'form-control-plaintext')
-      end
-
-      if options[:hint] && options[:hint][:text] && options[:hint][:id]
-        options[:input].reverse_merge!('aria-describedby': options[:hint][:id])
-      end
-
       capture(&block)
     end
 
@@ -247,6 +230,26 @@ module Effective
       end
 
       { layout: layout, wrapper: wrapper, input_group: input_group, label: label, hint: hint, input: input, feedback: feedback }
+    end
+
+    def apply_input_options!
+      # Server side validation
+      # if has_error? && options[:feedback]
+      #   options[:input][:class] = [options[:input][:class], (has_error?(name) ? 'is-invalid' : 'is-valid')].compact.join(' ')
+      # end
+
+      if is_required?(name)
+        options[:input][:required] = 'required'
+      end
+
+      if options[:input][:readonly]
+        options[:input][:readonly] = 'readonly'
+        options[:input][:class] = options[:input][:class].to_s.gsub('form-control', 'form-control-plaintext')
+      end
+
+      if options[:hint] && options[:hint][:text] && options[:hint][:id]
+        options[:input].reverse_merge!('aria-describedby': options[:hint][:id])
+      end
     end
 
     def merge_defaults!(obj, defaults)
