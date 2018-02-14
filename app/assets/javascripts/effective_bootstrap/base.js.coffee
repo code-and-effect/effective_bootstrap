@@ -10,6 +10,10 @@ this.EffectiveBootstrap ||= new class
       EffectiveBootstrap[method_name].call(this, $element, options)
       $element.addClass('initialized')
 
+  validate: (form) ->
+    form.classList.add('was-validated')
+    return form.checkValidity()
+
 $ -> EffectiveBootstrap.initialize()
 $(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()
 $(document).on 'cocoon:after-insert', -> EffectiveBootstrap.initialize()

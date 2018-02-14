@@ -147,12 +147,13 @@ module Effective
 
     def build_feedback
       return BLANK if options[:feedback] == false
-      return BLANK unless has_error? # Are there errors anywhere in this model?
 
-      invalid = object.errors[name].to_sentence.presence || ("can't be blank" if required?(name)) || 'is invalid'
+      invalid = object.errors[name].to_sentence.presence ||
+      invalid ||= [("can't be blank" if required?(name)), ('must be valid' if validated?(name))].compact.join(' and ')
+      valid = "Look's good!"
 
       content_tag(:div, invalid, options[:feedback][:invalid]) +
-      content_tag(:div, 'Looks good!', options[:feedback][:valid])
+      content_tag(:div, valid, options[:feedback][:valid])
 
       # Server side
       # if has_error?(name) && options[:feedback][:invalid]
@@ -174,6 +175,15 @@ module Effective
       return false unless obj.respond_to?(:validators_on)
 
       obj.validators_on(name).any? { |v| v.kind_of?(ActiveRecord::Validations::PresenceValidator) }
+    end
+
+    def validated?(name)
+      return false unless object && name
+
+      obj = (object.class == Class) ? object : object.class
+      return false unless obj.respond_to?(:validators_on)
+
+      obj.validators_on(name).any? { |v| !v.kind_of?(ActiveRecord::Validations::PresenceValidator) }
     end
 
     def input_group?

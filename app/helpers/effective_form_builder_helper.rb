@@ -14,7 +14,7 @@ module EffectiveFormBuilderHelper
     end
 
     without_error_proc do
-      form_with(**options.merge(builder: Effective::FormBuilder), &block)
+      form_with(**options.merge(builder: Effective::FormBuilder, html: { novalidate: true, onsubmit: 'return EffectiveBootstrap.validate(this);' }), &block)
     end
   end
 
