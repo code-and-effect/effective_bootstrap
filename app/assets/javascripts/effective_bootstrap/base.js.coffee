@@ -11,8 +11,17 @@ this.EffectiveBootstrap ||= new class
       $element.addClass('initialized')
 
   validate: (form) ->
+    valid = form.checkValidity()
     form.classList.add('was-validated')
-    return form.checkValidity()
+
+    $formActions = $(form).find('.form-actions')
+
+    if valid
+      $formActions.removeClass('form-is-invalid').addClass('form-is-valid')
+    else
+      $formActions.removeClass('form-is-valid').addClass('form-is-invalid')
+
+    valid
 
 $ -> EffectiveBootstrap.initialize()
 $(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()

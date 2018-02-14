@@ -148,9 +148,12 @@ module Effective
     def build_feedback
       return BLANK if options[:feedback] == false
 
-      invalid = object.errors[name].to_sentence.presence ||
+      invalid = object.errors[name].to_sentence.presence
+      invalid ||= options[:feedback][:invalid].delete(:text)
       invalid ||= [("can't be blank" if required?(name)), ('must be valid' if validated?(name))].compact.join(' and ')
-      valid = "Look's good!"
+      invalid ||= 'is invalid'
+
+      valid = options[:feedback][:valid].delete(:text) || "Look's good!"
 
       content_tag(:div, invalid, options[:feedback][:invalid]) +
       content_tag(:div, valid, options[:feedback][:valid])
