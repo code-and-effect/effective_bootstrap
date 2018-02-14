@@ -40,10 +40,6 @@ module Effective
       end
     end
 
-    def label_position
-      :before
-    end
-
     def feedback_options
       case layout
       when :inline
@@ -100,18 +96,16 @@ module Effective
 
       if layout == :horizontal
         build_input(&block) + build_feedback + build_hint
-      elsif label_position == :before
-        build_label + build_input(&block) + build_feedback + build_hint
       else
-        build_input(&block) + build_label + build_feedback + build_hint
+        build_label + build_input(&block) + build_feedback + build_hint
       end
     end
 
-    def build_input_group_content(&block) # S
+    def build_input_group_content(&block)
       if layout == :horizontal
-        build_input_group { build_input(&block) + build_feedback } + build_hint
+        build_input_group { build_input(&block) } + build_hint
       else
-        build_label + build_input_group { build_input(&block) + build_feedback } + build_hint
+        build_label + build_input_group { build_input(&block) } + build_hint
       end
     end
 
@@ -120,6 +114,7 @@ module Effective
         [
           (content_tag(:div, options[:input_group][:prepend], class: 'input-group-prepend') if options[:input_group][:prepend]),
           build_input(&block),
+          build_feedback,
           (content_tag(:div, options[:input_group][:append], class: 'input-group-append') if options[:input_group][:append]),
         ].compact.join.html_safe
       end

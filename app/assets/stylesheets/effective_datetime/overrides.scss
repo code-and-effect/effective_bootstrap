@@ -1,0 +1,11 @@
+.bootstrap-datetimepicker-widget {
+  font-weight: normal;
+
+  .disabled { opacity: 0.5; text-decoration: line-through; }
+}
+
+.bootstrap-datetimepicker-widget table td,
+.bootstrap-datetimepicker-widget table th {
+  padding: 4px 3px 4px 3px !important;
+  white-space: normal !important;
+}

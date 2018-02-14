@@ -11,8 +11,18 @@ module Effective
       super
     end
 
+    alias_method :super_text_field, :text_field
+
     def check_box(name, options = {})
       Effective::FormInputs::CheckBox.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
+    def date_field(name, options = {})
+      Effective::FormInputs::DateField.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
+    def datetime_field(name, options = {})
+      Effective::FormInputs::DatetimeField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
     def email_field(name, options = {})
@@ -48,6 +58,10 @@ module Effective
 
     def text_field(name, options = {})
       Effective::FormInputs::TextField.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
+    def time_field(name, options = {})
+      Effective::FormInputs::TimeField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
   end

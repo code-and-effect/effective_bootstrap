@@ -4,8 +4,7 @@ module Effective
 
       def build_input(&block)
         @builder.hidden_field(name, value: price, id: tag_id + '_value_as_integer') +
-        @template.text_field_tag(name, @template.number_to_currency(currency, unit: ''), options[:input].merge(id: tag_id, name: nil)) +
-        build_feedback
+        @template.text_field_tag(name, @template.number_to_currency(currency, unit: ''), options[:input].merge(id: tag_id, name: nil))
       end
 
       def input_group_options
