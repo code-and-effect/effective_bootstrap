@@ -8,7 +8,7 @@ module Effective
       end
 
       def input_group_options
-        { input_group: { class: 'input-group' }, prepend: content_tag(:span, '$', class: 'input-group-text') }
+        { input_group: { class: 'input-group' }, prepend: content_tag(:span, icon('dollar-sign'), class: 'input-group-text') }
       end
 
       def input_html_options

@@ -5,7 +5,7 @@ module Effective
     BLANK = ''.html_safe
 
     delegate :object, :label, to: :@builder
-    delegate :capture, :content_tag, :link_to, to: :@template
+    delegate :capture, :content_tag, :link_to, :icon, to: :@template
 
     # So this takes in the options for an entire form group.
     def initialize(name, options, builder:, html_options: nil)
