@@ -194,7 +194,7 @@ module Effective
     end
 
     def value
-      object.public_send(name) if object.respond_to?(:name)
+      object.public_send(name) if object.respond_to?(name)
     end
 
     private
@@ -254,7 +254,7 @@ module Effective
 
       if options[:input][:readonly]
         options[:input][:readonly] = 'readonly'
-        options[:input][:class] = options[:input][:class].to_s.gsub('form-control', 'form-control-plaintext')
+        options[:input][:class] = options[:input][:class].to_s.sub('form-control', 'form-control-plaintext')
       end
 
       if options[:hint] && options[:hint][:text] && options[:hint][:id]

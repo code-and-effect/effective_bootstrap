@@ -40,16 +40,20 @@ module Effective
     alias_method :telephone_field, :phone_field
 
     def price_field(name, options = {})
-      Effective::FormInputs::PriceField.new(name, options, builder: self).to_html {}
+      Effective::FormInputs::PriceField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
-    def select(name, choices = nil, *args, &block)
+    def select(name, choices = nil, *args)
       options = args.extract_options!.merge!(collection: choices)
-      Effective::FormInputs::Select.new(name, options, builder: self).to_html { super(name, options.delete(:collection), {}, options, &block) }
+      Effective::FormInputs::Select.new(name, options, builder: self).to_html { super(name, options.delete(:collection), {}, options) }
     end
 
     def submit(name = 'Submit', options = {})
       Effective::FormInputs::Submit.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
+    def static_field(name, options = {}, &block)
+      Effective::FormInputs::StaticField.new(name, options, builder: self).to_html(&block)
     end
 
     def text_area(name, options = {})

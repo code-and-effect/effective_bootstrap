@@ -13,6 +13,14 @@
 = f.date_field :date, hint: 'This is a date_field'
 = f.time_field :time, hint: 'This is a time_field'
 
+= f.static_field :static_text, hint: 'This is a static_field'
+
+= f.static_field :static_text, hint: 'This is a static_field built from a block' do
+  %strong This is rich text
+  built from a
+  %em normal haml
+  block
+
 = f.check_box :option1, inline: true, id: "option1_#{uid}"
 = f.check_box :option2, inline: true, id: "option2_#{uid}"
 = f.check_box :option3, inline: true, id: "option3_#{uid}"
