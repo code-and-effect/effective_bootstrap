@@ -114,8 +114,8 @@ module Effective
         [
           (content_tag(:div, options[:input_group][:prepend], class: 'input-group-prepend') if options[:input_group][:prepend]),
           build_input(&block),
-          build_feedback,
           (content_tag(:div, options[:input_group][:append], class: 'input-group-append') if options[:input_group][:append]),
+          build_feedback
         ].compact.join.html_safe
       end
     end

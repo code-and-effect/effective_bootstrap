@@ -68,6 +68,10 @@ module Effective
       Effective::FormInputs::TimeField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def url_field(name, options = {})
+      Effective::FormInputs::UrlField.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
   end
 end
 
