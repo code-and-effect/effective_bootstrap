@@ -13,7 +13,12 @@ $(document).on 'dp.change', (event) ->
   return if $end_date.length == 0
   return if $end_date.hasClass('not-date-linked')
 
-  try $end_date.data('DateTimePicker').minDate(event.date)
+  try
+    $end_date.data('DateTimePicker').minDate(event.date)
+
+  try
+    if $end_date.data('DateTimePicker').date() <= event.date
+      $end_date.data('DateTimePicker').date(moment(event.date.format()).add(1, 'hour'))
 
 # When an input with field named "end_*" is initialized, set it's corresponding "start_*" minDate
 $(document).on 'dp.end_date_initialized', (event) ->

@@ -7,6 +7,9 @@ this.EffectiveBootstrap ||= new class
       method_name = options['method_name']
       delete options['method_name']
 
+      unless EffectiveBootstrap[method_name]
+        return console.error("EffectiveBootstrap #{method_name} has not been implemented")
+
       EffectiveBootstrap[method_name].call(this, $element, options)
       $element.addClass('initialized')
 
