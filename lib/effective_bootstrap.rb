@@ -1,3 +1,4 @@
+require 'inline_svg'
 require 'effective_bootstrap/engine'
 require 'effective_bootstrap/version'
 

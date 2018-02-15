@@ -19,10 +19,9 @@
 
 - f.object.food = 'eggs'
 - f.object.color = 'orange'
-- f.object.color2 = 'orange'
 
 = f.select :food, EffectiveStyleGuide.foods
 = f.select :color, EffectiveStyleGuide.colors, tags: true
-= f.select :color2, EffectiveStyleGuide.grouped_colors
+= f.select :details, EffectiveStyleGuide.grouped_colors
 
 = f.submit

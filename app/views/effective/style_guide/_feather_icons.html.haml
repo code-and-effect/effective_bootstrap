@@ -1,0 +1,8 @@
+.row.text-center
+  - Dir["#{__dir__}/../../../assets/icons/*.svg"].map { |path| path.split('/').last.chomp('.svg') }.each do |name|
+
+    .col-sm-2.my-3
+      = icon(name)
+      %br
+      %small= name
+

@@ -18,4 +18,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'rails', '>= 5.1'
   s.add_dependency 'bootstrap', '~> 4.0.0'
+  s.add_dependency 'inline_svg'
 end
