@@ -1,6 +1,5 @@
 module EffectiveFormBuilderHelper
   def effective_form_with(**options, &block)
-
     options[:class] = [options[:class], 'needs-validation', ('form-inline' if options[:layout] == :inline)].compact.join(' ')
 
     without_error_proc do

@@ -148,7 +148,7 @@ module Effective
     def build_feedback
       return BLANK if options[:feedback] == false
 
-      invalid = object.errors[name].to_sentence.presence
+      invalid = object.errors[name].to_sentence.presence if object.respond_to?(:errors)
       invalid ||= options[:feedback][:invalid].delete(:text)
       invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].compact.join(' and ')
       invalid ||= 'is invalid'
@@ -224,6 +224,7 @@ module Effective
       wrapper = merge_defaults!(wrapper, wrapper_options)
       input_group = merge_defaults!(input_group, input_group_options)
       feedback = merge_defaults!(feedback, feedback_options)
+
       label = merge_defaults!(label, label_options)
       hint = merge_defaults!(hint, hint_options)
 
@@ -297,7 +298,7 @@ module Effective
     end
 
     def sanitized_object_name
-      @builder.object_name.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
+      @builder.object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
     end
 
     def sanitized_method_name
