@@ -42,13 +42,21 @@ form.form-inline .select2-container--bootstrap {
   max-width: 300px;
 }
 
-// Bootstrap 4 Feedback
+// Bootstrap 4 Feedback client side
 .was-validated .form-control:invalid ~ .select2 {
   .select2-selection { border: 1px solid #dc3545; }
 }
 
 .was-validated .form-control:valid ~ .select2 {
   .select2-selection { border: 1px solid #28a745; }
+}
+
+
+.was-validated .form-control:invalid ~ .select2-container--focus {
+  .select2-selection {
+    border: 1px solid #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  }
 }
 
 .was-validated .form-control:valid ~ .select2-container--focus {
@@ -58,9 +66,27 @@ form.form-inline .select2-container--bootstrap {
   }
 }
 
-.was-validated .form-control:invalid ~ .select2-container--focus {
+// Bootstrap 4 Feedback server side
+
+.form-control.is-invalid ~ .select2 {
+  .select2-selection { border: 1px solid #dc3545; }
+}
+
+.form-control.is-valid ~ .select2 {
+  .select2-selection { border: 1px solid #28a745; }
+}
+
+.form-control.is-invalid ~ .select2-container--focus {
   .select2-selection {
     border: 1px solid #dc3545;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
   }
 }
+
+.form-control.is-valid ~ .select2-container--focus {
+  .select2-selection {
+    border: 1px solid #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+  }
+}
+

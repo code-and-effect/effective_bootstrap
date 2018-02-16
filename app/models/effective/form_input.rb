@@ -150,7 +150,7 @@ module Effective
 
       invalid = object.errors[name].to_sentence.presence
       invalid ||= options[:feedback][:invalid].delete(:text)
-      invalid ||= [("can't be blank" if required?(name)), ('must be valid' if validated?(name))].compact.join(' and ')
+      invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].compact.join(' and ')
       invalid ||= 'is invalid'
 
       valid = options[:feedback][:valid].delete(:text) || "Look's good!"
@@ -244,11 +244,11 @@ module Effective
 
     def apply_input_options!
       # Server side validation
-      # if has_error? && options[:feedback]
-      #   options[:input][:class] = [options[:input][:class], (has_error?(name) ? 'is-invalid' : 'is-valid')].compact.join(' ')
-      # end
+      if has_error?(name)
+        options[:input][:class] = [options[:input][:class], 'is-invalid'].compact.join(' ')
+      end
 
-      if required?(name)
+      if required?(name) && (options[:input].delete(:required) != false)
         options[:input][:required] = 'required'
       end
 

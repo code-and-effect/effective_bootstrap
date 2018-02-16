@@ -29,6 +29,11 @@ module Effective
       Effective::FormInputs::EmailField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def error(name = nil, options = {})
+      Effective::FormInputs::ErrorField.new(name, options, builder: self).to_html()
+    end
+    alias_method :errors, :error
+
     def form_group(name = nil, options = {}, &block)
       Effective::FormInputs::FormGroup.new(name, options, builder: self).to_html(&block)
     end
