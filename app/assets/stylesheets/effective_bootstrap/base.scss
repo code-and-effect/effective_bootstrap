@@ -1,7 +1,7 @@
-.form-actions.form-is-invalid {
-  .invalid-feedback { display: block; }
+.was-validated.form-is-valid .form-actions {
+  .valid-feedback { display: block; }
 }
 
-.form-actions.form-is-valid {
-  .valid-feedback { display: block; }
+.was-validated.form-is-invalid  .form-actions {
+  .invalid-feedback { display: block; }
 }

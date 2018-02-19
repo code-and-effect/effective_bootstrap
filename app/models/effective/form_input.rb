@@ -193,6 +193,12 @@ module Effective
       (options[:input_group][:append] || options[:input_group][:prepend]).present?
     end
 
+    # Used for passwords and to not apply server side feedback
+    def reset_feedback?
+      return @reset_feedback unless @reset_feedback.nil?
+      @reset_feedback = options[:feedback].present? && (options[:feedback].delete(:reset) == true)
+    end
+
     def value
       object.public_send(name) if object.respond_to?(name)
     end
@@ -245,8 +251,14 @@ module Effective
 
     def apply_input_options!
       # Server side validation
-      if has_error?(name)
-        options[:input][:class] = [options[:input][:class], 'is-invalid'].compact.join(' ')
+      if has_error?
+        if has_error?(name)
+          options[:input][:class] = [options[:input][:class], 'is-invalid'].compact.join(' ')
+        elsif reset_feedback?
+          # Nothing
+        else
+          options[:input][:class] = [options[:input][:class], 'is-valid'].compact.join(' ')
+        end
       end
 
       if required?(name) && (options[:input].delete(:required) != false)

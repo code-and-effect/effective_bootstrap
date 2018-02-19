@@ -10,6 +10,15 @@ module Effective
         { input_group: { class: 'input-group' }, prepend: content_tag(:span, icon('lock'), class: 'input-group-text') }
       end
 
+      def feedback_options
+        case layout
+        when :inline
+          false
+        else
+          { valid: { class: 'valid-feedback' }, invalid: { class: 'invalid-feedback' }, reset: true }
+        end
+      end
+
     end
   end
 end

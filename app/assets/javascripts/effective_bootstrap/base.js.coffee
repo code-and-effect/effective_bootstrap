@@ -14,15 +14,19 @@ this.EffectiveBootstrap ||= new class
       $element.addClass('initialized')
 
   validate: (form) ->
-    valid = form.checkValidity()
-    form.classList.add('was-validated')
+    $form = $(form)
 
-    $formActions = $(form).find('.form-actions')
+    # Clear any server side validation on individual inputs
+    $form.find('.alert.is-invalid').remove()
+    $form.find('.is-invalid').removeClass('is-invalid')
+    $form.find('.is-valid').removeClass('is-valid')
+
+    valid = form.checkValidity()
 
     if valid
-      $formActions.removeClass('form-is-invalid').addClass('form-is-valid')
+      $form.addClass('was-validated').addClass('form-is-valid').removeClass('form-is-invalid')
     else
-      $formActions.removeClass('form-is-valid').addClass('form-is-invalid')
+      $form.addClass('was-validated').addClass('form-is-invalid').removeClass('form-is-valid')
 
     valid
 
