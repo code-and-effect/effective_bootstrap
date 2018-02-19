@@ -24,7 +24,7 @@ this.EffectiveBootstrap ||= new class
     valid = form.checkValidity()
 
     if valid
-      $form.addClass('was-validated').addClass('form-is-valid').removeClass('form-is-invalid')
+      $form.addClass('form-is-valid').removeClass('form-is-invalid')
     else
       $form.addClass('was-validated').addClass('form-is-invalid').removeClass('form-is-valid')
 
