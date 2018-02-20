@@ -20,10 +20,11 @@ formatWithGlyphicon = (data, container) ->
   $select.data('select2').$container.addClass(options['containerClass']) if options['containerClass']
   $select.data('select2').$dropdown.addClass(options['dropdownClass']) if options['dropdownClass']
 
-$(document).on 'turbolinks:before-render', ->
+$(document).on 'turbolinks:before-cache', ->
   $('select.effective_select.initialized').each (i, element) ->
     $input = $(element)
     $input.select2('destroy') if $input.data('select2')
+    $input.removeClass('initialized')
 
 # If we're working with a polymorphic select, split out the ID and assign the hidden _type and _id fields
 $(document).on 'change', "select.effective_select.polymorphic", (event) ->
