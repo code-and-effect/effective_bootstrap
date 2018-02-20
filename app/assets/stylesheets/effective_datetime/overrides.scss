@@ -1,11 +1,28 @@
 .bootstrap-datetimepicker-widget {
   font-weight: normal;
-
   .disabled { opacity: 0.5; text-decoration: line-through; }
+
+  .glyphicon { background-repeat: no-repeat; }
+
+  .glyphicon-chevron-up { background-image: asset-data-url('arrow-up-circle.svg'); }
+  .glyphicon-chevron-down { background-image: asset-data-url('arrow-down-circle.svg'); }
+  .glyphicon-chevron-left { background-image: asset-data-url('arrow-left-circle.svg'); }
+  .glyphicon-chevron-right { background-image: asset-data-url('arrow-right-circle.svg'); }
+  .glyphicon-time { background-image: asset-data-url('clock.svg'); }
+  .glyphicon-calendar { background-image: asset-data-url('calendar.svg'); }
+  .glyphicon-screenshot { background-image: asset-data-url('crosshair.svg'); }
+  .glyphicon-trash { background-image: asset-data-url('trash.svg'); }
+  .glyphicon-close { background-image: asset-data-url('x.svg'); }
 }
 
 .bootstrap-datetimepicker-widget table td,
 .bootstrap-datetimepicker-widget table th {
   padding: 4px 3px 4px 3px !important;
   white-space: normal !important;
+  border-top: none;
 }
+
+.bootstrap-datetimepicker-widget tbody tr:hover {
+  background-color: inherit;
+}
+
