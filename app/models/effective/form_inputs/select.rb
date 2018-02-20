@@ -55,7 +55,7 @@ module Effective
           ('tags-input' if tags?),
         ].compact.join(' ')
 
-        { class: classes, multiple: (true if multiple?) }.compact
+        { class: classes, multiple: (true if multiple?), include_blank: !multiple? }.compact
       end
 
       protected
