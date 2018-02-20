@@ -12,7 +12,7 @@ module Effective
 
       def build_input(&block)
         content = block_given? ? capture(&block) : value
-        content_tag(:p, content, options[:input].except(:readonly, :required).merge(id: tag_id))
+        content_tag(:p, content, options[:input].except(:readonly, :required, :value).merge(id: tag_id))
       end
 
     end

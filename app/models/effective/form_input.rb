@@ -122,8 +122,9 @@ module Effective
 
     def build_label
       return BLANK if options[:label] == false
+      return BLANK if name.kind_of?(NilClass)
 
-      text = (options[:label].delete(:text) || object.class.human_attribute_name(name)).html_safe
+      text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK).html_safe
 
       if options[:input][:id]
         options[:label][:for] = options[:input][:id]
