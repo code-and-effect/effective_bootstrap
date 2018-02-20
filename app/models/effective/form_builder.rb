@@ -58,7 +58,9 @@ module Effective
 
     def select(name, choices = nil, *args)
       options = args.extract_options!.merge!(collection: choices)
-      Effective::FormInputs::Select.new(name, options, builder: self).to_html { super(name, options.delete(:collection), {}, options) }
+      Effective::FormInputs::Select.new(name, options, builder: self).to_html do
+        super(name, options.delete(:collection), { selected: (options.delete(:selected) || options.delete(:value)) }, options)
+      end
     end
 
     def submit(name = 'Submit', options = {})
