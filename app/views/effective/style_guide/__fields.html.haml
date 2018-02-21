@@ -30,7 +30,7 @@
 
 = f.select :food, EffectiveStyleGuide.foods
 = f.select :color, EffectiveStyleGuide.colors, tags: true
-= f.select :details, EffectiveStyleGuide.grouped_colors
+= f.select :details, EffectiveStyleGuide.grouped_colors, grouped: true, multiple: true, selected: ['red', 'yellow']
 
 = f.url_field :url, hint: 'This is a url field'
 = f.number_field :number, hint: 'This is a number field'

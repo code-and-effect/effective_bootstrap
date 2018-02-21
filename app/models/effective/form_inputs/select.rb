@@ -1,5 +1,6 @@
 # http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-select
 # select(object, method, choices = nil, options = {}, html_options = {}, &block)
+# ActionView::Helpers::FormBuilder.instance_method(:check_box).bind(self).call(m, opts, v)`
 
 module Effective
   module FormInputs

@@ -4,7 +4,7 @@ module Effective
 
     BLANK = ''.html_safe
 
-    delegate :object, :label, to: :@builder
+    delegate :object, to: :@builder
     delegate :capture, :content_tag, :link_to, :icon, to: :@template
 
     # So this takes in the options for an entire form group.
@@ -130,7 +130,7 @@ module Effective
         options[:label][:for] = options[:input][:id]
       end
 
-      label(name, text, options[:label])
+      @builder.label(name, text, options[:label])
     end
 
     def build_input(&block)
