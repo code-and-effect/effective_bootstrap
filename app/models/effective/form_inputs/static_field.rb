@@ -11,7 +11,7 @@ module Effective
       end
 
       def build_input(&block)
-        content = block_given? ? capture(&block) : value
+        content = block_given? ? capture(&block) : (options[:input].delete(:value) || value)
         content_tag(:p, content, options[:input].except(:readonly, :required, :value).merge(id: tag_id))
       end
 
