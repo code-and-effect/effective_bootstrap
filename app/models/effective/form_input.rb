@@ -197,6 +197,14 @@ module Effective
       object.public_send(name) if object.respond_to?(name)
     end
 
+    def unique_id(item = nil)
+      if item && item.respond_to?(value_method || :to_s)
+        item_value = (item.send(value_method || :to_s).to_s.parameterize.presence rescue nil)
+      end
+
+      [tag_id, item_value, object_id].compact.join('_')
+    end
+
     private
 
     # Here we split them into { wrapper: {}, label: {}, hint: {}, input: {} }

@@ -39,9 +39,9 @@ module Effective
 
       def input_html_options
         if custom?
-          { class: 'custom-control-input' }
+          { class: 'custom-control-input', id: unique_id }
         else
-          { class: 'form-check-input' }
+          { class: 'form-check-input', id: unique_id }
         end
       end
 

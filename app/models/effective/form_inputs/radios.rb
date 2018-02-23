@@ -46,7 +46,7 @@ module Effective
       end
 
       def build_item(builder)
-        item_id = unique_item_id(builder)
+        item_id = unique_id(builder.object)
         build_item_wrap { builder.radio_button(id: item_id) + builder.label(item_label_options.merge(for: item_id)) }
       end
 
