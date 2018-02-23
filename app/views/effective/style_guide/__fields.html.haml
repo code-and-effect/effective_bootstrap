@@ -1,38 +1,42 @@
-= f.text_field :title, hint: 'This is a text field'
-= f.email_field :email, hint: 'This is an email field'
-= f.check_box :archived, hint: 'This is a checkbox', id: "archived_#{uid}"
-= f.price_field :price, hint: 'This is a price field'
+= f.text_field :title, hint: 'This is a text_field'
+= f.email_field :email, hint: 'This is an email_field'
+= f.check_box :archived, hint: 'This is a check_box', id: "archived_#{uid}"
 
-= f.phone_field :phone, hint: 'This is a phone field'
-= f.phone_field :fax, hint: 'This is a phone field'
-= f.phone_field :cell, hint: 'This is a phone field'
-
-= f.datetime_field :start_at, hint: 'This is a datetime_field'
-= f.datetime_field :end_at, hint: 'This is a datetime_field'
-
+= f.datetime_field :start_at, hint: 'This is a linked datetime_field'
+= f.datetime_field :end_at, hint: 'This is a linked datetime_field'
 = f.date_field :date, hint: 'This is a date_field'
 = f.time_field :time, hint: 'This is a time_field'
-
-= f.static_field :static_text, hint: 'This is a static_field'
-
-= f.static_field :static_text, hint: 'This is a static_field built from a block' do
-  %strong This is rich text
-  built from a
-  %em normal haml
-  block
 
 = f.check_box :option1, inline: true, id: "option1_#{uid}"
 = f.check_box :option2, inline: true, id: "option2_#{uid}"
 = f.check_box :option3, inline: true, id: "option3_#{uid}"
 
-- f.object.food = 'eggs'
-- f.object.color = 'orange'
+= f.number_field :number, hint: 'This is a number_field'
+= f.password_field :password, hint: 'This is a password_field'
 
-= f.select :food, EffectiveStyleGuide.foods
-= f.select :color, EffectiveStyleGuide.colors, tags: true
-= f.select :details, EffectiveStyleGuide.grouped_colors, grouped: true, multiple: true, selected: ['red', 'yellow']
+= f.phone_field :phone, hint: 'This is a phone_field'
+= f.phone_field :fax, hint: 'This is a phone_field'
+= f.phone_field :cell, hint: 'This is a phone_field'
 
-= f.url_field :url, hint: 'This is a url field'
-= f.number_field :number, hint: 'This is a number field'
+= f.price_field :price, hint: 'This is a price_field'
+
+= f.static_field :static_text, hint: 'This is a static_field'
+= f.static_field :static_text, hint: 'This is a static_field built from a block' do
+  #{content_tag(:strong, 'This is rich text')} built from #{content_tag(:em, 'normal haml')} block
+
+= f.text_area :details, hint: 'This is a text_area'
+= f.url_field :url, hint: 'This is a url_field'
+
+= f.select :food, EffectiveStyleGuide.foods, hint: 'This is a select'
+= f.select :color, EffectiveStyleGuide.colors, tags: true, hint: 'This is a select with tags: true'
+= f.select :color, EffectiveStyleGuide.grouped_colors, grouped: true, multiple: true, selected: ['red', 'yellow'], hint: 'This is a select with grouped: true, multiple: true'
+
+= f.checks :food, EffectiveStyleGuide.foods, hint: 'This is a checks'
+= f.checks :drink, EffectiveStyleGuide.drinks, custom: false, hint: 'This is a checks with custom: false'
+= f.checks :color, EffectiveStyleGuide.colors, inline: true, hint: 'This is a checks with inline: true'
+
+= f.radios "food_#{uid}", EffectiveStyleGuide.foods, hint: 'This is a radios'
+= f.radios "drink_#{uid}", EffectiveStyleGuide.drinks, custom: false, hint: 'This is a radios with custom: false'
+= f.radios "color_#{uid}", EffectiveStyleGuide.colors, inline: true, hint: 'This is a radios with inline: true'
 
 = f.submit

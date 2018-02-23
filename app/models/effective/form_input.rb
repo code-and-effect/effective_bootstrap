@@ -158,13 +158,6 @@ module Effective
 
       content_tag(:div, invalid, options[:feedback][:invalid]) +
       content_tag(:div, valid, options[:feedback][:valid])
-
-      # Server side
-      # if has_error?(name) && options[:feedback][:invalid]
-      #   content_tag(:div, object.errors[name].to_sentence, options[:feedback][:invalid])
-      # elsif options[:feedback][:valid]
-      #   content_tag(:div, 'Looks good!', options[:feedback][:valid])
-      # end
     end
 
     def has_error?(name = nil)

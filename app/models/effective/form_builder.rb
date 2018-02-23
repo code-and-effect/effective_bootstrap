@@ -74,6 +74,11 @@ module Effective
       Effective::FormInputs::StaticField.new(name, options, builder: self).to_html(&block)
     end
 
+    def radios(name, choices = nil, *args)
+      options = args.extract_options!.merge!(collection: choices)
+      Effective::FormInputs::Radios.new(name, options, builder: self).to_html
+    end
+
     def text_area(name, options = {})
       Effective::FormInputs::TextArea.new(name, options, builder: self).to_html { super(name, options) }
     end

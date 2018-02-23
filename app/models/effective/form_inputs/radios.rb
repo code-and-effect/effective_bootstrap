@@ -4,10 +4,10 @@
 
 module Effective
   module FormInputs
-    class Checks < CollectionInput
+    class Radios < CollectionInput
 
       def build_input(&block)
-        @builder.collection_check_boxes(name, options_collection, value_method, label_method, collection_options, item_html_options) { |builder| build_item(builder) }
+        @builder.collection_radio_buttons(name, options_collection, value_method, label_method, collection_options, item_html_options) { |builder| build_item(builder) }
       end
 
       def build_wrapper(&block)
@@ -41,12 +41,12 @@ module Effective
       end
 
       def build_item(builder)
-        build_item_wrap { builder.check_box + builder.label(item_label_options) }
+        build_item_wrap { builder.radio_button + builder.label(item_label_options) }
       end
 
       def build_item_wrap(&block)
         if custom?
-          content_tag(:div, yield, class: 'custom-control custom-checkbox ' + (inline? ? 'custom-control-inline' : 'form-group'))
+          content_tag(:div, yield, class: 'custom-control custom-radio ' + (inline? ? 'custom-control-inline' : 'form-group'))
         else
           content_tag(:div, yield, class: 'form-check' + (inline? ? ' form-check-inline' : ''))
         end
