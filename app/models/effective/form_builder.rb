@@ -61,6 +61,10 @@ module Effective
       Effective::FormInputs::PriceField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def save(name = 'Save', options = {})
+      Effective::FormInputs::Save.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
     def select(name, choices = nil, *args)
       options = args.extract_options!.merge!(collection: choices)
       Effective::FormInputs::Select.new(name, options, builder: self).to_html

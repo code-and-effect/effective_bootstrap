@@ -35,3 +35,4 @@ $(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()
 $(document).on 'cocoon:after-insert', -> EffectiveBootstrap.initialize()
 $(document).on 'effective-bootstrap:initialize', (event) -> EffectiveBootstrap.initialize(event.currentTarget)
 
+$(document).on 'ajax:beforeSend', 'form[data-remote]', -> this.checkValidity()

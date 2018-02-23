@@ -1,9 +1,18 @@
 module EffectiveFormBuilderHelper
   def effective_form_with(**options, &block)
     options[:class] = [options[:class], 'needs-validation', ('form-inline' if options[:layout] == :inline)].compact.join(' ')
+    options[:html] = (options[:html] || {}).merge(novalidate: true, onsubmit: 'return EffectiveBootstrap.validate(this);')
+
+    if options.delete(:remote) == true
+      if options[:html][:data].kind_of?(Hash)
+        options[:html][:data][:remote] = true
+      else
+        options[:html]['data-remote'] = true
+      end
+    end
 
     without_error_proc do
-      form_with(**options.merge(builder: Effective::FormBuilder, html: { novalidate: true, onsubmit: 'return EffectiveBootstrap.validate(this);' }), &block)
+      form_with(**options.merge(builder: Effective::FormBuilder), &block)
     end
   end
 

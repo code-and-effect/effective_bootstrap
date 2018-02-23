@@ -47,6 +47,14 @@ module Effective
         options[:input].merge(skip_default_ids: nil, allow_method_names_outside_object: nil)
       end
 
+      def unique_item_id(builder)
+        if builder.object.respond_to?(value_method)
+          item_value = (builder.object.send(value_method).to_s.parameterize.presence rescue nil)
+        end
+
+        [tag_id, item_value, object_id].compact.join('_')
+      end
+
       def value_method
         @value_method ||= options[:input].delete(:value_method)
       end
@@ -127,7 +135,7 @@ module Effective
         name.to_s.sub('_id', '') + '_id'
       end
 
-      def polymorphic_value(obj)
+      def polymorphic_value
         "#{object.class.model_name}_#{object.id}" if object
       end
 

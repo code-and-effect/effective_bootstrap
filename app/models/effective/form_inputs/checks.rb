@@ -45,7 +45,8 @@ module Effective
       end
 
       def build_item(builder)
-        build_item_wrap { builder.check_box + builder.label(item_label_options) }
+        item_id = unique_item_id(builder)
+        build_item_wrap { builder.check_box(id: item_id) + builder.label(item_label_options.merge(for: item_id)) }
       end
 
       def build_item_wrap(&block)
