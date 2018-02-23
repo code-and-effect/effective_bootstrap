@@ -5,3 +5,7 @@
 .was-validated.form-is-invalid  .form-actions {
   .invalid-feedback { display: block; }
 }
+
+fieldset.form-group > label {
+  display: block;
+}

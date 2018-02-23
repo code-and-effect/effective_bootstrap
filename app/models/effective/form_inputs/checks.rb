@@ -15,7 +15,7 @@ module Effective
       end
 
       def wrapper_options
-        { class: 'form-group' }
+        { class: "form-group #{tag_id}" }
       end
 
       def feedback_options
@@ -41,7 +41,7 @@ module Effective
 
         text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK).html_safe
 
-        content_tag(:legend, text, options[:label])
+        content_tag((inline? ? :label : :legend), text, options[:label])
       end
 
       def build_item(builder)
