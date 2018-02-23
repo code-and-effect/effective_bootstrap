@@ -1,13 +1,10 @@
 # http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-select
-# select(object, method, choices = nil, options = {}, html_options = {}, &block)
-# ActionView::Helpers::FormBuilder.instance_method(:check_box).bind(self).call(m, opts, v)`
-
 module Effective
   module FormInputs
     class Radios < CollectionInput
 
       def build_input(&block)
-        @builder.collection_radio_buttons(name, options_collection, value_method, label_method, collection_options, item_html_options) { |builder| build_item(builder) }
+        @builder.collection_radio_buttons(name, options_collection, value_method, label_method, collection_options, item_input_options) { |builder| build_item(builder) }
       end
 
       def build_wrapper(&block)
@@ -22,15 +19,6 @@ module Effective
         { class: 'form-group' }
       end
 
-      def build_label
-        return BLANK if options[:label] == false
-        return BLANK if name.kind_of?(NilClass)
-
-        text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK).html_safe
-
-        content_tag(:legend, text, options[:label])
-      end
-
       def feedback_options
         return false if layout == :inline
 
@@ -38,6 +26,23 @@ module Effective
           valid: { class: 'valid-feedback', style: ('display: block;' if has_error? && !has_error?(name)) }.compact,
           invalid: { class: 'invalid-feedback', style: ('display: block;' if has_error?(name)) }.compact
         }
+      end
+
+      def input_html_options
+        if custom?
+          { class: 'custom-control-input' }
+        else
+          { class: 'form-check-input' }
+        end
+      end
+
+      def build_label
+        return BLANK if options[:label] == false
+        return BLANK if name.kind_of?(NilClass)
+
+        text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK).html_safe
+
+        content_tag(:legend, text, options[:label])
       end
 
       def build_item(builder)
@@ -52,30 +57,16 @@ module Effective
         end
       end
 
+      def item_input_options
+        options[:input].except(:inline, :custom)
+      end
+
       def item_label_options
         if custom?
           { class: 'custom-control-label' }
         else
           { class: 'form-check-label' }
         end
-      end
-
-      def item_html_options
-        if custom?
-          { class: 'custom-control-input' }
-        else
-          { class: 'form-check-input' }
-        end
-      end
-
-      def inline? # default false
-        return @inline unless @inline.nil?
-        @inline = (options[:input].delete(:inline) == true)
-      end
-
-      def custom? # default true
-        return @custom unless @custom.nil?
-        @custom = (options[:input].delete(:custom) != false)
       end
 
     end
