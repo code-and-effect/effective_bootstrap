@@ -17,6 +17,11 @@ module Effective
       Effective::FormInputs::CheckBox.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def checks(name, choices = nil, *args)
+      options = args.extract_options!.merge!(collection: choices)
+      Effective::FormInputs::Checks.new(name, options, builder: self).to_html
+    end
+
     def date_field(name, options = {})
       Effective::FormInputs::DateField.new(name, options, builder: self).to_html { super(name, options) }
     end

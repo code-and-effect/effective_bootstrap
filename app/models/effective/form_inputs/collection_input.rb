@@ -20,11 +20,16 @@ module Effective
       def collection_options
         return @collection_options unless @collection_options.nil?
 
+        checked = options[:input].delete(:checked)
         selected = options[:input].delete(:selected)
         passed_value = options[:input].delete(:value)
         include_blank = options[:input].delete(:include_blank)
 
-        @collection_options = { selected: (selected || passed_value || value), include_blank: include_blank }
+        @collection_options = {
+          checked: (checked || selected || passed_value || value),
+          selected: (selected || checked || passed_value || value),
+          include_blank: include_blank
+        }.compact
       end
 
       def html_options
