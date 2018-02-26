@@ -17,14 +17,14 @@ module Effective
         @grouped = (options.delete(:grouped) || false)
       end
 
-      def inline? # default false
-        return @inline unless @inline.nil?
-        @inline = (options[:input].delete(:inline) == true)
-      end
-
       def custom? # default true
         return @custom unless @custom.nil?
         @custom = (options.delete(:custom) != false)
+      end
+
+      def inline? # default false
+        return @inline unless @inline.nil?
+        @inline = (options[:input].delete(:inline) == true)
       end
 
       def collection_options

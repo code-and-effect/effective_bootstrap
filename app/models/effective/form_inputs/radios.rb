@@ -3,15 +3,27 @@ module Effective
   module FormInputs
     class Radios < CollectionInput
 
-      def build_input(&block)
-        @builder.collection_radio_buttons(name, options_collection, value_method, label_method, collection_options, item_input_options) { |builder| build_item(builder) }
+      def build_wrapper(&block)
+        tag = buttons? ? :div : :fieldset
+
+        if layout == :horizontal
+          content_tag(tag, content_tag(:div, yield, class: 'row'), options[:wrapper])
+        else
+          content_tag(tag, yield, options[:wrapper])
+        end
       end
 
-      def build_wrapper(&block)
-        if layout == :horizontal
-          content_tag(:fieldset, content_tag(:div, yield, class: 'row'), options[:wrapper])
+      def build_input(&block)
+        build_button_group do
+          @builder.collection_radio_buttons(name, options_collection, value_method, label_method, collection_options, item_input_options) { |builder| build_item(builder) }
+        end
+      end
+
+      def build_button_group(&block)
+        if buttons?
+          content_tag(:div, yield, id: button_group_id, class: 'btn-group btn-group-toggle', 'data-toggle': 'buttons')
         else
-          content_tag(:fieldset, yield, options[:wrapper])
+          yield
         end
       end
 
@@ -29,7 +41,9 @@ module Effective
       end
 
       def input_html_options
-        if custom?
+        if buttons?
+          { autocomplete: 'off' }
+        elsif custom?
           { class: 'custom-control-input' }
         else
           { class: 'form-check-input' }
@@ -40,14 +54,29 @@ module Effective
         return BLANK if options[:label] == false
         return BLANK if name.kind_of?(NilClass)
 
+        tag = (buttons? || inline?) ? :label : :legend
         text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK).html_safe
 
-        content_tag((inline? ? :label : :legend), text, options[:label])
+        if buttons?
+          content_tag(:label, text, options[:label].merge(for: button_group_id))
+        elsif inline?
+          content_tag(:label, text, options[:label])
+        else
+          content_tag(:legend, text, options[:label])
+        end
       end
 
       def build_item(builder)
         item_id = unique_id(builder.object)
-        build_item_wrap { builder.radio_button(id: item_id) + builder.label(item_label_options.merge(for: item_id)) }
+
+        if buttons?
+          opts = item_label_options.merge(for: item_id)
+          opts[:class] = [opts[:class], ('active' if value == builder.value), ('first-button' if first_button?)].compact.join(' ')
+
+          builder.label(opts) { builder.radio_button(id: item_id) + builder.text }
+        else
+          build_item_wrap { builder.radio_button(id: item_id) + builder.label(item_label_options.merge(for: item_id)) }
+        end
       end
 
       def build_item_wrap(&block)
@@ -59,15 +88,31 @@ module Effective
       end
 
       def item_input_options
-        options[:input].except(:inline, :custom)
+        options[:input].except(:inline, :custom, :buttons)
       end
 
       def item_label_options
-        if custom?
+        if buttons?
+          { class: 'btn btn-secondary' }
+        elsif custom?
           { class: 'custom-control-label' }
         else
           { class: 'form-check-label' }
         end
+      end
+
+      def buttons? # default false
+        return @buttons unless @buttons.nil?
+        @buttons = (options.delete(:buttons) || false)
+      end
+
+      def button_group_id
+        "#{tag_id}_btn_group"
+      end
+
+      def first_button?
+        return false unless @first_button_group.nil?
+        @first_button_group = true
       end
 
     end

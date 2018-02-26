@@ -6,9 +6,7 @@ module Effective
         case layout
         when :horizontal
           build_wrapper do
-            content_tag(:div, '', class: 'col-sm-2') + content_tag(:div, class: 'col-sm-10') do
-              build_content(&block)
-            end
+            content_tag(:div, '', class: 'col-sm-2') + content_tag(:div, build_content(&block), class: 'col-sm-10')
           end
         else
           build_content(&block)
@@ -16,9 +14,7 @@ module Effective
       end
 
       def build_content(&block)
-        build_check_box_wrap {
-          build_input(&block) + build_label + build_feedback + build_hint
-        }
+        build_check_box_wrap { build_input(&block) + build_label + build_feedback + build_hint }
       end
 
       def build_check_box_wrap(&block)
