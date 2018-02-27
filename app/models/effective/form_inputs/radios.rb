@@ -71,7 +71,7 @@ module Effective
 
         if buttons?
           opts = item_label_options.merge(for: item_id)
-          opts[:class] = [opts[:class], ('active' if value == builder.value), ('first-button' if first_button?)].compact.join(' ')
+          opts[:class] = [opts[:class], ('active' if active_item?(builder)), ('first-button' if first_item?) ].compact.join(' ')
 
           builder.label(opts) { builder.radio_button(id: item_id) + builder.text }
         else
@@ -110,9 +110,14 @@ module Effective
         "#{tag_id}_btn_group"
       end
 
-      def first_button?
-        return false unless @first_button_group.nil?
-        @first_button_group = true
+      def first_item?
+        return false unless @first_item.nil?
+        @first_item = true
+      end
+
+      def active_item?(builder)
+        value = self.value || collection_options[:checked]
+        value == builder.value || Array(value).map(&:to_s) == Array(builder.value).map(&:to_s)
       end
 
     end
