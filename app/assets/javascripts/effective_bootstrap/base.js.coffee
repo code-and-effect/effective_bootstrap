@@ -25,6 +25,7 @@ this.EffectiveBootstrap ||= new class
 
     if valid
       $form.addClass('form-is-valid').removeClass('form-is-invalid')
+      setTimeout((-> $('button[type=submit],input[type=submit]').prop('disabled', true)), 0)
     else
       $form.addClass('was-validated').addClass('form-is-invalid').removeClass('form-is-valid')
 

@@ -1,0 +1,33 @@
+// Submit buttons
+.form-actions {
+  border-top: solid 1px #eee;
+  margin-top: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  > * { margin-top: 1rem; }
+}
+
+// Spinner
+.form-actions .eb-icon-spinner { display: none; }
+.form-is-valid .form-actions .eb-icon-spinner { display: inline; }
+
+// Custom submit button feedback
+.was-validated.form-is-valid .form-actions {
+  .valid-feedback { display: block; }
+}
+
+.was-validated.form-is-invalid .form-actions {
+  .invalid-feedback { display: block; }
+}
+
+// Radio and Checkbox fieldsets
+fieldset.form-group > label {
+  display: block;
+}
+
+div.form-group > label + .btn-group {
+  display: block;
+}

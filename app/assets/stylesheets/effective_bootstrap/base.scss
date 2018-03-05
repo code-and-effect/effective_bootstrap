@@ -1,21 +1,3 @@
-.was-validated.form-is-valid .form-actions {
-  .valid-feedback { display: block; }
-}
+@import './forms';
+@import './icons';
 
-.was-validated.form-is-invalid .form-actions {
-  .invalid-feedback { display: block; }
-}
-
-fieldset.form-group > label {
-  display: block;
-}
-
-div.form-group > label + .btn-group {
-  display: block;
-}
-
-// Effective radios, buttons: true
-div.btn-group > .btn.first-button {
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
-}

@@ -39,6 +39,10 @@ module Effective
     end
     alias_method :errors, :error
 
+    def file_field(name, options = {})
+      Effective::FormInputs::FileField.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
     def form_group(name = nil, options = {}, &block)
       Effective::FormInputs::FormGroup.new(name, options, builder: self).to_html(&block)
     end

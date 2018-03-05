@@ -236,11 +236,7 @@ module Effective
       label = merge_defaults!(label, label_options)
       hint = merge_defaults!(hint, hint_options)
 
-      # Merge input_html: {}, defaults, and add all class: keys together
-      input.merge!(input_html.except(:class))
-      merge_defaults!(input, input_html_options.except(:class))
-      input[:class] = [input[:class], input_html[:class], input_html_options[:class]].compact.join(' ')
-
+      merge_defaults!(input.merge!(input_html), input_html_options)
       merge_defaults!(input_js, input_js_options)
 
       if input_js.present?
@@ -299,7 +295,6 @@ module Effective
     end
 
     # https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/base.rb#L120
-    # Not 100% sure best way to generate this
     def tag_id(index = nil)
       case
       when @builder.object_name.empty?
