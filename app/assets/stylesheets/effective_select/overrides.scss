@@ -1,7 +1,21 @@
 // These are overrides from the bootstrap-theme
 
+.select2-container--bootstrap .select2-selection--single {
+  line-height: 1.5;
+  height: 38px;
+}
+
+.select2-container--bootstrap .select2-selection--multiple {
+  line-height: 1.5;
+  min-height: 38px;
+}
+
+.select2-container--bootstrap .select2-selection {
+  font-size: 1rem;
+}
+
 .select2-container .select2-selection--single .select2-selection__rendered {
-  margin: 0 0 0 5px;
+  margin: 0 0 0 0.5rem;
 }
 
 .select2-container--bootstrap .select2-selection--single .select2-selection__clear {
