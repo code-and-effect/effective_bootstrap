@@ -14,7 +14,7 @@ module EffectiveIconsHelper
   end
 
   def show_icon_to(path, options = {})
-    icon_to('eye-open', path, { title: 'Show' }.merge(options))
+    icon_to('eye', path, { title: 'Show' }.merge(options))
   end
 
   def edit_icon_to(path, options = {})
