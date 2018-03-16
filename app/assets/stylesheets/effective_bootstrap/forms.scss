@@ -7,7 +7,9 @@
   align-items: center;
   justify-content: flex-end;
 
-  > * { margin-top: 1rem; }
+  > * {
+    margin: 1rem 0 0 0.5rem;
+  }
 }
 
 // Spinner

@@ -21,7 +21,7 @@ module Effective
 
       def build_button_group(&block)
         if buttons?
-          content_tag(:div, yield, id: button_group_id, class: 'btn-group btn-group-toggle', 'data-toggle': 'buttons')
+          content_tag(:div, yield, id: button_group_id, class: 'btn-group btn-group-toggle effective-radios', 'data-toggle': 'buttons')
         else
           yield
         end
@@ -93,7 +93,7 @@ module Effective
 
       def item_label_options
         if buttons?
-          { class: 'btn btn-secondary' }
+          { class: 'btn btn-outline-secondary' }
         elsif custom?
           { class: 'custom-control-label' }
         else

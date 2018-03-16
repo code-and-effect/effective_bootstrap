@@ -13,6 +13,10 @@ module EffectiveIconsHelper
     link_to(icon(svg), url, options)
   end
 
+  def new_icon_to(path, options = {})
+    icon_to('plus', path, { title: 'New' }.merge(options))
+  end
+
   def show_icon_to(path, options = {})
     icon_to('eye', path, { title: 'Show' }.merge(options))
   end

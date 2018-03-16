@@ -79,6 +79,7 @@ module Effective
     end
 
     def static_field(name, options = {}, &block)
+      options = { value: options } if options.kind_of?(String)
       Effective::FormInputs::StaticField.new(name, options, builder: self).to_html(&block)
     end
 

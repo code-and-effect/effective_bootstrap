@@ -2,3 +2,21 @@ div.btn-group > .btn.first-button {
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
 }
+
+// An active/focused/selected radio button should appear like btn-primary
+// .effective-radios {
+//   .btn-outline-secondary:not(:disabled):not(.disabled):active,
+//   .btn-outline-secondary:not(:disabled):not(.disabled).active,
+//   .show > .btn-outline-secondary.dropdown-toggle {
+//     background-color: #007bff;
+//     border-color: #007bff;
+//   }
+
+//   .btn-outline-secondary:not(:disabled):not(.disabled):active:focus,
+//   .btn-outline-secondary:not(:disabled):not(.disabled).active:focus,
+//   .show > .btn-outline-secondary.dropdown-toggle:focus,
+//   .btn-outline-secondary:focus,
+//   .btn-outline-secondary.focus {
+//     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+//   }
+// }
