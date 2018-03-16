@@ -1,6 +1,56 @@
 # Boostrap4 Helpers
 
 module EffectiveBootstrapHelper
+  # Button Dropdowns
+  # https://getbootstrap.com/docs/4.0/components/dropdowns/
+  #
+  # = dropdown do
+  #   = dropdown_link_to 'Something', root_path
+  #   = dropdown_divider
+  #   = dropdown_link_to 'Another', root_path
+  #
+  # Button Dropdowns
+  # variations can be :dropup, :dropleft, :dropright
+  # split can be true, false
+  # right is to right align things
+  def dropdown(variation: nil, split: true, btn: 'btn-outline-primary', right: false, &block)
+    raise 'expected a block' unless block_given?
+
+    @_dropdown_link_tos = []; yield
+
+    return @_dropdown_link_tos.first if @_dropdown_link_tos.length <= 1
+
+    if split
+      first = @_dropdown_link_tos.first
+      menu = content_tag(:div, @_dropdown_link_tos[1..-1].join.html_safe, class: ['dropdown-menu', ('dropdown-menu-right' if right)].compact.join(' '))
+      split = content_tag(:button, class: "btn #{btn} dropdown-toggle dropdown-toggle-split", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
+        content_tag(:span, 'Toggle Dropdown', class: 'sr-only')
+      end
+
+      content_tag(:div, class: 'btn-group') do
+        content_tag(:div, class: ['btn-group', variation.to_s.presence].compact.join(' '), role: 'group') do
+          [:dropleft].include?(variation) ? (split + menu + first) : (first + split + menu)
+        end
+      end
+    else
+      raise 'split false is unsupported'
+    end
+  end
+
+  def dropdown_link_to(label, path, options = {})
+    if @_dropdown_link_tos.length == 0
+      options[:class] = [options[:class], 'btn btn-outline-primary'].compact.join(' ') unless options[:class].to_s.include?('btn-')
+      @_dropdown_link_tos << link_to(label, path, options)
+    else
+      options[:class] = [options[:class], 'dropdown-item'].compact.join(' ')
+      @_dropdown_link_tos << link_to(label, path, options)
+    end; nil
+  end
+
+  def dropdown_divider
+    @_dropdown_link_tos << content_tag(:div, '', class: 'dropdown-divider'); nil
+  end
+
   # Nav links and dropdowns
   # Automatically puts in the 'active' class based on request path
 
