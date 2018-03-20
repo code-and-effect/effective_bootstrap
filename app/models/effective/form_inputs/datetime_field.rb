@@ -18,7 +18,11 @@ module Effective
       end
 
       def build_input(&block)
-        @builder.super_text_field(name, options[:input])
+        @builder.super_text_field(name, options[:input].merge(value: datetime_to_s))
+      end
+
+      def datetime_to_s
+        value&.strftime('%F %H:%M')
       end
 
       private

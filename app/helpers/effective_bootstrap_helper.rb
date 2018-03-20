@@ -20,7 +20,7 @@ module EffectiveBootstrapHelper
 
     return @_dropdown_link_tos.first if @_dropdown_link_tos.length <= 1
 
-    if split
+    retval = if split
       first = @_dropdown_link_tos.first
       menu = content_tag(:div, @_dropdown_link_tos[1..-1].join.html_safe, class: ['dropdown-menu', ('dropdown-menu-right' if right)].compact.join(' '))
       split = content_tag(:button, class: "btn #{btn} dropdown-toggle dropdown-toggle-split", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
@@ -35,20 +35,74 @@ module EffectiveBootstrapHelper
     else
       raise 'split false is unsupported'
     end
+
+    @_dropdown_link_tos = nil
+
+    retval
   end
 
+  # This is a special variant of dropdown
+  # dots do
+  #   = dropdown_link_to 'Edit', edit_path(thing)
+  def dots(options = nil, &block)
+    (options ||= {})[:class] = "dropdown dropdown-dots #{options.delete(:class)}".strip
+
+    content_tag(:span, options) do
+      content_tag(:button, class: "btn btn-dots dropdown-toggle #{options.delete(:button_class)}", 'aria-expanded': true, 'aria-haspopup': true, 'data-toggle': 'dropdown', type: 'button') do
+      end + content_tag(:div, capture(&block), class: 'dropdown-menu')
+    end
+  end
+
+  def dots_link_to(label, path, options = {})
+    options[:class] = [options[:class], 'dropdown-item'].compact.join(' ')
+
+    concat link_to(label, path, options)
+  end
+
+  # # Works with dots do and dropdown do
   def dropdown_link_to(label, path, options = {})
+    unless @_dropdown_link_tos
+      options[:class] = [options[:class], 'dropdown-item'].compact.join(' ')
+      return link_to(label, path, options)
+    end
+
     if @_dropdown_link_tos.length == 0
       options[:class] = [options[:class], 'btn btn-outline-primary'].compact.join(' ') unless options[:class].to_s.include?('btn-')
-      @_dropdown_link_tos << link_to(label, path, options)
     else
       options[:class] = [options[:class], 'dropdown-item'].compact.join(' ')
-      @_dropdown_link_tos << link_to(label, path, options)
-    end; nil
+    end
+
+    @_dropdown_link_tos << link_to(label, path, options)
+
+    nil
   end
 
+  # Works with dots ao and dropdown do
   def dropdown_divider
-    @_dropdown_link_tos << content_tag(:div, '', class: 'dropdown-divider'); nil
+    unless @_dropdown_link_tos
+      content_tag(:div, '', class: 'dropdown-divider')
+    else
+      @_dropdown_link_tos << content_tag(:div, '', class: 'dropdown-divider')
+      nil
+    end
+  end
+
+  def list_group(&block)
+    content_tag(:div, yield, class: 'list-group')
+  end
+
+  # List group
+  # = list_group_link_to
+  # Automatically puts in the 'active' class based on request path
+  def list_group_link_to(label, path, opts = {})
+    # Regular link item
+    opts[:class] = if request.fullpath.include?(path)
+      [opts[:class], 'list-group-item active'].compact.join(' ')
+    else
+      [opts[:class], 'list-group-item'].compact.join(' ')
+    end
+
+    link_to(label.to_s, path, opts)
   end
 
   # Nav links and dropdowns

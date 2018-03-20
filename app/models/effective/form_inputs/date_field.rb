@@ -17,6 +17,10 @@ module Effective
         { input_group: { class: 'input-group' }, prepend: content_tag(:span, icon('calendar'), class: 'input-group-text') }
       end
 
+      def datetime_to_s
+        value&.strftime('%F')
+      end
+
     end
   end
 end

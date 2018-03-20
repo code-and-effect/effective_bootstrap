@@ -17,6 +17,10 @@ module Effective
         { input_group: { class: 'input-group' }, prepend: content_tag(:span, icon('clock'), class: 'input-group-text') }
       end
 
+      def datetime_to_s
+        value&.strftime('%H:%M')
+      end
+
     end
   end
 end
