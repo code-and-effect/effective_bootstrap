@@ -7,5 +7,9 @@ module EffectiveBootstrap
       eval File.read("#{config.root}/config/effective_bootstrap.rb")
     end
 
+    initializer 'effective_bootstrap.assets' do |app|
+      Rails.application.config.assets.precompile += ['icons/*.svg']
+    end
+
   end
 end
