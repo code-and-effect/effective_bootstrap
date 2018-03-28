@@ -8,7 +8,7 @@ module EffectiveBootstrap
     end
 
     initializer 'effective_bootstrap.assets' do |app|
-      Rails.application.config.assets.precompile += ['icons/*.svg']
+      app.config.assets.precompile += ['icons/*']
     end
 
   end

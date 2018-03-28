@@ -4,15 +4,15 @@
 
   .glyphicon { background-repeat: no-repeat; }
 
-  .glyphicon-chevron-up { background-image: asset-data-url('arrow-up-circle.svg'); }
-  .glyphicon-chevron-down { background-image: asset-data-url('arrow-down-circle.svg'); }
-  .glyphicon-chevron-left { background-image: asset-data-url('arrow-left-circle.svg'); }
-  .glyphicon-chevron-right { background-image: asset-data-url('arrow-right-circle.svg'); }
-  .glyphicon-time { background-image: asset-data-url('clock.svg'); }
-  .glyphicon-calendar { background-image: asset-data-url('calendar.svg'); }
-  .glyphicon-screenshot { background-image: asset-data-url('crosshair.svg'); }
-  .glyphicon-trash { background-image: asset-data-url('trash.svg'); }
-  .glyphicon-close { background-image: asset-data-url('x.svg'); }
+  .glyphicon-chevron-up { background-image: asset-data-url('icons/arrow-up-circle.svg'); }
+  .glyphicon-chevron-down { background-image: asset-data-url('icons/arrow-down-circle.svg'); }
+  .glyphicon-chevron-left { background-image: asset-data-url('icons/arrow-left-circle.svg'); }
+  .glyphicon-chevron-right { background-image: asset-data-url('icons/arrow-right-circle.svg'); }
+  .glyphicon-time { background-image: asset-data-url('icons/clock.svg'); }
+  .glyphicon-calendar { background-image: asset-data-url('icons/calendar.svg'); }
+  .glyphicon-screenshot { background-image: asset-data-url('icons/crosshair.svg'); }
+  .glyphicon-trash { background-image: asset-data-url('icons/trash.svg'); }
+  .glyphicon-close { background-image: asset-data-url('icons/x.svg'); }
 }
 
 .bootstrap-datetimepicker-widget table td,
