@@ -66,6 +66,7 @@ module Effective
     end
 
     def save(name = 'Save', options = {})
+      (options = name; name = 'Save') if name.kind_of?(Hash)
       Effective::FormInputs::Save.new(name, options, builder: self).to_html { super(name, options) }
     end
 
@@ -75,6 +76,7 @@ module Effective
     end
 
     def submit(name = 'Save', options = {}, &block)
+      (options = name; name = 'Save') if name.kind_of?(Hash)
       Effective::FormInputs::Submit.new(name, options, builder: self).to_html(&block)
     end
 

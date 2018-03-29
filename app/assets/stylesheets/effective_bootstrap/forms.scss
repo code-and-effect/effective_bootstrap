@@ -2,15 +2,25 @@
 .form-actions {
   display: flex;
   align-items: center;
-
-  > * {
-    margin: 1rem 0 0 0.5rem;
-  }
 }
 
 .form-actions-bordered {
   border-top: solid 1px #eee;
   margin-top: 1rem;
+
+  > * { margin-top: 1rem; }
+}
+
+.form-actions.justify-content-start {
+  > * { margin-right: 0.5rem; }
+}
+
+.form-actions.justify-content-end {
+  > * { margin-left: 0.5rem; }
+}
+
+.form-actions.justify-content-center {
+  > * { margin-left: 0.5rem; }
 }
 
 // Spinner

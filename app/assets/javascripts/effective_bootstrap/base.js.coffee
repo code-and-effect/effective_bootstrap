@@ -25,11 +25,17 @@ this.EffectiveBootstrap ||= new class
 
     if valid
       $form.addClass('form-is-valid').removeClass('form-is-invalid')
-      setTimeout((-> $('button[type=submit],input[type=submit]').prop('disabled', true)), 0)
+      setTimeout((-> EffectiveBootstrap.disable($form)), 0)
     else
       $form.addClass('was-validated').addClass('form-is-invalid').removeClass('form-is-valid')
 
     valid
+
+  disable: ($form) ->
+    $form.find('[type=submit]').prop('disabled', true)
+
+  enable: ($form) ->
+    $form.removeClass('form-is-valid').find('[type=submit]').removeAttr('disabled')
 
 $ -> EffectiveBootstrap.initialize()
 $(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()

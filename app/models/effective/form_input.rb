@@ -288,7 +288,7 @@ module Effective
       when Hash
         html_classes = (obj[:class].to_s.split(' ') + defaults[:class].to_s.split(' ')).uniq
 
-        # Try to smart merge bootstrap4 classes
+        # Try to smart merge bootstrap classes
         if (exclusive = html_classes.select { |c| c.include?('-') }).length > 1
           EXCLUSIVE_CLASS_PREFIXES.each do |prefix|
             prefixed = exclusive.select { |c| c.start_with?(prefix) }

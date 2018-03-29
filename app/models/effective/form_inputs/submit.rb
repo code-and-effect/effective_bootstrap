@@ -17,9 +17,9 @@ module Effective
           ('row' if layout == :horizontal),
           'form-group form-actions',
           ('form-actions-bordered' if border),
-          ('justify-content-start' if left),
-          ('justify-content-center' if center),
-          ('justify-content-end' if right)
+          ('justify-content-start' if left && layout == :vertical),
+          ('justify-content-center' if center && layout == :vertical),
+          ('justify-content-end' if right && layout == :vertical)
         ].compact.join(' ')
 
         { class: classes }
