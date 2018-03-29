@@ -3,6 +3,8 @@ module Effective
     attr_accessor :name, :options
 
     BLANK = ''.html_safe
+    EXCLUSIVE_CLASS_PREFIXES = [] # None
+    EXCLUSIVE_CLASS_SUFFIXES = ['-primary', '-secondary', '-success', '-danger', '-warning', '-info', '-light', '-dark']
 
     delegate :object, to: :@builder
     delegate :capture, :content_tag, :link_to, :icon, to: :@template
@@ -284,7 +286,22 @@ module Effective
       when String
         defaults.merge(text: obj)
       when Hash
+        html_classes = (obj[:class].to_s.split(' ') + defaults[:class].to_s.split(' ')).uniq
+
+        # Try to smart merge bootstrap4 classes
+        if (exclusive = html_classes.select { |c| c.include?('-') }).length > 1
+          EXCLUSIVE_CLASS_PREFIXES.each do |prefix|
+            prefixed = exclusive.select { |c| c.start_with?(prefix) }
+            prefixed[1..-1].each { |c| html_classes.delete(c) } if prefixed.length > 1
+          end
+
+          suffixed = exclusive.select { |c| EXCLUSIVE_CLASS_SUFFIXES.any? { |suffix| c.end_with?(suffix) } }
+          suffixed[1..-1].each { |c| html_classes.delete(c) } if suffixed.length > 1
+        end
+
+        obj[:class] = html_classes.join(' ') if html_classes.present?
         obj.reverse_merge!(defaults)
+        obj
       else
         raise 'unexpected object'
       end

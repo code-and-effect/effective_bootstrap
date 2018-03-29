@@ -1,15 +1,16 @@
 // Submit buttons
-.form-actions.form-group {
-  border-top: solid 1px #eee;
-  margin-top: 1rem;
-
+.form-actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 
   > * {
     margin: 1rem 0 0 0.5rem;
   }
+}
+
+.form-actions-bordered {
+  border-top: solid 1px #eee;
+  margin-top: 1rem;
 }
 
 // Spinner

@@ -91,3 +91,21 @@ $('input.effective_date_time_picker').datetimepicker
 
 Any options passed in this way will be used to initialize the underlying javascript libraries.
 
+
+```
+  = f.submit
+  = f.submit 'Save 2'
+
+  = f.submit 'Save', left: true
+  = f.submit 'Save', center: true
+  = f.submit 'Save', right: true
+
+  = f.submit 'Save', border: false
+  = f.submit 'Save', center: true, border: false
+  = f.submit 'Save', left: true, border: false
+
+  = f.submit('Save', border: false) do
+    = f.save 'Okay'
+    = f.save 'Mom'
+```
+

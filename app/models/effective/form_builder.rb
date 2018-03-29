@@ -74,8 +74,8 @@ module Effective
       Effective::FormInputs::Select.new(name, options, builder: self).to_html
     end
 
-    def submit(name = 'Submit', options = {})
-      Effective::FormInputs::Submit.new(name, options, builder: self).to_html { super(name, options) }
+    def submit(name = 'Save', options = {}, &block)
+      Effective::FormInputs::Submit.new(name, options, builder: self).to_html(&block)
     end
 
     def static_field(name, options = {}, &block)
