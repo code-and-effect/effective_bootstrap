@@ -103,7 +103,7 @@ https://getbootstrap.com/docs/4.0/components/navbar/
 
 ## Icon Helpers
 
-Unfortunately, Bootstrap 4 dropped support for glyphicons, so we use a combination of [Inline SVG](https://github.com/jamesmartin/inline_svg), with [Feather Icons](https://feathericons.com) and [FontAwesome](https://fontawesome.com) to get back this functionality, even better than it was before.
+Unfortunately, Bootstrap 4 dropped support for glyphicons, so we use a combination of [Inline SVG](https://github.com/jamesmartin/inline_svg), with [Feather Icons](https://feathericons.com) and [FontAwesome](https://fontawesome.com) .svg images (no webfonts) to get back this functionality, even better than it was before.
 
 ```haml
 = icon('ok') # <svg class='eb-icon eb-icon-ok' ...>
@@ -115,7 +115,7 @@ Unfortunately, Bootstrap 4 dropped support for glyphicons, so we use a combinati
 
 A full list of icons can be found here: [All effective_bootstrap icons](https://github.com/code-and-effect/effective_bootstrap/tree/master/app/assets/images/icons)
 
-To overwrite an icon, or add your own, just drop a `.svg` file into your application's `app/assets/images/icons/` directory.
+To overwrite or add an icon, just drop the `.svg` file into your application's `app/assets/images/icons/` directory.
 
 There are also a few helpers for commonly used icons, they all take the form of `x_icon_to(new_thing_path)`:
 
@@ -140,33 +140,6 @@ Of course, just the regular form inputs are boring, and this gem extends numerou
 
 This is an opinionated Bootstrap4 form builder.
 
-```haml
-= effective_form_with(model: @user) do |f|
-  = f.text_field :name
-  = f.submit
-```
-
-All standard form fields have been implemented as per [Rails 5.1 FormHelper](http://api.rubyonrails.org/v5.1/classes/ActionView/Helpers/FormHelper.html)
-
-### Options Passing to JavaScript
-
-All `input_js: options` passed to any custom form input will be used to initialize the Javascript library
-
-For example:
-
-```ruby
-= effective_form_with(model: @user) do |f|
-  = f.date_field :updated_at, input_js: {useCurrent: 'day', showTodayButton: true}
-```
-
-will result in the following call to the Javascript library:
-
-```javascript
-$('input').datetimepicker(useCurrent: 'day', showTodayButton: true);
-```
-
-Any options passed in this way will be used to initialize the underlying javascript libraries.
-
 ## effective_form_with
 
 Matches the Rails `form_with` tag syntax, with all its `:model`, `:scope`, `:url`, `:method`, etc.
@@ -175,10 +148,33 @@ As well, you can specify `layout: :vertical`, `layout: :horizontal`, or `layout:
 
 ```haml
 = effective_form_with(model: @user, layout: :horizontal) do |f|
+  = f.text_field :name
   = f.submit
 ```
 
 The default is `layout: :vertical`.
+
+All standard form fields have been implemented as per [Rails 5.1 FormHelper](http://api.rubyonrails.org/v5.1/classes/ActionView/Helpers/FormHelper.html)
+
+### Options
+
+There are three sets of options hashes that you can pass into any form input:
+
+- `wrapper: { class: 'something' }` are applied to the wrapping <div class='form-group'> tag.
+- `input_html: { class: 'something' }` are applied to the <input>, <select> or <textarea> tag itself.
+- `input_js: { key: value}` are passed to any custom form input will be used to initialize the Javascript library. For example:
+
+```ruby
+= effective_form_with(model: @user) do |f|
+  = f.date_field :updated_at, input_js: { useCurrent: 'day', showTodayButton: true }
+```
+
+will result in the following call to the Javascript library:
+
+```javascript
+$('input').datetimepicker(useCurrent: 'day', showTodayButton: true);
+```
+Any options passed in this way will be used to initialize the underlying javascript libraries.
 
 ## Basic form inputs
 
