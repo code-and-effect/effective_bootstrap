@@ -107,9 +107,7 @@ Unfortunately, Bootstrap 4 dropped support for glyphicons, so we use a combinati
 = icon_to('ok', root_path) # <a href='/'><svg class='eb-icon eb-icon-ok' ...></a>
 ```
 
-A full list of icons can be found here:
-
-[All effective_bootstrap icons](https://github.com/code-and-effect/effective_bootstrap/tree/master/app/assets/images/icons)
+A full list of icons can be found here: [All effective_bootstrap icons](https://github.com/code-and-effect/effective_bootstrap/tree/master/app/assets/images/icons)
 
 To overwrite an icon, or add your own, just drop a `.svg` file into your application's `app/assets/images/icons/` directory.
 
