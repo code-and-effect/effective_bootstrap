@@ -112,7 +112,7 @@ module EffectiveBootstrapHelper
   #   = nav_link_to 'Sign In', new_user_session_path
   #   = nav_dropdown 'Settings' do
   #     = nav_link_to 'Account Settings', user_settings_path
-  #     = nav_dropdown_divider
+  #     = nav_divider
   #     = nav_link_to 'Sign In', new_user_session_path, method: :delete
   def nav_link_to(label, path, opts = {})
     if @_nav_mode == :dropdown  # We insert dropdown-items

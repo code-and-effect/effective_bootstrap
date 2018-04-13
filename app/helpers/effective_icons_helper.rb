@@ -47,4 +47,3 @@ module EffectiveIconsHelper
   end
 
 end
-
