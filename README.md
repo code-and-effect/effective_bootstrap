@@ -44,7 +44,9 @@ And to your `application.scss`:
 
 ## View Helpers
 
-- [Dropdowns](https://getbootstrap.com/docs/4.0/components/dropdowns/)
+### Dropdown
+
+https://getbootstrap.com/docs/4.0/components/dropdowns/
 
 ```haml
 = dropdown do
@@ -55,7 +57,9 @@ And to your `application.scss`:
 
 Options include: `dropdown(variation: :dropup|:dropleft|:dropright, split: true|false, right: true|false, btn: 'btn-secondary')`
 
-- [ListGroup](https://getbootstrap.com/docs/4.0/components/list-group/)
+### ListGroup
+
+https://getbootstrap.com/docs/4.0/components/list-group/
 
 ```haml
 = list_group do
@@ -64,7 +68,9 @@ Options include: `dropdown(variation: :dropup|:dropleft|:dropright, split: true|
 
 `list_group_link_to` will automatically insert the the `.active` class based on the request path.
 
-- [Navbar](https://getbootstrap.com/docs/4.0/components/navbar/)
+### Navbar
+
+https://getbootstrap.com/docs/4.0/components/navbar/
 
 ```haml
 %nav.navbar.navbar-expand-lg.navbar-light.bg-light
