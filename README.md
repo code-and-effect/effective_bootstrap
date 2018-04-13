@@ -160,8 +160,8 @@ All standard form fields have been implemented as per [Rails 5.1 FormHelper](htt
 
 There are three sets of options hashes that you can pass into any form input:
 
-- `wrapper: { class: 'something' }` are applied to the wrapping <div class='form-group'> tag.
-- `input_html: { class: 'something' }` are applied to the <input>, <select> or <textarea> tag itself.
+- `wrapper: { class: 'something' }` are applied to the wrapping div tag.
+- `input_html: { class: 'something' }` are applied to the input, select or textarea tag itself.
 - `input_js: { key: value}` are passed to any custom form input will be used to initialize the Javascript library. For example:
 
 ```ruby
