@@ -2,3 +2,17 @@ div.btn-group > .btn.first-button {
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
 }
+
+.effective-radios.card-deck {
+  .card-header { cursor: pointer; }
+
+  input[type=radio] { display: none; }
+
+  .visible-when-selected { display: none; }
+  .visible-when-unselected { display: block; }
+
+  .active {
+    .visible-when-selected { display: block; }
+    .visible-when-unselected { display: none; }
+  }
+}

@@ -28,7 +28,7 @@ module Effective
         if buttons?
           content_tag(:div, yield, id: button_group_id, class: 'btn-group btn-group-toggle effective-radios', 'data-toggle': 'buttons')
         elsif cards?
-          content_tag(:div, yield, id: button_group_id, class: 'card-group effective-radios')
+          content_tag(:div, yield, id: button_group_id, class: 'card-deck effective-radios', 'data-toggle': 'cards')
         else
           yield
         end
@@ -86,12 +86,14 @@ module Effective
 
           builder.label(opts) { builder.radio_button(id: item_id) + builder.text }
         elsif cards?
-          #opts = item_label_options.merge(for: item_id)
-          #opts[:class] = [opts[:class], ('active' if active_item?(builder)), ('first-card' if first_item?) ].compact.join(' ')
+          opts = item_label_options.merge(for: item_id)
+          opts[:class] = [opts[:class], ('active border-secondary' if active_item?(builder)), ('first-card' if first_item?) ].compact.join(' ')
 
-          #builder.label(opts) { builder.radio_button(id: item_id) + builder.text }
-
-          build_item_wrap { builder.radio_button(id: item_id) + builder.label(item_label_options.merge(for: item_id)) }
+          if active_item?(builder)
+            builder.label(opts) { builder.radio_button(id: item_id) + builder.text.sub('card-header', 'card-header bg-secondary text-white').html_safe }
+          else
+            builder.label(opts) { builder.radio_button(id: item_id) + builder.text }
+          end
         else
           build_item_wrap { builder.radio_button(id: item_id) + builder.label(item_label_options.merge(for: item_id)) }
         end
@@ -115,7 +117,7 @@ module Effective
         if buttons?
           { class: 'btn btn-outline-secondary' }
         elsif cards?
-          { class: '' }
+          { class: 'card' }
         elsif custom?
           { class: 'custom-control-label' }
         else
