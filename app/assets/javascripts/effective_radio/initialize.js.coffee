@@ -13,6 +13,7 @@ $(document).on 'change', '[data-toggle=cards] input[type=radio]', (event) ->
 
   $card.addClass('active').addClass('border-secondary')
   $card.find('.card-header').addClass('bg-secondary text-white')
+  true
 
 $(document).on 'click', '[data-toggle=cards] [data-toggle=card]', (event) ->
   $card = $(event.currentTarget).closest('.card')
