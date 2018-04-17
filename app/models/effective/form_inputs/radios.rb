@@ -1,10 +1,15 @@
 # http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-select
+
+# buttons: true
+# cards: true
+# custom: false
+
 module Effective
   module FormInputs
     class Radios < CollectionInput
 
       def build_wrapper(&block)
-        tag = buttons? ? :div : :fieldset
+        tag = (buttons? || cards?) ? :div : :fieldset
 
         if layout == :horizontal
           content_tag(tag, content_tag(:div, yield, class: 'row'), options[:wrapper])
@@ -22,6 +27,8 @@ module Effective
       def build_button_group(&block)
         if buttons?
           content_tag(:div, yield, id: button_group_id, class: 'btn-group btn-group-toggle effective-radios', 'data-toggle': 'buttons')
+        elsif cards?
+          content_tag(:div, yield, id: button_group_id, class: 'card-group effective-radios')
         else
           yield
         end
@@ -43,6 +50,8 @@ module Effective
       def input_html_options
         if buttons?
           { autocomplete: 'off' }
+        elsif cards?
+          { autocomplete: 'off' }
         elsif custom?
           { class: 'custom-control-input' }
         else
@@ -59,6 +68,8 @@ module Effective
 
         if buttons?
           content_tag(:label, text, options[:label].merge(for: button_group_id))
+        elsif cards?
+          content_tag(:label, text, options[:label].merge(for: button_group_id))
         elsif inline?
           content_tag(:label, text, options[:label])
         else
@@ -74,13 +85,22 @@ module Effective
           opts[:class] = [opts[:class], ('active' if active_item?(builder)), ('first-button' if first_item?) ].compact.join(' ')
 
           builder.label(opts) { builder.radio_button(id: item_id) + builder.text }
+        elsif cards?
+          #opts = item_label_options.merge(for: item_id)
+          #opts[:class] = [opts[:class], ('active' if active_item?(builder)), ('first-card' if first_item?) ].compact.join(' ')
+
+          #builder.label(opts) { builder.radio_button(id: item_id) + builder.text }
+
+          build_item_wrap { builder.radio_button(id: item_id) + builder.label(item_label_options.merge(for: item_id)) }
         else
           build_item_wrap { builder.radio_button(id: item_id) + builder.label(item_label_options.merge(for: item_id)) }
         end
       end
 
       def build_item_wrap(&block)
-        if custom?
+        if cards?
+          content_tag(:div, yield, class: 'card')
+        elsif custom?
           content_tag(:div, yield, class: 'custom-control custom-radio ' + (inline? ? 'custom-control-inline' : 'form-group'))
         else
           content_tag(:div, yield, class: 'form-check' + (inline? ? ' form-check-inline' : ''))
@@ -94,6 +114,8 @@ module Effective
       def item_label_options
         if buttons?
           { class: 'btn btn-outline-secondary' }
+        elsif cards?
+          { class: '' }
         elsif custom?
           { class: 'custom-control-label' }
         else
@@ -104,6 +126,11 @@ module Effective
       def buttons? # default false
         return @buttons unless @buttons.nil?
         @buttons = (options.delete(:buttons) || false)
+      end
+
+      def cards? # default false
+        return @cards unless @cards.nil?
+        @cards= (options.delete(:cards) || false)
       end
 
       def button_group_id
