@@ -35,9 +35,6 @@ this.EffectiveBootstrap ||= new class
     $form.addClass('form-is-valid').removeClass('form-is-invalid')
     @disable($form)
 
-  error: ($form) ->
-    $form.addClass('was-validated').addClass('form-is-invalid').removeClass('form-is-valid')
-
   disable: ($form) ->
     $form.find('[type=submit]').prop('disabled', true)
 
