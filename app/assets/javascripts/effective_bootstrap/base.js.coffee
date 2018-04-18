@@ -1,4 +1,7 @@
 this.EffectiveBootstrap ||= new class
+  remote_form_payload: ''
+  remote_form_flash: ''
+
   initialize: (target) ->
     $(target || document).find('[data-input-js-options]:not(.initialized)').each (i, element) ->
       $element = $(element)
@@ -29,6 +32,9 @@ this.EffectiveBootstrap ||= new class
     else
       $form.addClass('was-validated').addClass('form-is-invalid').removeClass('form-is-valid')
 
+    if valid and $form.data('remote')
+      $form.one 'ajax:success', (event) -> EffectiveBootstrap.loadRemoteForm($(event.target))
+
     valid
 
   submitting: ($form) ->
@@ -40,6 +46,19 @@ this.EffectiveBootstrap ||= new class
 
   enable: ($form) ->
     $form.removeClass('form-is-valid').find('[type=submit]').removeAttr('disabled')
+
+  # Loads remote for payload that was placed here by effective_resources create.js.erb and update.js.erb
+  loadRemoteForm: ($form) ->
+    $newForm = @remote_form_payload.find('form')
+
+    for flash in @remote_form_flash
+      status = flash[0]
+      message = flash[1]
+      $newForm.prepend($("<div class='alert alert-#{status}'>#{message}</div>"))
+
+    $form.replaceWith($newForm)
+    @remote_form_payload = ''; @remote_form_flash = ''
+
 
 $ -> EffectiveBootstrap.initialize()
 $(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()
