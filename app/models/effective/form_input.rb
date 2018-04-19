@@ -265,9 +265,13 @@ module Effective
         options[:input][:required] = 'required'
       end
 
-      if options[:input][:readonly]
+      if options[:input][:readonly] || form_readonly?
         options[:input][:readonly] = 'readonly'
         options[:input][:class] = options[:input][:class].to_s.sub('form-control', 'form-control-plaintext')
+      end
+
+      if options[:input][:disabled] || form_disabled?
+        options[:input][:disabled] = 'disabled'
       end
 
       if options[:hint] && options[:hint][:text] && options[:hint][:id]
@@ -309,6 +313,14 @@ module Effective
 
     def layout
       options[:layout] || @builder.layout
+    end
+
+    def form_readonly?
+      @builder.readonly
+    end
+
+    def form_disabled?
+      @builder.disabled
     end
 
     # https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/base.rb#L120

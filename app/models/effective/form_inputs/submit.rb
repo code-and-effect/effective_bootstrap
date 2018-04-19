@@ -2,6 +2,10 @@ module Effective
   module FormInputs
     class Submit < Effective::FormInput
 
+      def to_html(&block)
+        return super unless (form_readonly? || form_disabled?)
+      end
+
       def build_input(&block)
         tags = [
           icon('check', style: 'display: none;'),

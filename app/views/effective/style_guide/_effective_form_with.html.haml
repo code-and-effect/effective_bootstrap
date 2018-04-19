@@ -4,6 +4,9 @@
 = effective_form_with model: Effective::StyleGuide.new, url: url do |f|
   = render '_fields', f: f, uid: 1
 %hr
+= effective_form_with model: Effective::StyleGuide.new, url: url, readonly: true do |f|
+  = render '_fields', f: f, uid: 1
+%hr
 = effective_form_with model: Effective::StyleGuide.new.tap { |s| s.valid? }, url: url do |f|
   = render '_fields', f: f, uid: 2
 %hr

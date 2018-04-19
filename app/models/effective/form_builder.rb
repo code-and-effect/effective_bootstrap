@@ -1,13 +1,19 @@
 module Effective
   class FormBuilder < ActionView::Helpers::FormBuilder
 
-    attr_accessor :layout, :template
+    attr_accessor :template, :layout, :action, :readonly, :disabled
 
     delegate :content_tag, to: :template
 
     def initialize(object_name, object, template, options)
       @template = template
-      @layout = (options.delete(:layout) || :vertical).to_sym
+
+      @layout = options.fetch(:layout, :vertical).to_sym
+      @action = options.fetch(:action, (object.new_record? ? :create : :update))
+
+      @readonly = options.fetch(:readonly, false)
+      @disabled = options.fetch(:disabled, template.cannot?(@action, object))
+
       super
     end
 
