@@ -32,6 +32,7 @@ this.EffectiveBootstrap ||= new class
       setTimeout((-> EffectiveBootstrap.disable($form)), 0)
     else
       $form.addClass('was-validated').addClass('form-is-invalid').removeClass('form-is-valid')
+      @flash($form, 'danger')
 
     if valid and $form.data('remote')
       $form.one 'ajax:success', (event) -> EffectiveBootstrap.loadRemoteForm($(event.target))
@@ -50,7 +51,8 @@ this.EffectiveBootstrap ||= new class
 
   # Loads remote for payload that was placed here by effective_resources create.js.erb and update.js.erb
   loadRemoteForm: ($target) ->
-    $form = @remote_form_payload.find('form')
+    $form = @remote_form_payload.find("form[data-remote-index='#{$target.data('remote-index')}']")
+    $form = @remote_form_payload.find('form') if $form.length == 0
     $target.replaceWith($form)
 
     for flash in @remote_form_flash

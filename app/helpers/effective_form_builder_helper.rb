@@ -4,10 +4,14 @@ module EffectiveFormBuilderHelper
     options[:html] = (options[:html] || {}).merge(novalidate: true, onsubmit: 'return EffectiveBootstrap.validate(this);')
 
     if options.delete(:remote) == true
+      @_effective_remote_index ||= 0
+
       if options[:html][:data].kind_of?(Hash)
         options[:html][:data][:remote] = true
+        options[:html][:data]['data-remote-index'] = (@_effective_remote_index += 1)
       else
         options[:html]['data-remote'] = true
+        options[:html]['data-remote-index'] = (@_effective_remote_index += 1)
       end
     end
 
