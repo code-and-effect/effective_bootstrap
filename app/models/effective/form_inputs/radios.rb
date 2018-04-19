@@ -41,10 +41,11 @@ module Effective
       def button_group_class
         [
           'effective-radios',
+          ('no-feedback' if options[:feedback] == false),
           ('btn-group btn-group-toggle' if buttons?),
           ('card-deck' if cards?),
-          ('is-invalid' if feedback_options && has_error?(name)),
-          ('is-valid' if feedback_options && has_error? && !has_error?(name))
+          ('is-invalid' if options[:feedback] && has_error?(name)),
+          ('is-valid' if options[:feedback] && has_error? && !has_error?(name))
         ].compact.join(' ')
       end
 

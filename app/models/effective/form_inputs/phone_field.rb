@@ -17,6 +17,11 @@ module Effective
         { input_group: { class: 'input-group' }, prepend: content_tag(:span, icon('phone'), class: 'input-group-text') }
       end
 
+      # This has gotta be a valid pattern
+      def validated?(name)
+        true
+      end
+
       private
 
       def fax?

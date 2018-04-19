@@ -29,7 +29,7 @@ this.EffectiveBootstrap ||= new class
     else
       $form.addClass('was-validated').addClass('form-is-invalid')
 
-      $('.effective-radios,.effective-checks').each -> # These controls need a little bit of help with client side validations
+      $('.effective-radios:not(.no-feedback),.effective-checks:not(.no-feedback)').each -> # These controls need a little bit of help with client side validations
         $(@).addClass(if $(@).find('input:invalid').length > 0 then 'is-invalid' else 'is-valid')
 
       @flash($form, 'danger')

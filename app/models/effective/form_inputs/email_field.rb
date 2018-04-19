@@ -10,7 +10,7 @@ module Effective
         { input_group: { class: 'input-group' }, prepend: content_tag(:span, icon('at-sign'), class: 'input-group-text') }
       end
 
-      # This has gotta be a valid email field irregardless of the class level email
+      # This has gotta be a valid pattern
       def validated?(name)
         true
       end
