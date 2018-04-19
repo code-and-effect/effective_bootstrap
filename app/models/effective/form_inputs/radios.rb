@@ -26,9 +26,9 @@ module Effective
 
       def build_button_group(&block)
         if buttons?
-          content_tag(:div, yield, id: button_group_id, class: 'btn-group btn-group-toggle effective-radios', 'data-toggle': 'buttons')
+          content_tag(:div, yield, id: button_group_id, class: button_group_class, 'data-toggle': 'buttons')
         elsif cards?
-          content_tag(:div, yield, id: button_group_id, class: 'card-deck effective-radios', 'data-toggle': 'cards')
+          content_tag(:div, yield, id: button_group_id, class: button_group_class, 'data-toggle': 'cards')
         else
           yield
         end
@@ -38,12 +38,22 @@ module Effective
         { class: "form-group #{tag_id}" }
       end
 
+      def button_group_class
+        [
+          'effective-radios',
+          ('btn-group btn-group-toggle' if buttons?),
+          ('card-deck' if cards?),
+          ('is-invalid' if feedback_options && has_error?(name)),
+          ('is-valid' if feedback_options && has_error? && !has_error?(name))
+        ].compact.join(' ')
+      end
+
       def feedback_options
         return false if layout == :inline
 
         {
-          valid: { class: 'valid-feedback', style: ('display: block;' if has_error? && !has_error?(name)) }.compact,
-          invalid: { class: 'invalid-feedback', style: ('display: block;' if has_error?(name)) }.compact
+          valid: { class: 'valid-feedback' }.compact,
+          invalid: { class: 'invalid-feedback' }.compact
         }
       end
 

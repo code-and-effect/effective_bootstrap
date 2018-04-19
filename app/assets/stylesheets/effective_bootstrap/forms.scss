@@ -33,15 +33,6 @@
 .form-actions .eb-icon-spinner { display: none; }
 .form-is-valid .form-actions .eb-icon-spinner { display: inline; }
 
-// Custom submit button feedback
-.was-validated.form-is-valid .form-actions {
-  .valid-feedback { display: block; }
-}
-
-.was-validated.form-is-invalid .form-actions {
-  .invalid-feedback { display: block; }
-}
-
 // Radio and Checkbox fieldsets
 fieldset.form-group > label {
   display: block;
@@ -50,3 +41,9 @@ fieldset.form-group > label {
 div.form-group > label + .btn-group {
   display: block;
 }
+
+.effective-radios.is-invalid ~ .invalid-feedback { display: block }
+.effective-radios.is-valid ~ .valid-feedback { display: block }
+
+.effective-checks.is-invalid .invalid-feedback { display: block }
+.effective-checks.is-valid .valid-feedback { display: block }

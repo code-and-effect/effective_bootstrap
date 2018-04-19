@@ -15,15 +15,21 @@ module Effective
       end
 
       def wrapper_options
-        { class: "form-group #{tag_id}" }
+        { class: [
+            'form-group effective-checks',
+            tag_id,
+            ('is-invalid' if feedback_options && has_error?(name)),
+            ('is-valid' if feedback_options && has_error? && !has_error?(name))
+          ].compact.join(' ')
+        }
       end
 
       def feedback_options
         return false if layout == :inline
 
         {
-          valid: { class: 'valid-feedback', style: ('display: block;' if has_error? && !has_error?(name)) }.compact,
-          invalid: { class: 'invalid-feedback', style: ('display: block;' if has_error?(name)) }.compact
+          valid: { class: 'valid-feedback' }.compact,
+          invalid: { class: 'invalid-feedback' }.compact
         }
       end
 
@@ -58,7 +64,7 @@ module Effective
       end
 
       def item_input_options
-        options[:input].except(:inline, :custom)
+        options[:input].except(:inline, :custom, :required)
       end
 
       def item_label_options

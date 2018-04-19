@@ -19,18 +19,19 @@ this.EffectiveBootstrap ||= new class
   validate: (form) ->
     $form = $(form)
 
-    # Clear any server side validation on individual inputs
-    $form.find('.alert.is-invalid').remove()
-    $form.find('.is-invalid').removeClass('is-invalid')
-    $form.find('.is-valid').removeClass('is-valid')
+    @reset($form)
 
     valid = form.checkValidity()
 
     if valid
-      $form.addClass('form-is-valid').removeClass('form-is-invalid')
+      $form.addClass('form-is-valid')
       setTimeout((-> EffectiveBootstrap.disable($form)), 0)
     else
-      $form.addClass('was-validated').addClass('form-is-invalid').removeClass('form-is-valid')
+      $form.addClass('was-validated').addClass('form-is-invalid')
+
+      $('.effective-radios,.effective-checks').each -> # These controls need a little bit of help with client side validations
+        $(@).addClass(if $(@).find('input:invalid').length > 0 then 'is-invalid' else 'is-valid')
+
       @flash($form, 'danger')
 
     if valid and $form.data('remote')
@@ -50,7 +51,14 @@ this.EffectiveBootstrap ||= new class
     $form.find('[type=submit]').prop('disabled', true)
 
   reset: ($form) ->
-    $form.removeClass('form-is-valid').find('[type=submit]').removeAttr('disabled')
+    $form.removeClass('was-validated').removeClass('form-is-invalid').removeClass('form-is-valid')
+
+    # Clear any server side validation on individual inputs
+    $form.find('.alert.is-invalid').remove()
+    $form.find('.is-invalid').removeClass('is-invalid')
+    $form.find('.is-valid').removeClass('is-valid')
+
+    $form.find('[type=submit]').removeAttr('disabled')
 
   flash: ($form, status, message, skip_success = false) ->
     $actions = $form.children('.form-actions')

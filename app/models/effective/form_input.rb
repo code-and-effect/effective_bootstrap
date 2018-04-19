@@ -164,7 +164,12 @@ module Effective
 
     def has_error?(name = nil)
       return false unless object.respond_to?(:errors)
-      name ? object.errors[name].present? : object.errors.present?
+
+      if name
+        object.errors[name].present? || (parent_object && parent_object.errors[name].present?)
+      else
+        object.errors.present? || parent_object&.errors&.present?
+      end
     end
 
     def required?(name)
@@ -182,7 +187,7 @@ module Effective
       obj = (object.class == Class) ? object : object.class
       return false unless obj.respond_to?(:validators_on)
 
-      obj.validators_on(name).any? { |v| !v.kind_of?(ActiveRecord::Validations::PresenceValidator) }
+      obj.validators_on(name).present?
     end
 
     def input_group?
@@ -324,6 +329,10 @@ module Effective
 
     def form_disabled?
       @builder.disabled
+    end
+
+    def parent_object
+      @builder.options[:parent_builder]&.object
     end
 
     # https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/base.rb#L120

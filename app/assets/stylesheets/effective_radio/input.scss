@@ -16,3 +16,11 @@ div.btn-group > .btn.first-button {
     .visible-when-unselected { display: none; }
   }
 }
+
+.effective-radios.is-valid {
+  label { border-color: #28a745; }
+}
+
+.effective-radios.is-invalid {
+  label { border-color: #dc3545; }
+}
