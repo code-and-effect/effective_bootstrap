@@ -1,6 +1,7 @@
 this.EffectiveBootstrap ||= new class
-  remote_form_payload: ''
-  remote_form_flash: ''
+  remote_form_payload: ''         # A fresh form
+  remote_form_flash: ''           # Array of Arrays
+  remote_form_flash_payload: ''   # $('<div alert>...</div>')
 
   initialize: (target) ->
     $(target || document).find('[data-input-js-options]:not(.initialized)').each (i, element) ->
@@ -48,17 +49,24 @@ this.EffectiveBootstrap ||= new class
     $form.removeClass('form-is-valid').find('[type=submit]').removeAttr('disabled')
 
   # Loads remote for payload that was placed here by effective_resources create.js.erb and update.js.erb
-  loadRemoteForm: ($form) ->
-    $newForm = @remote_form_payload.find('form')
+  loadRemoteForm: ($target) ->
+    $form = @remote_form_payload.find('form')
+    $target.replaceWith($form)
 
     for flash in @remote_form_flash
-      status = flash[0]
-      message = flash[1]
-      $newForm.prepend($("<div class='alert alert-#{status}'>#{message}</div>"))
+      @flash($form, flash[0], @remote_form_flash_payload)
 
-    $form.replaceWith($newForm)
-    @remote_form_payload = ''; @remote_form_flash = ''
+    @remote_form_payload = ''; @remote_form_flash = ''; @remote_form_flash_payload = '';
 
+  flash: ($form, status, $alert) ->
+    $submit = $form.children('.form-actions')
+
+    if status == 'danger' || status == 'error'
+      $submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow')
+    else
+      $submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow')
+
+    $submit.prepend($alert) if $alert.length > 0
 
 $ -> EffectiveBootstrap.initialize()
 $(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()

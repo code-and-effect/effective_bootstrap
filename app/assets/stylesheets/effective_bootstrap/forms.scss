@@ -2,6 +2,12 @@
 .form-actions {
   display: flex;
   align-items: center;
+  position: relative;
+
+  .alert {
+    position: absolute;
+    top: -4.0em;
+  }
 }
 
 .form-actions-bordered {
