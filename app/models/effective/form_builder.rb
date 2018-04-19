@@ -8,11 +8,10 @@ module Effective
     def initialize(object_name, object, template, options)
       @template = template
 
-      @layout = options.fetch(:layout, :vertical).to_sym
-      @action = options.fetch(:action, (object.new_record? ? :create : :update))
-
-      @readonly = options.fetch(:readonly, false)
-      @disabled = options.fetch(:disabled, template.cannot?(@action, object))
+      @layout = (options.delete(:layout) || :vertical).to_sym
+      @action = options.delete(:action)
+      @readonly = options.delete(:readonly)
+      @disabled = options.delete(:disabled)
 
       super
     end

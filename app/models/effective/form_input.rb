@@ -267,7 +267,10 @@ module Effective
 
       if options[:input][:readonly] || form_readonly?
         options[:input][:readonly] = 'readonly'
-        options[:input][:class] = options[:input][:class].to_s.sub('form-control', 'form-control-plaintext')
+
+        unless options[:input][:class].to_s.include?('form-control-plaintext')
+          options[:input][:class] = options[:input][:class].to_s.sub('form-control', 'form-control-plaintext')
+        end
       end
 
       if options[:input][:disabled] || form_disabled?
