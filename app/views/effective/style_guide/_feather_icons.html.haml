@@ -1,7 +1,7 @@
 %p These icons are a combination of #{link_to 'Feather', 'https://feathericons.com/'} and #{link_to 'FontAwesome', 'https://fontawesome.com/'} icons.
 
 .row.text-center
-  - Dir["#{__dir__}/../../../assets/icons/*.svg"].map { |path| path.split('/').last.chomp('.svg') }.each do |name|
+  - Dir["#{__dir__}/../../../assets/images/icons/*.svg"].map { |path| path.split('/').last.chomp('.svg') }.each do |name|
     .col-sm-2.my-3
       = icon(name)
       %br
