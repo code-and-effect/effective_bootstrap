@@ -187,7 +187,7 @@ module Effective
       obj = (object.class == Class) ? object : object.class
       return false unless obj.respond_to?(:validators_on)
 
-      obj.validators_on(name).present?
+      obj.validators_on(name).any? { |v| !v.kind_of?(ActiveRecord::Validations::PresenceValidator) }
     end
 
     def input_group?
@@ -329,6 +329,10 @@ module Effective
 
     def form_disabled?
       @builder.disabled
+    end
+
+    def form_remote?
+      @builder.remote
     end
 
     def parent_object

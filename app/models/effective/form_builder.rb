@@ -1,7 +1,7 @@
 module Effective
   class FormBuilder < ActionView::Helpers::FormBuilder
 
-    attr_accessor :template, :layout, :action, :readonly, :disabled
+    attr_accessor :template, :layout, :action, :readonly, :disabled, :remote
 
     delegate :content_tag, to: :template
 
@@ -12,6 +12,7 @@ module Effective
       @action = options.delete(:action)
       @readonly = options.delete(:readonly)
       @disabled = options.delete(:disabled)
+      @remote = options[:remote]
 
       super
     end
