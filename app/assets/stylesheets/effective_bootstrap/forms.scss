@@ -31,7 +31,7 @@
 
 // Spinner
 .form-actions .eb-icon-spinner { display: none; }
-.form-is-valid .form-actions .eb-icon-spinner { display: inline; }
+.form-actions.form-current-click .eb-icon-spinner { display: inline; }
 
 // Radio and Checkbox fieldsets
 fieldset.form-group > label {

@@ -1,6 +1,6 @@
 module Effective
   module FormInputs
-    class Submit < Effective::FormInput
+    class Delete < Effective::FormInput
 
       def to_html(&block)
         return super unless (form_readonly? || form_disabled?)
@@ -11,10 +11,14 @@ module Effective
           icon('check', style: 'display: none;'),
           icon('x', style: 'display: none;'),
           icon('spinner'),
-          (block_given? ? capture(&block) : content_tag(:button, name, options[:input]))
+          (block_given? ? capture(&block) : content_tag(:a, name, options[:input]))
         ]
 
         (left? ? tags.reverse.join : tags.join).html_safe
+      end
+
+      def label_options
+        false
       end
 
       def wrapper_options
@@ -33,18 +37,11 @@ module Effective
       end
 
       def input_html_options
-        { class: 'btn btn-primary', type: 'submit', name: 'commit', value: name }
+        { class: 'btn btn-warning', data: { method: :delete, remote: true, confirm: "Delete #{object}?"} }
       end
-
-      def label_options
-        false
-      end
-
-      private
 
       def border?
-        return @border unless @border.nil?
-        @border = options.key?(:border) ? options.delete(:border) : true
+        false
       end
 
       def left?
@@ -77,6 +74,7 @@ module Effective
         # end
         false
       end
+
 
     end
   end

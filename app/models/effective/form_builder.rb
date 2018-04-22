@@ -36,6 +36,11 @@ module Effective
       Effective::FormInputs::DatetimeField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def delete(name = 'Remove', url = nil, options = {}, &block)
+      options[:href] ||= url
+      Effective::FormInputs::Delete.new(name, options, builder: self).to_html(&block)
+    end
+
     def email_field(name, options = {})
       Effective::FormInputs::EmailField.new(name, options, builder: self).to_html { super(name, options) }
     end
