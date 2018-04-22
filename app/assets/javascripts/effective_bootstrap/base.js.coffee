@@ -21,6 +21,7 @@ this.EffectiveBootstrap ||= new class
     valid = form.checkValidity()
     $form = $(form)
 
+    @clearFlash()
     @reset($form) if $form.hasClass('was-validated')
 
     if valid then @submitting($form) else @invalidate($form)
@@ -28,26 +29,25 @@ this.EffectiveBootstrap ||= new class
 
   submitting: ($form) ->
     $form.addClass('form-is-valid').removeClass('form-is-invalid')
+    @spin()
     setTimeout((-> EffectiveBootstrap.disable($form)), 0)
-    true
 
   invalidate: ($form) ->
     $form.addClass('was-validated').addClass('form-is-invalid')
-    $form.find('.form-current-click').removeClass('form-current-click')
+    $form.find('.form-current-submit').removeClass('form-current-submit')
 
     # These controls need a little bit of help with client side validations
     $form.find('.effective-radios:not(.no-feedback),.effective-checks:not(.no-feedback)').each ->
       $(@).addClass(if $(@).find('input:invalid').length > 0 then 'is-invalid' else 'is-valid')
 
     @flash($form, 'danger')
-    false
 
   disable: ($form) ->
     $form.find('[type=submit]').prop('disabled', true)
 
   reset: ($form) ->
     $form.removeClass('was-validated').removeClass('form-is-invalid').removeClass('form-is-valid')
-    $form.find('.form-current-click').removeClass('form-current-click')
+    $form.find('.form-current-submit').removeClass('form-current-submit')
 
     # Clear any server side validation on individual inputs
     $form.find('.alert.is-invalid').remove()
@@ -56,19 +56,20 @@ this.EffectiveBootstrap ||= new class
 
     $form.find('[type=submit]').removeAttr('disabled')
 
-  spin: -> @current_submit.addClass('form-current-click') if @current_submit.length > 0
+  spin: -> @current_submit.addClass('form-current-submit') if @current_submit.length > 0
 
   beforeAjax: ($form) ->
     return unless $form.data('remote')
 
-    $form.one 'ajax:success', (event) -> EffectiveBootstrap.loadFromAjax($(event.target))
+    $form.one 'ajax:success', (event, thing, another) ->
+      EffectiveBootstrap.loadFromAjax($(event.target), $(event.target).data('method') == 'delete')
 
     $form.one 'ajax:error', (event, _, status, message) ->
       EffectiveBootstrap.reset($(event.target))
       EffectiveBootstrap.flash($(event.target), 'danger', "Ajax #{status}: #{message}")
 
   # Loads remote for payload that was placed here by effective_resources create.js.erb and update.js.erb
-  loadFromAjax: ($target) ->
+  loadFromAjax: ($target, was_delete) ->
     $target = $target.closest('form') unless $target.is('form')
 
     if @remote_form_payload.length > 0
@@ -76,13 +77,14 @@ this.EffectiveBootstrap ||= new class
       $form = @remote_form_payload.find('form') if $form.length == 0
       $target.replaceWith($form)
 
-    # We update the current submit to point to the new one
-    if @current_submit.length > 0
-      @current_submit = $form.find("##{@current_submit.attr('id')}.form-actions")
+    # We update the current submit to point to the new one.
+    unless was_delete
+      if @current_submit.length > 0
+        @current_submit = $form.find("##{@current_submit.attr('id')}.form-actions")
 
-    if @remote_form_flash.length > 0
-      for flash in @remote_form_flash
-        @flash($form, flash[0], flash[1], true)
+      if @remote_form_flash.length > 0 && was_delete == false
+        for flash in @remote_form_flash
+          @flash($form, flash[0], flash[1], true)
 
     @remote_form_payload = ''; @remote_form_flash = ''; @current_submit = '';
 
@@ -95,6 +97,8 @@ this.EffectiveBootstrap ||= new class
     if message? && !(status == 'success' && skip_success)
       @current_submit.prepend(@buildFlash(status, message))
 
+  clearFlash: -> @current_submit.find('.alert').remove() if @current_submit.length > 0
+
   buildFlash: (status, message) ->
     $("
       <div class='alert alert-dismissable alert-#{status} fade show' role='alert'>
@@ -105,9 +109,7 @@ this.EffectiveBootstrap ||= new class
       </div>
     ")
 
-  setCurrentSubmit: (button) ->
-    $action = $(button).parent()
-    @current_submit = $action if $action.is('.form-actions')
+  setCurrentSubmit: ($submit) -> @current_submit = $submit if $submit.is('.form-actions')
 
 $ -> EffectiveBootstrap.initialize()
 $(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()
@@ -116,8 +118,8 @@ $(document).on 'effective-bootstrap:initialize', (event) -> EffectiveBootstrap.i
 
 # Sets EffectiveBootstrap. current_click.
 # This displays the spinner here, and directs any flash messages before and after loadRemoteForm
-$(document).on 'click', 'a[data-remote],button[type=submit]', (event) ->
-  EffectiveBootstrap.setCurrentSubmit($(@))
+$(document).on 'click', '.form-actions a[data-remote],.form-actions button[type=submit]', (event) ->
+  EffectiveBootstrap.setCurrentSubmit($(@).parent())
   EffectiveBootstrap.spin()
 
 # This actually attached the handlers to a remote ajax form when it or an action inside it triggers a remote thing.

@@ -6,7 +6,7 @@
 
   .alert {
     position: absolute;
-    top: -4.0em;
+    top: 4.0em;
   }
 }
 
@@ -31,7 +31,7 @@
 
 // Spinner
 .form-actions .eb-icon-spinner { display: none; }
-.form-actions.form-current-click .eb-icon-spinner { display: inline; }
+.form-actions.form-current-submit .eb-icon-spinner { display: inline; }
 
 // Radio and Checkbox fieldsets
 fieldset.form-group > label {
