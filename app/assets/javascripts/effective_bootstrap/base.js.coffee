@@ -59,15 +59,13 @@ this.EffectiveBootstrap ||= new class
     $form.find('[type=submit]').removeAttr('disabled')
 
   flash: ($form, status, message, skip_success = false) ->
-    $actions = if @current_submit.length > 0 then @current_submit else $form.children('.form-actions')
-
     if status == 'danger' || status == 'error'
-      $actions.find('.eb-icon-x').show().delay(1000).fadeOut('slow')
+      @current_submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow')
     else
-      $actions.find('.eb-icon-check').show().delay(1000).fadeOut('slow')
+      @current_submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow')
 
     if message? && !(status == 'success' && skip_success)
-      $actions.prepend(@buildFlash(status, message))
+      @current_submit.prepend(@buildFlash(status, message))
 
   # Loads remote for payload that was placed here by effective_resources create.js.erb and update.js.erb
   loadRemoteForm: ($target) ->
@@ -77,6 +75,10 @@ this.EffectiveBootstrap ||= new class
       $form = @remote_form_payload.find("form[data-remote-index='#{$target.data('remote-index')}']")
       $form = @remote_form_payload.find('form') if $form.length == 0
       $target.replaceWith($form)
+
+    # We update the current submit to point to the new one
+    if @current_submit.length > 0
+      @current_submit = $form.find("##{@current_submit.attr('id')}.form-actions")
 
     if @remote_form_flash.length > 0
       for flash in @remote_form_flash
