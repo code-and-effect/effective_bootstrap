@@ -28,7 +28,7 @@ this.EffectiveBootstrap ||= new class
 
   submitting: ($form) ->
     $form.addClass('form-is-valid').removeClass('form-is-invalid')
-    setTimeout((-> EffectiveBootstrap.disable($form) and EffectiveBootstrap.spin()), 0)
+    setTimeout((-> EffectiveBootstrap.disable($form)), 0)
     true
 
   invalidate: ($form) ->
@@ -45,8 +45,6 @@ this.EffectiveBootstrap ||= new class
   disable: ($form) ->
     $form.find('[type=submit]').prop('disabled', true)
 
-  spin: -> @current_submit.addClass('form-current-click') if @current_submit.length > 0
-
   reset: ($form) ->
     $form.removeClass('was-validated').removeClass('form-is-invalid').removeClass('form-is-valid')
     $form.find('.form-current-click').removeClass('form-current-click')
@@ -58,17 +56,19 @@ this.EffectiveBootstrap ||= new class
 
     $form.find('[type=submit]').removeAttr('disabled')
 
-  flash: ($form, status, message, skip_success = false) ->
-    if status == 'danger' || status == 'error'
-      @current_submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow')
-    else
-      @current_submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow')
+  spin: -> @current_submit.addClass('form-current-click') if @current_submit.length > 0
 
-    if message? && !(status == 'success' && skip_success)
-      @current_submit.prepend(@buildFlash(status, message))
+  beforeAjax: ($form) ->
+    return unless $form.data('remote')
+
+    $form.one 'ajax:success', (event) -> EffectiveBootstrap.loadFromAjax($(event.target))
+
+    $form.one 'ajax:error', (event, _, status, message) ->
+      EffectiveBootstrap.reset($(event.target))
+      EffectiveBootstrap.flash($(event.target), 'danger', "Ajax #{status}: #{message}")
 
   # Loads remote for payload that was placed here by effective_resources create.js.erb and update.js.erb
-  loadRemoteForm: ($target) ->
+  loadFromAjax: ($target) ->
     $target = $target.closest('form') unless $target.is('form')
 
     if @remote_form_payload.length > 0
@@ -86,14 +86,14 @@ this.EffectiveBootstrap ||= new class
 
     @remote_form_payload = ''; @remote_form_flash = ''; @current_submit = '';
 
-  beforeAjax: ($form) ->
-    return unless $form.data('remote')
+  flash: ($form, status, message, skip_success = false) ->
+    if status == 'danger' || status == 'error'
+      @current_submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow')
+    else
+      @current_submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow')
 
-    $form.one 'ajax:success', (event) -> EffectiveBootstrap.loadRemoteForm($(event.target))
-
-    $form.one 'ajax:error', (event, _, status, message) ->
-      EffectiveBootstrap.reset($(event.target))
-      EffectiveBootstrap.flash($(event.target), 'danger', "Ajax #{status}: #{message}")
+    if message? && !(status == 'success' && skip_success)
+      @current_submit.prepend(@buildFlash(status, message))
 
   buildFlash: (status, message) ->
     $("
