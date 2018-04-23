@@ -75,7 +75,9 @@ this.EffectiveBootstrap ||= new class
     if @remote_form_payload.length > 0
       $form = @remote_form_payload.find("form[data-remote-index='#{$target.data('remote-index')}']")
       $form = @remote_form_payload.find('form') if $form.length == 0
-      $target.replaceWith($form)
+      if $form.length > 0
+        @initialize($form)
+        $target.replaceWith($form)
 
     # We update the current submit to point to the new one.
     unless was_delete
