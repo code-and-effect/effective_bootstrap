@@ -348,7 +348,7 @@ module Effective
         "#{sanitized_object_name}_#{index}_#{sanitized_method_name}"
       else
         "#{sanitized_object_name}_#{sanitized_method_name}"
-      end
+      end.downcase.parameterize
     end
 
     def sanitized_object_name

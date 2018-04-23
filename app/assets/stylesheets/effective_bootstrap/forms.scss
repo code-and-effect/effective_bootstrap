@@ -10,23 +10,41 @@
   }
 }
 
+.form-actions-inline.justify-content-end {
+  margin-left: 0.5em;
+
+  svg {
+    position: absolute;
+    left: -1.6em;
+  }
+}
+
+.form-actions-inline.justify-content-start {
+  margin-right: 0.5em;
+
+  svg {
+    position: absolute;
+    right: -1.6em;
+  }
+}
+
 .form-actions-bordered {
   border-top: solid 1px #eee;
-  margin-top: 1rem;
+  margin-top: 1em;
 
-  > * { margin-top: 1rem; }
+  > a,button { margin-top: 1em; }
 }
 
 .form-actions.justify-content-start {
-  > * { margin-right: 0.5rem; }
+  > a,button { margin-right: 0.5em; }
 }
 
 .form-actions.justify-content-end {
-  > * { margin-left: 0.5rem; }
+  > a,button { margin-left: 0.5em; }
 }
 
 .form-actions.justify-content-center {
-  > * { margin-left: 0.5rem; }
+  > a,button { margin-left: 0.5em; }
 }
 
 // Spinner

@@ -27,6 +27,7 @@ module Effective
         classes = [
           ('row' if layout == :horizontal),
           'form-group form-actions',
+          ('form-actions-inline' if inline?),
           ('form-actions-bordered' if border?),
           ('justify-content-start' if left? && layout == :vertical),
           ('justify-content-center' if center? && layout == :vertical),
@@ -42,6 +43,11 @@ module Effective
 
       def border?
         false
+      end
+
+      def inline?
+        return @form_actions_inline unless @form_actions_inline.nil?
+        @form_actions_inline = (options.delete(:inline) || false)
       end
 
       def left?
