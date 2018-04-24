@@ -36,15 +36,15 @@
 }
 
 .form-actions.justify-content-start {
-  > a,button { margin-right: 0.5em; }
+  > a,button { margin-right: 0.5em; } // Not svg
 }
 
 .form-actions.justify-content-end {
-  > a,button { margin-left: 0.5em; }
+  > a,button { margin-left: 0.5em; } // Not svg
 }
 
 .form-actions.justify-content-center {
-  > a,button { margin-left: 0.5em; }
+  > a,button { margin-left: 0.5em; } // Not svg
 }
 
 // Spinner
@@ -52,16 +52,11 @@
 .form-actions.form-current-submit .eb-icon-spinner { display: inline; }
 
 // Radio and Checkbox fieldsets
-fieldset.form-group > label {
-  display: block;
-}
+fieldset.form-group > label { display: block; }
+div.form-group > label + .btn-group { display: block; }
 
-div.form-group > label + .btn-group {
-  display: block;
-}
+.effective-radios.is-invalid ~ .invalid-feedback { display: block; }
+.effective-radios.is-valid ~ .valid-feedback { display: block; }
 
-.effective-radios.is-invalid ~ .invalid-feedback { display: block }
-.effective-radios.is-valid ~ .valid-feedback { display: block }
-
-.effective-checks.is-invalid .invalid-feedback { display: block }
-.effective-checks.is-valid .valid-feedback { display: block }
+.effective-checks.is-invalid .invalid-feedback { display: block; }
+.effective-checks.is-valid .valid-feedback { display: block; }

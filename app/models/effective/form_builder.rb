@@ -58,6 +58,12 @@ module Effective
       Effective::FormInputs::FormGroup.new(name, options, builder: self).to_html(&block)
     end
 
+    # This is gonna be a post?
+    def post_to(name, url, options = {}, &block)
+      options[:href] ||= url
+      Effective::FormInputs::PostTo.new(name, options, builder: self).to_html(&block)
+    end
+
     def number_field(name, options = {})
       Effective::FormInputs::NumberField.new(name, options, builder: self).to_html { super(name, options) }
     end
