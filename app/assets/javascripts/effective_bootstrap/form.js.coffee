@@ -32,6 +32,8 @@ this.EffectiveForm ||= new class
     $form.find('[type=submit]').prop('disabled', true)
 
   reset: ($form) ->
+    $form = $form.closest('form') unless $form.is('form')
+
     $form.removeClass('was-validated').removeClass('form-is-invalid').removeClass('form-is-valid')
     $form.find('.form-current-submit').removeClass('form-current-submit')
 
@@ -52,7 +54,7 @@ this.EffectiveForm ||= new class
 
     $form.one 'ajax:error', (event, _, status, message) ->
       EffectiveForm.reset($(event.target))
-      EffectiveForm.flash($(event.target), 'danger', "Ajax #{status}: #{message}")
+      EffectiveForm.flash($(event.target), 'danger', "#{status}: #{message || 'unable to contact server. please refresh the page and try again.'}")
 
   # Loads remote for payload that was placed here by effective_resources create.js.erb and update.js.erb
   loadFromAjax: ($target, was_delete) ->
