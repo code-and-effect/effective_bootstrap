@@ -59,9 +59,9 @@ module Effective
     end
 
     # This is gonna be a post?
-    def post_to(name, url, options = {}, &block)
+    def remote_link_to(name, url, options = {}, &block)
       options[:href] ||= url
-      Effective::FormInputs::PostTo.new(name, options, builder: self).to_html(&block)
+      Effective::FormInputs::RemoteLinkTo.new(name, options, builder: self).to_html(&block)
     end
 
     def number_field(name, options = {})

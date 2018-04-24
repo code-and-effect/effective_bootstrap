@@ -1,6 +1,6 @@
 module Effective
   module FormInputs
-    class PostTo < Submit
+    class RemoteLinkTo < Submit
 
       def build_input(&block)
         tags = [
@@ -14,15 +14,7 @@ module Effective
       end
 
       def input_html_options
-        {
-          class: '',
-          rel: 'nofollow',
-          data: {
-            method: :post,
-            remote: true,
-            confirm: confirm
-          }
-        }
+        { class: '', rel: 'nofollow', data: { method: :post, remote: true, confirm: confirm } }
       end
 
       def border?
