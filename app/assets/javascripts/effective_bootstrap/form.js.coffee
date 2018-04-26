@@ -49,7 +49,7 @@ this.EffectiveForm ||= new class
   beforeAjax: ($form) ->
     return unless $form.data('remote')
 
-    $form.one 'ajax:success', (event, thing, another) ->
+    $form.one 'ajax:success', (event) ->
       EffectiveForm.loadFromAjax($(event.target), $(event.target).data('method') == 'delete')
 
     $form.one 'ajax:error', (event, _, status, message) ->
@@ -62,23 +62,31 @@ this.EffectiveForm ||= new class
 
     if @remote_form_payload.length > 0
       $form = @remote_form_payload.find("form[data-remote-index='#{$target.data('remote-index')}']")
-      $form = @remote_form_payload.find('form') if $form.length == 0
-      if $form.length > 0
-        EffectiveBootstrap.initialize($form)
-        $target.replaceWith($form)
+      $form = @remote_form_payload.find('form').first() if $form.length == 0
+
+    if @remote_form_payload.length == 0 || $form.length == 0
+      return @flash('danger', 'no remote form provided. please refresh the page and try again.')
+
+    EffectiveBootstrap.initialize($form)
+    $target.replaceWith($form)
+    @remote_form_payload = ''
+
+    # There's nothing to update if it was a successful delete
+    return if was_delete
 
     # We update the current submit to point to the new one.
-    unless was_delete
-      if @current_submit.length > 0
-        @current_submit = $form.find("##{@current_submit.attr('id')}.form-actions")
+    if @current_submit.length > 0
+      @current_submit = $form.find("##{@current_submit.attr('id')}.form-actions")
 
-      if @remote_form_flash.length > 0 && was_delete == false
-        for flash in @remote_form_flash
-          @flash($form, flash[0], flash[1], true)
+    if @remote_form_flash.length > 0
+      for flash in @remote_form_flash
+        @flash($form, flash[0], flash[1], true)
 
-    @remote_form_payload = ''; @remote_form_flash = ''; @current_submit = '';
+      @remote_form_flash = ''
 
   flash: ($form, status, message, skip_success = false) ->
+    return unless @current_submit.length > 0
+
     if status == 'danger' || status == 'error'
       @current_submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow')
     else
