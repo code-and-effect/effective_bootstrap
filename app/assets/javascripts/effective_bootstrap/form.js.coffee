@@ -49,7 +49,7 @@ this.EffectiveForm ||= new class
   beforeAjax: ($form) ->
     return unless $form.data('remote')
 
-    $form.one 'ajax:success', (event) ->
+    $form.one 'ajax:success', (event, data, status) ->
       EffectiveForm.loadFromAjax($(event.target), $(event.target).data('method') == 'delete')
 
     $form.one 'ajax:error', (event, _, status, message) ->
@@ -59,13 +59,13 @@ this.EffectiveForm ||= new class
   # Loads remote for payload that was placed here by effective_resources create.js.erb and update.js.erb
   loadFromAjax: ($target, was_delete) ->
     $target = $target.closest('form') unless $target.is('form')
+    $form = ''
 
     if @remote_form_payload.length > 0
       $form = @remote_form_payload.find("form[data-remote-index='#{$target.data('remote-index')}']")
       $form = @remote_form_payload.find('form').first() if $form.length == 0
 
-    if @remote_form_payload.length == 0 || $form.length == 0
-      return @flash('danger', 'no remote form provided. please refresh the page and try again.')
+    return if @remote_form_payload.length == 0 || $form.length == 0
 
     EffectiveBootstrap.initialize($form)
     $target.replaceWith($form)
