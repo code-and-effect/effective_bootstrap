@@ -11,7 +11,15 @@ module Effective
           icon('check', style: 'display: none;'),
           icon('x', style: 'display: none;'),
           icon('spinner'),
-          (block_given? ? capture(&block) : content_tag(:button, name, options[:input]))
+          (
+            if block_given?
+              capture(&block)
+            else
+              content_tag(:button, options[:input]) do
+                icon_name.present? ? (icon(icon_name) + name) : name
+              end
+            end
+          )
         ]
 
         (left? ? tags.reverse.join : tags.join).html_safe
@@ -67,6 +75,11 @@ module Effective
       def right?
         return @right unless @right.nil?
         @right = (options.delete(:right) || false)
+      end
+
+      def icon_name
+        return @icon unless @icon.nil?
+        @icon = options[:input].delete(:icon) || ''.html_safe
       end
 
       def feedback_options

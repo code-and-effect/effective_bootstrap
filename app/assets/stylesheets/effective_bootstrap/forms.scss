@@ -13,7 +13,7 @@
 .form-actions-inline.justify-content-end {
   margin-left: 0.5em;
 
-  svg {
+  > svg {
     position: absolute;
     left: -1.6em;
   }
@@ -22,7 +22,7 @@
 .form-actions-inline.justify-content-start {
   margin-right: 0.5em;
 
-  svg {
+  > svg {
     position: absolute;
     right: -1.6em;
   }
