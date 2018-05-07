@@ -178,7 +178,10 @@ module Effective
       obj = (object.class == Class) ? object : object.class
       return false unless obj.respond_to?(:validators_on)
 
-      obj.validators_on(name).any? { |v| v.kind_of?(ActiveRecord::Validations::PresenceValidator) }
+      obj.validators_on(name).any? do |v|
+        v.kind_of?(ActiveRecord::Validations::PresenceValidator) && !v.options.key?(:if) && !v.options.key?(:unless)
+      end
+
     end
 
     def validated?(name)
