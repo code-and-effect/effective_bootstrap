@@ -28,13 +28,14 @@ module Effective
       end
 
       def build_attachment(attachment)
-        url = @template.url_for(attachment)
+        url = (@template.url_for(attachment) rescue false)
+        return unless url
 
-        content_tag(:div, class: 'col-3') do
+        content_tag(:div, class: 'col') do
           content_tag(:div, class: 'card mb-3') do
             if attachment.image?
-              content_tag(:img, '', class: 'card-img-top', src: url, alt: attachment.filename.to_s) +
               content_tag(:div, class: 'card-body') do
+                content_tag(:img, '', class: 'img-fluid', src: url, alt: attachment.filename.to_s) +
                 link_to(attachment.filename, url, class: 'card-link')
               end
             else
