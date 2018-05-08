@@ -153,8 +153,8 @@ module Effective
 
       invalid = object.errors[name].to_sentence.presence if object.respond_to?(:errors)
       invalid ||= options[:feedback][:invalid].delete(:text)
-      invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].compact.join(' and ')
-      invalid ||= 'is invalid'
+      invalid ||= "can't be blank" if options[:input][:required]
+      invalid ||= "can't be blank or invalid"
 
       valid = options[:feedback][:valid].delete(:text) || "Look's good!"
 
@@ -179,9 +179,38 @@ module Effective
       return false unless obj.respond_to?(:validators_on)
 
       obj.validators_on(name).any? do |v|
-        v.kind_of?(ActiveRecord::Validations::PresenceValidator) && !v.options.key?(:if) && !v.options.key?(:unless)
+        v.kind_of?(ActiveRecord::Validations::PresenceValidator) && required_options?(v.options)
+      end
+    end
+
+    def required_options?(opts)
+      return true unless (opts.key?(:if) || opts.key?(:unless))
+
+      if opts[:if].respond_to?(:call)
+        return object.instance_exec(&opts[:if])
       end
 
+      if opts[:if].kind_of?(Symbol)
+        return object.send(opts[:if])
+      end
+
+      if opts.key?(:if)
+        return opts[:if]
+      end
+
+      if opts[:unless].respond_to?(:call)
+        return !object.instance_exec(&opts[:unless])
+      end
+
+      if opts[:unless].kind_of?(Symbol)
+        return !object.send(opts[:unless])
+      end
+
+      if opts.key?(:unless)
+        return !opts[:unless]
+      end
+
+      false
     end
 
     def validated?(name)
