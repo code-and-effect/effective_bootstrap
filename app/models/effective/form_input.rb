@@ -153,8 +153,8 @@ module Effective
 
       invalid = object.errors[name].to_sentence.presence if object.respond_to?(:errors)
       invalid ||= options[:feedback][:invalid].delete(:text)
-      invalid ||= "can't be blank" if options[:input][:required]
-      invalid ||= "can't be blank or invalid"
+      invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].compact.join(' and ')
+      invalid ||= "can't be blank or is invalid"
 
       valid = options[:feedback][:valid].delete(:text) || "Look's good!"
 
