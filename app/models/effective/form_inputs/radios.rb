@@ -35,7 +35,11 @@ module Effective
       end
 
       def wrapper_options
-        { class: "form-group #{tag_id}" }
+        if buttons? || cards?
+          { class: "form-group #{tag_id}" }
+        else
+          { class: "form-group effective-radios #{tag_id}" }
+        end
       end
 
       def button_group_class

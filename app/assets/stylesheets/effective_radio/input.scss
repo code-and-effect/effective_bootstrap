@@ -3,6 +3,20 @@ div.btn-group > .btn.first-button {
   border-bottom-left-radius: 0.25rem;
 }
 
+.effective-radios {
+  white-space: nowrap;
+}
+
+.effective-radios.is-valid {
+  label { border-color: #28a745; }
+  .valid-feedback { display: block; }
+}
+
+.effective-radios.is-invalid {
+  label { border-color: #dc3545; }
+  .invalid-feedback { display: block; }
+}
+
 .effective-radios.card-deck {
   .card-header { cursor: pointer; }
 
@@ -17,10 +31,3 @@ div.btn-group > .btn.first-button {
   }
 }
 
-.effective-radios.is-valid {
-  label { border-color: #28a745; }
-}
-
-.effective-radios.is-invalid {
-  label { border-color: #dc3545; }
-}
