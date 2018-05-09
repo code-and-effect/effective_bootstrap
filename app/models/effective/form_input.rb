@@ -126,13 +126,13 @@ module Effective
       return BLANK if options[:label] == false
       return BLANK if name.kind_of?(NilClass)
 
-      text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK).html_safe
+      text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK)
 
       if options[:input][:id]
         options[:label][:for] = options[:input][:id]
       end
 
-      @builder.label(name, text, options[:label])
+      @builder.label(name, text.html_safe, options[:label])
     end
 
     def build_input(&block)
@@ -143,9 +143,9 @@ module Effective
       return BLANK unless options[:hint] && options[:hint][:text]
 
       tag = options[:hint].delete(:tag)
-      text = options[:hint].delete(:text).html_safe
+      text = options[:hint].delete(:text)
 
-      content_tag(tag, text, options[:hint])
+      content_tag(tag, text.html_safe, options[:hint])
     end
 
     def build_feedback
@@ -158,8 +158,8 @@ module Effective
 
       valid = options[:feedback][:valid].delete(:text) || "Look's good!"
 
-      content_tag(:div, invalid, options[:feedback][:invalid]) +
-      content_tag(:div, valid, options[:feedback][:valid])
+      content_tag(:div, invalid.html_safe, options[:feedback][:invalid]) +
+      content_tag(:div, valid.html_safe, options[:feedback][:valid])
     end
 
     def has_error?(name = nil)
