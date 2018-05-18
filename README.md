@@ -444,6 +444,10 @@ The `f.save` is purely a input submit button.
 
 MIT License.  Copyright [Code and Effect Inc.](http://www.codeandeffect.com/)
 
+[Feather icons](https://github.com/feathericons/feather#license) are licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+[FontAwesome icons](https://fontawesome.com/license) are licensed under the [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/) and require this attribution.
+
 ## Credits
 
 The authors of this gem are not associated with any of the awesome projects used by this gem.
