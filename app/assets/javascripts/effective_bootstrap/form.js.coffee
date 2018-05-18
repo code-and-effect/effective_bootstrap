@@ -1,6 +1,6 @@
 this.EffectiveForm ||= new class
   current_submit: ''              # The $(.form-actions) that clicked
-  remote_form_payload: ''         # A fresh form
+  remote_form_payload: ''         # String containing html from server side render of this form
   remote_form_flash: ''           # Array of Arrays
 
   validate: (form) ->
@@ -62,10 +62,11 @@ this.EffectiveForm ||= new class
     $form = ''
 
     if @remote_form_payload.length > 0
-      $form = @remote_form_payload.find("form[data-remote-index='#{$target.data('remote-index')}']")
-      $form = @remote_form_payload.find('form').first() if $form.length == 0
+      $payload = $("<div>#{@remote_form_payload}</div>")
+      $form = $payload.find("form[data-remote-index='#{$target.data('remote-index')}']")
+      $form = $payload.find('form').first() if $form.length == 0
 
-    return if @remote_form_payload.length == 0 || $form.length == 0
+    return if $form.length == 0
 
     EffectiveBootstrap.initialize($form)
     $target.replaceWith($form)
@@ -79,9 +80,7 @@ this.EffectiveForm ||= new class
       @current_submit = $form.find("##{@current_submit.attr('id')}.form-actions")
 
     if @remote_form_flash.length > 0
-      for flash in @remote_form_flash
-        @flash($form, flash[0], flash[1], true)
-
+      @flash($form, flash[0], flash[1], true) for flash in @remote_form_flash
       @remote_form_flash = ''
 
   flash: ($form, status, message, skip_success = false) ->
