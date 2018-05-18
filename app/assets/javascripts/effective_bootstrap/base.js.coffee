@@ -1,3 +1,4 @@
+# This initializes all the effective_* form inputs also in this gem
 this.EffectiveBootstrap ||= new class
   initialize: (target) ->
     $(target || document).find('[data-input-js-options]:not(.initialized)').each (i, element) ->
@@ -36,7 +37,7 @@ $(document).on 'confirm', (event) ->
       , 4000)
     false # don't show the confirmation dialog
 
-$.rails.confirm = (message) -> true
+$.rails.confirm = (message) -> true if $.rails
 $(document).on 'confirm:complete', (event) -> $(event.target).data('confirmed')
 
 # Fade out cocoon remove.
