@@ -19,7 +19,7 @@ $(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()
 $(document).on 'cocoon:after-insert', -> EffectiveBootstrap.initialize()
 $(document).on 'effective-bootstrap:initialize', (event) -> EffectiveBootstrap.initialize(event.currentTarget)
 
-# These next two three methods hijack jquery_ujs data-confirm and do it our own way with a double click confirm
+# These next three methods hijack jquery_ujs data-confirm and do it our own way with a double click confirm
 $(document).on 'confirm', (event) ->
   $obj = $(event.target)
 

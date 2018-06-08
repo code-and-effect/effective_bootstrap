@@ -6,6 +6,7 @@
 //= require ./effective_time/input
 
 //= require ./effective_checks/input
+//= require ./effective_editor/input
 //= require ./effective_file/input
 //= require ./effective_phone/input
 //= require ./effective_price/input
