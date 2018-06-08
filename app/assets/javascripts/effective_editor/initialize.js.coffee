@@ -1,12 +1,12 @@
 # https://quilljs.com/docs/download/
 # https://github.com/quilljs/quill
 (this.EffectiveBootstrap || {}).effective_editor = ($element, options) ->
-  $input = $element.siblings('input').first()
+  editor = '#' + $element.attr('id') + '_editor'
 
-  quill = new Quill('#' + $element.attr('id'), options)
-  quill.setContents(JSON.parse($input.val()))
+  quill = new Quill(editor, options)
+  quill.pasteHTML($element.val())
 
   quill.on 'text-change', (delta, old, source) ->
-    value = quill.getContents()
-    value['html'] = $element.children('.ql-editor').html()
-    $input.val(JSON.stringify(value))
+    html = $(editor).children('.ql-editor').html()
+    html = '' if html == '<p><br></p>' || html == '<p></p>'
+    $element.val(html)

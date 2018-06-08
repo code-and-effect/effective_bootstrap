@@ -1,0 +1,13 @@
+.effective-editor { height: 0; width: 0; padding: 0; margin: 0; visibility: hidden; }
+
+// Bootstrap 4 Feedback client side
+.was-validated .form-control:invalid ~ .ql-container, { border-color: #dc3545; }
+.was-validated .form-control:valid ~ .ql-container { border-color: #28a745; }
+.was-validated .form-control:invalid ~ .ql-toolbar, { border-color: #dc3545; }
+.was-validated .form-control:valid ~ .ql-toolbar { border-color: #28a745; }
+
+// Bootstrap 4 Server side feedback
+.form-control.is-invalid ~ .ql-container { border-color: #dc3545; }
+.form-control.is-invalid ~ .ql-toolbar { border-color: #dc3545; }
+.form-control.is-valid ~ .ql-container { border-color: #28a745; }
+.form-control.is-valid ~ .ql-toolbar { border-color: #28a745; }
