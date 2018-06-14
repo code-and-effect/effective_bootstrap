@@ -1,5 +1,7 @@
 module EffectiveIconsHelper
 
+  # icon('check', class: 'big-4')
+  # icon('check', class: 'small-3')
   def icon(svg, options = {})
     svg = svg.to_s.chomp('.svg')
 
