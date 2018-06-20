@@ -10,3 +10,5 @@
     html = $(editor).children('.ql-editor').html()
     html = '' if html == '<p><br></p>' || html == '<p></p>'
     $element.val(html)
+
+  $element.on 'quill:focus', (event) -> quill.focus()
