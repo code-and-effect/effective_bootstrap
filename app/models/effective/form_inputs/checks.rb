@@ -49,8 +49,8 @@ module Effective
         text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK).html_safe
 
         content_tag((inline? ? :label : :legend), options[:label]) do
-          text + content_tag(:small, class: 'effective-checks-actions text-muted ml-1') do
-            link_to('All', '#', 'data-effective-checks-all': true) + ' - ' + link_to('None', '#', 'data-effective-checks-none': true)
+          text + content_tag(:div, class: 'effective-checks-actions text-muted') do
+            link_to('Select All', '#', 'data-effective-checks-all': true) + ' - ' + link_to('Select None', '#', 'data-effective-checks-none': true)
           end
         end
       end
