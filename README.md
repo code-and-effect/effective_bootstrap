@@ -162,7 +162,7 @@ There are three sets of options hashes that you can pass into any form input:
 
 - `wrapper: { class: 'something' }` are applied to the wrapping div tag.
 - `input_html: { class: 'something' }` are applied to the input, select or textarea tag itself.
-- `input_js: { key: value}` are passed to any custom form input will be used to initialize the Javascript library. For example:
+- `input_js: { key: value }` are passed to any custom form input will be used to initialize the Javascript library. For example:
 
 ```ruby
 = effective_form_with(model: @user) do |f|
@@ -315,12 +315,12 @@ will internally translate the collection into:
 [['User 1', 'User_1'], ['User 2', 'User_2'], ['Member 100', 'Member_100']]
 ```
 
-and instead of posting to the server with the parameter `:primary_contact`, it will instead post `{:primary_contact_id => 2, :primary_contact_type => 'User'}`.
+and instead of posting to the server with the parameter `:primary_contact`, it will instead post `{primary_contact_id: 2, primary_contact_type: 'User'}`.
 
 Using both `polymorphic: true` and `grouped: true` is recommended.  In this case the expected collection is as follows:
 
 ```ruby
-= f.input :primary_contact, {'Users' => User.all, 'Members' => 'Member.all'}, polymorphic: true, grouped: true
+= f.input :primary_contact, {'Users': User.all, 'Members': Member.all}, polymorphic: true, grouped: true
 ```
 
 ### Options
@@ -343,13 +343,13 @@ The default options used to initialize this form input are as follows:
 To limit the number of items that can be selected in a multiple select box:
 
 ```ruby
-:maximumSelectionLength => 2
+maximumSelectionLength: 2
 ```
 
 To hide the search box entirely:
 
 ```ruby
-:minimumResultsForSearch => 'Infinity'
+minimumResultsForSearch: 'Infinity'
 ```
 
 For a full list of options, please refer to: https://select2.github.io/options.html
@@ -360,8 +360,8 @@ The following `input_js: options` are not part of the standard select2 API, and 
 To add a css class to the select2 container or dropdown:
 
 ```ruby
-:containerClass => 'custom-container-class'
-:dropdownClass => 'custom-dropdown-class'
+containerClass: 'custom-container-class'
+dropdownClass: 'custom-dropdown-class'
 ```
 
 to display a glyphicon infront of each option value:
