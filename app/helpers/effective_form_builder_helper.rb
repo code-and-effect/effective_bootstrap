@@ -5,15 +5,14 @@ module EffectiveFormBuilderHelper
 
     # Compute the default ID
     subject = Array(options[:scope] || options[:model]).last
+    class_name = subject.class.name.parameterize.underscore
 
     html_id = if subject.kind_of?(Symbol)
-      subject
-    elsif subject.respond_to?(:new_record?) && subject.new_record?
-      "new_#{subject.class.name.underscore}"
+      subject.to_s
     elsif subject.respond_to?(:persisted?) && subject.persisted?
-      "edit_#{subject.class.name.underscore}_#{subject.to_param}"
+      "edit_#{class_name}_#{subject.to_param}"
     else
-      raise 'Unexpected subject. Expected :scope or :model to be a symbol or ActiveRecord object'
+      "new_#{class_name}"
     end
 
     remote_index = options.except(:model).hash.abs
