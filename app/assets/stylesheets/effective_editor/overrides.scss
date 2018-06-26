@@ -1,4 +1,4 @@
-.effective-editor { height: 0; width: 0; padding: 0; margin: 0; visibility: hidden; }
+.effective_editor { height: 0; width: 0; padding: 0; margin: 0; visibility: hidden; }
 
 // Bootstrap 4 Feedback client side
 .was-validated .form-control:invalid ~ .ql-container, { border-color: #dc3545; }
@@ -11,3 +11,15 @@
 .form-control.is-invalid ~ .ql-toolbar { border-color: #dc3545; }
 .form-control.is-valid ~ .ql-container { border-color: #28a745; }
 .form-control.is-valid ~ .ql-toolbar { border-color: #28a745; }
+
+.ql-effective.ql-container {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+// Now for the editor itself
+.effective_editor_content.ql-container {
+  border: none;
+
+  .ql-editor { padding: 0; }
+}

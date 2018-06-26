@@ -10,21 +10,31 @@ module Effective
       end
 
       def input_html_options
-        { class: 'effective-editor form-control', id: unique_id }
+        { class: 'effective_editor form-control', id: unique_id }
       end
 
       def input_js_options
-        { modules: { toolbar: toolbar }, theme: 'snow', placeholder: "Add #{name.to_s.pluralize}..." }
+        { modules: { toolbar: toolbar }, theme: 'snow', placeholder: "Add #{name.to_s.pluralize}...", delta: delta? }
       end
 
       def toolbar
         [
-          [{ 'header': [1, 2, 3, 4, false] }],
+          [{'header': [1, 2, 3, 4, false] }],
           ['bold', 'italic', 'underline'],
           ['link', 'image', 'video', 'code-block'],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          [{ 'align': [] }, 'clean'],
+          [{'list': 'ordered'}, { 'list': 'bullet' }],
+          [{'align': [] }, 'clean'],
         ]
+      end
+
+      def delta? # default false
+        return @delta unless @delta.nil?
+
+        if options.key?(:html)
+          @delta = (options.delete(:html) == false)
+        else
+          @delta = (options.delete(:delta) || false)
+        end
       end
 
     end
