@@ -1,5 +1,6 @@
 this.EffectiveForm ||= new class
   current_submit: ''              # The $(.form-actions) that clicked
+  current_delete: ''              # If there's a rails ujs_delete link with the data-closeset selector, use this.
   remote_form_payload: ''         # String containing html from server side render of this form
   remote_form_flash: ''           # Array of Arrays
 
@@ -108,6 +109,13 @@ this.EffectiveForm ||= new class
 
   setCurrentSubmit: ($submit) -> @current_submit = $submit if $submit.is('.form-actions')
 
+  setCurrentDelete: ($delete) -> @current_delete = $delete
+
+  finishDelete: ->
+    if @current_delete.length > 0
+      @current_delete.fadeOut('slow', -> $(this).remove())
+      @current_delete = ''
+
 # Sets EffectiveBootstrap. current_click.
 # This displays the spinner here, and directs any flash messages before and after loadRemoteForm
 $(document).on 'click', '.form-actions a[data-remote],.form-actions button[type=submit]', (event) ->
@@ -118,3 +126,7 @@ $(document).on 'click', '.form-actions a[data-remote],.form-actions button[type=
 $(document).on 'ajax:beforeSend', 'form[data-remote]', (event) ->
   EffectiveForm.beforeAjax($(@))
   this.checkValidity()
+
+$(document).on 'ajax:beforeSend', '[data-method=delete]', (event) ->
+  if ($delete = $(@)).data('closest')
+    EffectiveForm.setCurrentDelete($delete.closest($delete.data('closest')))
