@@ -4,10 +4,13 @@
  * Copyright (c) 2014, Jason Chen
  * Copyright (c) 2013, salesforce.com
  */
+ /*
+   UPGRADE WARNING: track what styles have been commented out and keep them commented out;
+ */
 .ql-container {
   box-sizing: border-box;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  // font-family: Helvetica, Arial, sans-serif;
+  // font-size: 13px;
   height: 100%;
   margin: 0px;
   position: relative;
@@ -56,7 +59,7 @@
 .ql-editor h4,
 .ql-editor h5,
 .ql-editor h6 {
-  margin: 0;
+  // margin: 0;
   padding: 0;
   counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
 }
@@ -848,7 +851,7 @@
 .ql-toolbar.ql-snow {
   border: 1px solid #ccc;
   box-sizing: border-box;
-  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  // font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   padding: 8px;
 }
 .ql-toolbar.ql-snow .ql-formats {

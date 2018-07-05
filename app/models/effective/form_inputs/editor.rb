@@ -17,11 +17,12 @@ module Effective
         { modules: { toolbar: toolbar }, theme: 'snow', placeholder: "Add #{name.to_s.pluralize}...", delta: delta? }
       end
 
+      # Commented out 'Full' toolbar options because currently we don't want headers / source / code options
       def toolbar
         [
-          [{'header': [1, 2, 3, 4, false] }],
+          # [{'header': [1, 2, 3, 4, false] }],
           ['bold', 'italic', 'underline'],
-          ['link', 'image', 'video', 'code-block'],
+          ['link', 'image', 'video'], # also 'code-block'
           [{'list': 'ordered'}, { 'list': 'bullet' }],
           [{'align': [] }, 'clean'],
         ]
