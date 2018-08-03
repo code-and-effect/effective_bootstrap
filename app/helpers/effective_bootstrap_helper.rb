@@ -143,6 +143,57 @@ module EffectiveBootstrapHelper
     content_tag(:div, '', class: 'dropdown-divider')
   end
 
+  # Tabs DSL
+  # Inserts both the tablist and the tabpanel
+
+  # = tabs do
+  #   = tab 'Imports' do
+  #     %p Imports
+
+  #   = tab 'Exports' do
+  #     %p Exports
+
+  # If you pass active 'label' it will make that tab active. Otherwise first.
+  # Unique will make sure the tab html IDs are unique
+  # $('#tab-demographics').tab('show')
+  def tabs(active: nil, unique: false, list: {}, content: {}, &block)
+    raise 'expected a block' unless block_given?
+
+    @_tab_mode = :tablist
+    @_tab_active = (active || :first)
+    @_tab_unique = ''.object_id if unique
+
+    content_tag(:ul, {class: 'nav nav-tabs', role: 'tablist'}.merge(list)) do
+      yield # Yield to tab the first time
+    end +
+    content_tag(:div, {class: 'tab-content'}.merge(content)) do
+      @_tab_mode = :content
+      @_tab_active = (active || :first)
+      yield # Yield to tab the second time
+    end
+  end
+
+  def tab(label, options = {}, &block)
+    controls = options.delete(:controls) || label.to_s.parameterize.gsub('_', '-')
+    controls = controls[1..-1] if controls[0] == '#'
+    controls = "#{controls}-#{@_tab_unique}" if @_tab_unique
+
+    active = (@_tab_active == :first || @_tab_active == label)
+
+    @_tab_active = nil if @_tab_active == :first
+
+    if @_tab_mode == :tablist # Inserting the label into the tablist top
+      content_tag(:li, class: 'nav-item') do
+        content_tag(:a, label, id: ('tab-' + controls), class: ['nav-link', ('active' if active)].compact.join(' '), href: '#' + controls, 'aria-controls': controls, 'aria-selected': active.to_s, 'data-toggle': 'tab', role: 'tab')
+      end
+    else # Inserting the content into the tab itself
+      classes = ['tab-pane', 'fade', ('show active' if active), options[:class].presence].compact.join(' ')
+      content_tag(:div, id: controls, class: classes, role: 'tabpanel', 'aria-labelledby': ('tab-' + controls)) do
+        yield
+      end
+    end
+  end
+
   def merge_class_key(hash, value)
     return { :class => value } unless hash.kind_of?(Hash)
 
