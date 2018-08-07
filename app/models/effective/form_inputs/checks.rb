@@ -50,7 +50,9 @@ module Effective
 
         content_tag((inline? ? :label : :legend), options[:label]) do
           text + content_tag(:div, class: 'effective-checks-actions text-muted') do
-            link_to('Select All', '#', 'data-effective-checks-all': true) + ' - ' + link_to('Select None', '#', 'data-effective-checks-none': true)
+            unless disabled?
+              link_to('Select All', '#', 'data-effective-checks-all': true) + ' - ' + link_to('Select None', '#', 'data-effective-checks-none': true)
+            end
           end
         end
       end

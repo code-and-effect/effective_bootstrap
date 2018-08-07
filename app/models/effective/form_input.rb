@@ -310,7 +310,7 @@ module Effective
         end
       end
 
-      if options[:input][:disabled] || form_disabled?
+      if disabled? || form_disabled?
         options[:input][:disabled] = 'disabled'
       end
 
@@ -357,6 +357,10 @@ module Effective
 
     def form_readonly?
       @builder.readonly
+    end
+
+    def disabled?
+      options.dig(:input, :disabled).present?
     end
 
     def form_disabled?
