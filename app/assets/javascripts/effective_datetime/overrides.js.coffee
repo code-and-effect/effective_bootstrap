@@ -40,3 +40,6 @@ $(document).on 'dp.end_date_initialized', (event) ->
   try
     date = $start_date.data('DateTimePicker').date()
     $end_date.data('DateTimePicker').minDate(date) if date
+
+$(document).on 'click', '.effective_date_time_picker_input_group', (event) ->
+  $(event.currentTarget).children('input').data('DateTimePicker').show()
