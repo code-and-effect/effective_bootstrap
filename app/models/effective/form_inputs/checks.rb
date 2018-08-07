@@ -1,9 +1,16 @@
 module Effective
+
   module FormInputs
     class Checks < CollectionInput
 
       def build_input(&block)
-        @builder.collection_check_boxes(name, options_collection, value_method, label_method, collection_options, item_input_options) { |builder| build_item(builder) }
+        html = @builder.collection_check_boxes(name, options_collection, value_method, label_method, collection_options, item_input_options) { |builder| build_item(builder) }
+
+        if disabled? # collection_check_boxes doesn't correctly disable the input type hidden, but does on the build_items
+          html = html.sub('<input type="hidden"', '<input type="hidden" disabled="disabled"').html_safe
+        end
+
+        html
       end
 
       def build_wrapper(&block)

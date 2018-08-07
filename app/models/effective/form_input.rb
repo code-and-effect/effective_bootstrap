@@ -302,7 +302,7 @@ module Effective
         options[:input][:required] = 'required'
       end
 
-      if options[:input][:readonly] || form_readonly?
+      if readonly?
         options[:input][:readonly] = 'readonly'
 
         unless options[:input][:class].to_s.include?('form-control-plaintext')
@@ -310,7 +310,7 @@ module Effective
         end
       end
 
-      if disabled? || form_disabled?
+      if disabled?
         options[:input][:disabled] = 'disabled'
       end
 
@@ -359,8 +359,12 @@ module Effective
       @builder.readonly
     end
 
+    def readonly?
+      options.dig(:input, :readonly).present? || form_readonly?
+    end
+
     def disabled?
-      options.dig(:input, :disabled).present?
+      options.dig(:input, :disabled).present? || form_disabled?
     end
 
     def form_disabled?
