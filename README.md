@@ -364,12 +364,21 @@ containerClass: 'custom-container-class'
 dropdownClass: 'custom-dropdown-class'
 ```
 
-to display a glyphicon infront of each option value:
+to display rich html for the option value:
 
 ```ruby
-f.input :user, User.all.map { |user| [user.to_s, user.to_param, { class: 'glyphicon-flag' }] }, template: :glyphicon
-```
+f.select :user, user_tag_collection(User.all), template: :html
 
+def user_tag_collection(users)
+  users.map do |user|
+    [
+      user.to_s,
+      user.to_param,
+      { 'data-html': content_tag(:span, user.to_s, class: 'user-choice') }
+    ]
+  end
+end
+```
 
 ### Additional
 

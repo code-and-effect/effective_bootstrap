@@ -6,11 +6,20 @@ formatWithGlyphicon = (data, container) ->
   else
     data.text
 
+formatWithHtml = (data, container) ->
+  if data.element && data.element.getAttribute('data-html')
+    $(data.element.getAttribute('data-html'))
+  else
+    data.text
+
 (this.EffectiveBootstrap || {}).effective_select = ($element, options) ->
   switch options['template']
     when 'glyphicon'
       options['templateResult'] = formatWithGlyphicon
       options['templateSelection'] = formatWithGlyphicon
+    when 'html'
+      options['templateResult'] = formatWithHtml
+      options['templateSelection'] = formatWithHtml
 
   $select = $element.select2(options)
 
