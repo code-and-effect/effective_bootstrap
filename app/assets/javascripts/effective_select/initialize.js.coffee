@@ -12,6 +12,12 @@ formatWithHtml = (data, container) ->
   else
     data.text
 
+matchWithHtml = (params, data) ->
+  return data if $.trim(params.term) == ''
+  return null unless data.element?
+
+  if $(data.element.getAttribute('data-html')).text().indexOf(params.term) > -1 then data else null
+
 (this.EffectiveBootstrap || {}).effective_select = ($element, options) ->
   switch options['template']
     when 'glyphicon'
@@ -20,6 +26,7 @@ formatWithHtml = (data, container) ->
     when 'html'
       options['templateResult'] = formatWithHtml
       options['templateSelection'] = formatWithHtml
+      options['matcher'] = matchWithHtml
 
   $select = $element.select2(options)
 
