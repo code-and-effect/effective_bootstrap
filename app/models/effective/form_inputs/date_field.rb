@@ -10,7 +10,7 @@ module Effective
       end
 
       def input_js_options
-        { format: 'YYYY-MM-DD', showTodayButton: true, showClear: true, useCurrent: 'hour', disabledDates: disabled_dates.presence }.compact
+        { format: 'YYYY-MM-DD', showTodayButton: false, showClear: false, useCurrent: 'hour', disabledDates: disabled_dates.presence }.compact
       end
 
       def input_group_options

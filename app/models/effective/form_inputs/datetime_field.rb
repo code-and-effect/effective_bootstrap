@@ -5,12 +5,12 @@ module Effective
       def input_html_options
         {
           class: ['form-control', 'effective_date_time_picker', 'effective_datetime', ('not-date-linked' if not_date_linked?)].compact.join(' '),
-          pattern: '\d{4}(-\d{2})?-(\d{2})?( \d+)?(:\d{2})?'
+          pattern: pattern
         }
       end
 
       def input_js_options
-        { format: 'YYYY-MM-DD HH:mm', sideBySide: true, showTodayButton: true, showClear: true, useCurrent: 'hour', disabledDates: disabled_dates.presence }.compact
+        { format: format, sideBySide: true, showTodayButton: false, showClear: false, useCurrent: 'hour', disabledDates: disabled_dates.presence }.compact
       end
 
       def input_group_options
@@ -21,8 +21,16 @@ module Effective
         @builder.super_text_field(name, options[:input].merge(value: datetime_to_s))
       end
 
-      def datetime_to_s
-        value&.strftime('%F %H:%M')
+      def datetime_to_s # ruby
+        value&.strftime(am_pm? ? '%F %I:%M %p' : '%F %H:%M')
+      end
+
+      def pattern # html
+        am_pm? ? '\d{4}(-\d{2})?(-\d{2})?( \d{1,2})?(:\d{2} \[aApPmM]{2})?' : '\d{4}(\-d{2})?(-\d{2})?( \d{2})?(:\d{2})?'
+      end
+
+      def format # moment.js
+        am_pm? ? 'YYYY-MM-DD LT' : 'YYYY-MM-DD HH:mm'
       end
 
       private
@@ -50,6 +58,11 @@ module Effective
       def not_date_linked?
         return @not_date_linked unless @not_date_linked.nil?
         @not_date_linked = (options.delete(:date_linked) == false)
+      end
+
+      def am_pm?
+        return @am_pm unless @am_pm.nil?
+        @am_pm = options.key?(:am_pm) ? options.delete(:am_pm) : true
       end
 
     end

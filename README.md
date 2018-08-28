@@ -209,7 +209,7 @@ Bootstrap 3 Datepicker (https://github.com/Eonasdan/bootstrap-datetimepicker)
 The default options used to initialize this form input are as follows:
 
 ```ruby
-input_js: { showTodayButton: true, showClear: true, useCurrent: 'hour' }
+am_pm: true, input_js: { showTodayButton: false, showClear: false, useCurrent: 'hour' }
 ```
 
 For a full list of options, please refer to:
