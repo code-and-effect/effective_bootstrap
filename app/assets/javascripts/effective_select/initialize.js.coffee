@@ -16,7 +16,7 @@ matchWithHtml = (params, data) ->
   return data if $.trim(params.term) == ''
   return null unless data.element?
 
-  if $(data.element.getAttribute('data-html')).text().indexOf(params.term) > -1 then data else null
+  if $(data.element.getAttribute('data-html')).text().toLowerCase().indexOf(params.term.toLowerCase()) > -1 then data else null
 
 (this.EffectiveBootstrap || {}).effective_select = ($element, options) ->
   switch options['template']

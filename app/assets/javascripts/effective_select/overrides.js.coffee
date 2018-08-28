@@ -8,7 +8,6 @@ $(document).on 'select2:open', (event) ->
     $select.removeData('state')
     setTimeout ( => $select.select2('close') ), 0
 
-
 # effective_select custom reinitialization functionality
 # This is a custom event intended to be manually triggered when the underlying options change
 # You can use this to dynamically disable options (with or without the effective_select hide_disabled: true)
