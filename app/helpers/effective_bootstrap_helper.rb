@@ -29,8 +29,8 @@ module EffectiveBootstrapHelper
 
       content_tag(:div, class: 'btn-group') do
         content_tag(:div, class: ['btn-group', variation.to_s.presence].compact.join(' '), role: 'group') do
-          [:dropleft].include?(variation) ? (split + menu + first) : (first + split + menu)
-        end
+          [:dropleft].include?(variation) ? (split + menu) : (first + split + menu)
+        end + ([:dropleft].include?(variation) ? first : '').html_safe
       end
     else
       raise 'split false is unsupported'
