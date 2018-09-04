@@ -27,5 +27,7 @@
 (this.EffectiveBootstrap || {}).effective_editor_tag = ($element, options) ->
   quill = new Quill('#' + $element.attr('id'), options)
 
-  if $element.data('delta')
-    quill.setContents($element.data('delta'))
+  content = ($element.attr('data-delta') || '')
+
+  if content.length > 0
+    if content.startsWith('{') then quill.setContents($element.data('delta')) else quill.pasteHTML(content)
