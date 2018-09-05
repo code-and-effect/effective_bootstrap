@@ -18,3 +18,7 @@
 
   .ql-editor { padding: 0; }
 }
+
+@media (max-width: 576px) {
+  .ql-toolbar.ql-snow .ql-formats { margin-right: 0px; }
+}
