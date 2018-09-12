@@ -126,7 +126,20 @@ module Effective
       return BLANK if options[:label] == false
       return BLANK if name.kind_of?(NilClass)
 
-      text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK)
+      text = options[:label].delete(:text)
+      name_to_s = name.to_s
+
+      text ||= (
+        if object && name_to_s.ends_with?('_id')
+          object.class.human_attribute_name(name_to_s.chomp('_id'))
+        elsif object && name_to_s.ends_with?('_ids')
+          object.class.human_attribute_name(name_to_s.chomp('_ids').pluralize)
+        elsif object
+          object.class.human_attribute_name(name)
+        else
+          BLANK
+        end
+      )
 
       if options[:input][:id]
         options[:label][:for] = options[:input][:id]
