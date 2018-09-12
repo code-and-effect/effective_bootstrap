@@ -66,6 +66,7 @@ this.EffectiveForm ||= new class
       $payload = $("<div>#{@remote_form_payload}</div>")
       $form = $payload.find("form[data-remote-index='#{$target.data('remote-index')}']")
       $form = $payload.find('form').first() if $form.length == 0
+      $form.attr('data-remote', true)
 
     return if $form.length == 0
 
@@ -83,14 +84,21 @@ this.EffectiveForm ||= new class
     if @remote_form_flash.length > 0
       @flash($form, flash[0], flash[1], true) for flash in @remote_form_flash
       @remote_form_flash = ''
+    else
+      @flash($form, 'success', '', true)
+
+    $form.trigger('effective-form:complete')
+    true
 
   flash: ($form, status, message, skip_success = false) ->
     return unless @current_submit.length > 0
 
     if status == 'danger' || status == 'error'
-      @current_submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow')
+      $form.trigger('effective-form:error', message)
+      @current_submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow', -> $form.trigger('effective-form:error-animation-done', message))
     else
-      @current_submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow')
+      $form.trigger('effective-form:success', message)
+      @current_submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow', -> $form.trigger('effective-form:success-animation-done', message))
 
     if message? && !(status == 'success' && skip_success)
       @current_submit.prepend(@buildFlash(status, message))
