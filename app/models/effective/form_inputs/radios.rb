@@ -153,7 +153,7 @@ module Effective
 
       def cards? # default false
         return @cards unless @cards.nil?
-        @cards= (options.delete(:cards) || false)
+        @cards = (options.delete(:cards) || false)
       end
 
       def button_group_id

@@ -59,7 +59,8 @@ module Effective
 
       def multiple?
         return @multiple unless @multiple.nil?
-        @multiple = (options.delete(:multiple) || false) || tags?
+
+        @multiple = options.key?(:multiple) ? options.delete(:multiple) : (tags? || name.to_s.ends_with?('_ids'))
       end
 
       def tags?
