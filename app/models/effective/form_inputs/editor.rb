@@ -14,28 +14,41 @@ module Effective
       end
 
       def input_js_options
-        { modules: { toolbar: toolbar }, theme: 'snow', placeholder: "Add #{name.to_s.pluralize}...", delta: delta? }
+        {
+          modules: { toolbar: toolbar, syntax: (content_mode == :code) },
+          theme: 'snow',
+          placeholder: "Add #{name.to_s.pluralize}...",
+          content_mode: content_mode
+        }
       end
 
       # Commented out 'Full' toolbar options because currently we don't want headers / source / code options
       def toolbar
+        return false if content_mode == :code
+
         [
           # [{'header': [1, 2, 3, 4, false] }],
           ['bold', 'italic', 'underline'],
-          ['link', 'image', 'video'], # also 'code-block'
+          ['link', 'image', 'video', 'code-block'], # also 'code-block'
           [{'list': 'ordered'}, { 'list': 'bullet' }],
           [{'align': [] }, 'clean'],
         ]
       end
 
-      def delta? # default false
-        return @delta unless @delta.nil?
+      def content_mode # default false
+        return @content_mode unless @content_mode.nil?
 
-        if options.key?(:html)
-          @delta = (options.delete(:html) == false)
-        else
-          @delta = (options.delete(:delta) || false)
-        end
+        @content_mode = (
+          if options.delete(:delta)
+            :delta
+          elsif options.delete(:html)
+            :html
+          elsif options.delete(:code)
+            :code
+          else
+            :delta
+          end
+        )
       end
 
     end
