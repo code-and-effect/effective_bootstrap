@@ -6,7 +6,7 @@
   content_mode = options['content_mode']
   delete options['content_mode']
 
-  quill = new Quill(editor, options)
+  quill = new Quill($element.siblings(editor).get(0), options)
   content = $element.val() || ''
 
   if content.length > 0
@@ -39,7 +39,7 @@
   quill = new Quill('#' + $element.attr('id'), options)
 
   content = ($element.attr('data-content') || '')
-  content_mode = $element.data('content-mode')
+  content_mode = $element.data('input-js-options')['content_mode']
 
   if content.length > 0
     if content.startsWith('{')
