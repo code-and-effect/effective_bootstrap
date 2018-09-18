@@ -14,13 +14,13 @@
       quill.setContents(JSON.parse(content))
     else if content_mode == 'code'
       quill.setText(content)
-      quill.format('code-block', true)
     else if content.startsWith('<')
       quill.pasteHTML(content)
     else
       quill.setText(content)
 
   if content_mode == 'code'
+    quill.format('code-block', true)
     quill.on 'text-change', (delta, old, source) -> $element.val(quill.getText())
 
   if content_mode == 'delta'
@@ -46,8 +46,10 @@
       quill.setContents(JSON.parse(content))
     else if content_mode == 'code'
       quill.setText(content)
-      quill.format('code-block', true)
     else if content.startsWith('<')
       quill.pasteHTML(content)
     else
       quill.setText(content)
+
+  if content_mode == 'code'
+    quill.format('code-block', true)
