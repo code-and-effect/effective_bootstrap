@@ -5,7 +5,7 @@ module Effective
       def build_input(&block)
         content = value.presence || (capture(&block) if block_given?)
 
-        @builder.super_text_area(name, options[:input]) +
+        @builder.super_text_area(name, (options[:input] || {}).merge(autocomplete: 'off')) +
         content_tag(:div, '', class: 'ql-effective', id: unique_id + '_editor')
       end
 
@@ -29,7 +29,7 @@ module Effective
         [
           # [{'header': [1, 2, 3, 4, false] }],
           ['bold', 'italic', 'underline'],
-          ['link', 'image', 'video', 'code-block'], # also 'code-block'
+          ['link', 'image', 'video'], # also 'code-block'
           [{'list': 'ordered'}, { 'list': 'bullet' }],
           [{'align': [] }, 'clean'],
         ]

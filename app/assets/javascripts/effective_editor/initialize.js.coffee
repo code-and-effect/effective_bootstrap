@@ -21,16 +21,14 @@
 
   if content_mode == 'code'
     quill.formatText(0, quill.getLength(), 'code-block', true)
-    quill.on 'text-change', (delta, old, source) -> $element.val(quill.getText())
-
-  if content_mode == 'delta'
-    quill.on 'text-change', (delta, old, source) -> $element.val(JSON.stringify(quill.getContents()))
-
-  if content_mode == 'html'
-    quill.on 'text-change', (delta, old, source) ->
+    quill.on 'text-change', -> $element.val(quill.getText())
+  else if content_mode == 'html'
+    quill.on 'text-change', ->
       html = $(editor).children('.ql-editor').html()
       html = '' if html == '<p><br></p>' || html == '<p></p>'
       $element.val(html)
+  else
+    quill.on 'text-change', -> $element.val(JSON.stringify(quill.getContents()))
 
   $element.on 'quill:focus', (event) -> quill.focus()
 
