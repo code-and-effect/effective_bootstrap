@@ -5,7 +5,7 @@ module Effective
       def build_input(&block)
         content = value.presence || (capture(&block) if block_given?)
 
-        @builder.super_text_field(name, options[:input]) +
+        @builder.super_text_area(name, options[:input]) +
         content_tag(:div, '', class: 'ql-effective', id: unique_id + '_editor')
       end
 

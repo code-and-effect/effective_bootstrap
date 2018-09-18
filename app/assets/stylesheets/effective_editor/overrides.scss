@@ -1,4 +1,5 @@
 .effective_editor { height: 0; width: 0; padding: 0; margin: 0; visibility: hidden; }
+textarea.form-control.effective_editor { height: 0; }
 
 // Bootstrap 4 Feedback client side
 .was-validated .form-control:invalid ~ .ql-container, { border-color: #dc3545; }

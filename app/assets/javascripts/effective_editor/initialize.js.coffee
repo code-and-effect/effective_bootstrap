@@ -20,7 +20,7 @@
       quill.setText(content)
 
   if content_mode == 'code'
-    quill.format('code-block', true)
+    quill.formatText(0, quill.getLength(), 'code-block', true)
     quill.on 'text-change', (delta, old, source) -> $element.val(quill.getText())
 
   if content_mode == 'delta'
@@ -52,4 +52,4 @@
       quill.setText(content)
 
   if content_mode == 'code'
-    quill.format('code-block', true)
+    quill.formatText(0, quill.getLength(), 'code-block', true)

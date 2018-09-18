@@ -18,6 +18,7 @@ module Effective
     end
 
     alias_method :super_text_field, :text_field
+    alias_method :super_text_area, :text_area
 
     def check_box(name, options = {})
       Effective::FormInputs::CheckBox.new(name, options, builder: self).to_html { super(name, options) }
