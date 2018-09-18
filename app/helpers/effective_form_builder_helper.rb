@@ -5,7 +5,7 @@ module EffectiveFormBuilderHelper
 
     # Compute the default ID
     subject = Array(options[:scope] || options[:model]).last
-    class_name = subject.class.name.parameterize.underscore
+    class_name = subject.class.name.underscore
 
     html_id = if subject.kind_of?(Symbol)
       subject.to_s
