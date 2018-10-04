@@ -283,7 +283,7 @@ As a Rails Form Helper input:
 = f.select :category, 10.times.map { |x| "Category #{x}"}
 = f.select :categories, 10.times.map { |x| "Category #{x}"}, multiple: true
 = f.select :categories, 10.times.map { |x| "Category #{x}"}, tags: true
-= f.select :categories, {'Active': [['Post A', 1], ['Post B', 2]], 'Past': ['Post C', 3], ['Post D', 4]}, grouped: true
+= f.select :categories, {'Active': [['Post A', 1], ['Post B', 2]], 'Past': [['Post C', 3], ['Post D', 4]]}, grouped: true
 ```
 
 ### Modes
