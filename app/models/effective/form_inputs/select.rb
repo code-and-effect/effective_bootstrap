@@ -33,7 +33,7 @@ module Effective
           minimumResultsForSearch: 6,
           width: 'style',
           placeholder: (input_html_options.delete(:placeholder) || 'Please choose'),
-          allowClear: !multiple?,
+          allowClear: (true if include_blank?),
           tokenSeparators: ([',', ';', '\n', '\t'] if tags?),
           tags: (true if tags?),
           template: js_template,
@@ -52,10 +52,15 @@ module Effective
           ('tags-input' if tags?),
         ].compact.join(' ')
 
-        { class: classes, multiple: (true if multiple?), include_blank: !multiple? }.compact
+        { class: classes, multiple: (true if multiple?), include_blank: (true if include_blank?) }.compact
       end
 
       private
+
+      def include_blank?
+        return @include_blank unless @include_blank.nil?
+        @include_blank = (options.key?(:include_blank) ? options.delete(:include_blank) : true) && !multiple?
+      end
 
       def multiple?
         return @multiple unless @multiple.nil?
