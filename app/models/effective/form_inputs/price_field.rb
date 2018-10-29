@@ -12,7 +12,7 @@ module Effective
       end
 
       def input_html_options
-        { class: 'form-control effective_price', maxlength: 14, autocomplete: 'off', 'data-include-blank': include_blank? }
+        { class: 'form-control effective_price', autocomplete: 'off', 'data-include-blank': include_blank? }
       end
 
       private

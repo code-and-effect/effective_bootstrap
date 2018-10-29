@@ -10,7 +10,7 @@ module Effective
       end
 
       def input_js_options
-        { format: format, sideBySide: true, showTodayButton: false, showClear: false, useCurrent: 'hour', disabledDates: disabled_dates.presence }.compact
+        { format: format, sideBySide: true, showTodayButton: false, showClear: false, useCurrent: 'hour', disabledDates: disabled_dates.presence, minDate: min_date.presence, maxDate: max_date.presence }.compact
       end
 
       def input_group_options
@@ -37,22 +37,17 @@ module Effective
 
       def disabled_dates
         return @disabled_dates unless @disabled_dates.nil?
+        @disabled_dates ||= Array(options.delete(:disabledDates)).map { |obj| parse_object_date(obj) }.flatten.compact
+      end
 
-        @disabled_dates ||= (
-          Array(options.delete(:disabledDates)).map do |obj|
-            if obj.respond_to?(:strftime)
-              obj.strftime('%F')
-            elsif obj.kind_of?(Range) && obj.first.respond_to?(:strftime)
-              [obj.first].tap do |dates|
-                dates << (dates.last + 1.day) until (dates.last + 1.day) > obj.last
-              end
-            elsif obj.kind_of?(String)
-              obj
-            else
-              raise 'unexpected disabledDates data. Expected a DateTime, Range of DateTimes or String'
-            end
-          end.flatten.compact
-        )
+      def max_date
+        return @max_date unless @max_date.nil?
+        @max_date = parse_object_date(options.delete(:maxDate))
+      end
+
+      def min_date
+        return @min_date unless @min_date.nil?
+        @min_date = parse_object_date(options.delete(:minDate))
       end
 
       def not_date_linked?
@@ -63,6 +58,24 @@ module Effective
       def am_pm?
         return @am_pm unless @am_pm.nil?
         @am_pm = options.key?(:am_pm) ? options.delete(:am_pm) : true
+      end
+
+      private
+
+      def parse_object_date(obj)
+        if obj.respond_to?(:strftime)
+          obj.strftime('%F')
+        elsif obj.kind_of?(Range) && obj.first.respond_to?(:strftime)
+          [obj.first].tap do |dates|
+            dates << (dates.last + 1.day) until (dates.last + 1.day) > obj.last
+          end
+        elsif obj.kind_of?(String)
+          obj
+        elsif obj.nil?
+          obj
+        else
+          raise "unexpected date object #{obj}. Expected a DateTime, Range of DateTimes or String"
+        end
       end
 
     end
