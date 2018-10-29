@@ -36,8 +36,8 @@ module Effective
         include_blank = options[:input].delete(:include_blank)
 
         @collection_options = {
-          checked: (checked || selected || passed_value || value),
-          selected: (selected || checked || passed_value || value),
+          checked: (checked || selected || passed_value || polymorphic_value || value),
+          selected: (selected || checked || passed_value || polymorphic_value || value),
           include_blank: include_blank
         }.compact
       end
@@ -86,26 +86,24 @@ module Effective
           raise "Grouped collection expecting a Hash {'Posts' => Post.all, 'Events' => Event.all} or a Hash {'Posts' => [['Post A', 1], ['Post B', 2]], 'Events' => [['Event A', 1], ['Event B', 2]]}"
         end
 
-        if grouped
-          collection.transform_values! { |group| group.to_a }
+        if polymorphic? && !grouped && collection.present?
+          raise "Polymorphic collection expecting a Hash {'Posts' => Post.all, 'Events' => Event.all}"
         end
 
-        if polymorphic?
-          if grouped
-            collection.values.each do |group|
-              group.transform_values! { |obj| [obj.to_s, "#{obj.class.model_name}_#{obj.id}"] }
-            end
+        @options_collection = (
+          if polymorphic?
+            collection.transform_values { |group| group.map { |obj| [obj.to_s, "#{obj.class.model_name}_#{obj.id}"] } }
+          elsif grouped
+            collection.transform_values { |group| group.to_a }
           else
-            collection.transform_values! { |obj| [obj.to_s, "#{obj.class.model_name}_#{obj.id}"] }
+            collection.to_a
           end
-        end
-
-        @options_collection = collection.to_a
+        )
       end
 
       def assign_options_collection_methods!
         options[:input].reverse_merge!(
-          if grouped? && polymorphic?
+          if polymorphic?
             { group_method: :last, group_label_method: :first, option_key_method: :second, option_value_method: :first }
           elsif grouped?
             { group_method: :last, group_label_method: :first, option_key_method: :second, option_value_method: :first }
@@ -128,7 +126,8 @@ module Effective
       end
 
       def polymorphic_value
-        "#{object.class.model_name}_#{object.id}" if object
+        return nil unless polymorphic?
+        "#{value.class.model_name}_#{value.id}" if value
       end
 
       def polymorphic_type_value

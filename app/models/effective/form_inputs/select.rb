@@ -7,7 +7,7 @@ module Effective
     class Select < CollectionInput
 
       def build_input(&block)
-        html = if grouped? && polymorphic?
+        html = if polymorphic?
           @builder.grouped_collection_select(polymorphic_id_method, options_collection, group_method, group_label_method, option_key_method, option_value_method, collection_options, html_options)
         elsif grouped?
           @builder.grouped_collection_select(name, options_collection, group_method, group_label_method, option_key_method, option_value_method, collection_options, html_options)
@@ -47,7 +47,7 @@ module Effective
           'effective_select',
           'form-control',
           ('polymorphic' if polymorphic?),
-          ('grouped' if grouped?),
+          ('grouped' if (grouped? || polymorphic?)),
           ('hide-disabled' if hide_disabled?),
           ('tags-input' if tags?),
         ].compact.join(' ')
