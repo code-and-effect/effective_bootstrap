@@ -22,6 +22,8 @@ $(document).on 'change', "input[type='text'].effective_price", (event) ->
 
   unless $input.data('include-blank') && value == ''
     value = parseInt(value || 0)
+    value = 2000000000 if value > 2000000000 # 20 million is our max value
+    value = -2000000000 if value < -2000000000 # -20 million is our min value
 
   if isNaN(value) == false && value != ''
     value = (value / 100.0) if value != 0
