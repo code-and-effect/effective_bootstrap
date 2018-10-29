@@ -32,7 +32,7 @@ module Effective
           theme: 'bootstrap',
           minimumResultsForSearch: 6,
           width: 'style',
-          placeholder: (input_html_options.delete(:placeholder) || 'Please choose'),
+          placeholder: (options.delete(:placeholder) || 'Please choose'),
           allowClear: (true if include_blank?),
           tokenSeparators: ([',', ';', '\n', '\t'] if tags?),
           tags: (true if tags?),
