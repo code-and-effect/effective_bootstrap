@@ -5,6 +5,7 @@
 module Effective
   module FormInputs
     class Select < CollectionInput
+      INCLUDE_NULL = 'Blank (null)'
 
       def build_input(&block)
         html = if polymorphic?
@@ -52,10 +53,37 @@ module Effective
           ('tags-input' if tags?),
         ].compact.join(' ')
 
-        { class: classes, multiple: (true if multiple?), include_blank: (true if include_blank?) }.compact
+        { class: classes, multiple: (true if multiple?), include_blank: (true if include_blank?), include_null: include_null }.compact
+      end
+
+      def assign_options_collection!
+        super
+
+        if include_null && @options_collection.kind_of?(Array)
+          @options_collection.push(['---------------', '-', disabled: 'disabled'])
+          @options_collection.push([include_null, 'nil'])
+        end
+
+        if include_null && @options_collection.kind_of?(Hash)
+          @options_collection[include_null] = [[include_null, 'nil']]
+        end
+
+        @options_collection
       end
 
       private
+
+      def include_null
+        return @include_null unless @include_null.nil?
+
+        obj = options.delete(:include_null)
+
+        @include_null = case obj
+        when nil then false
+        when true then INCLUDE_NULL
+        else obj
+        end
+      end
 
       def include_blank?
         return @include_blank unless @include_blank.nil?
