@@ -80,7 +80,7 @@ module Effective
       def assign_options_collection!
         collection = options[:input].delete(:collection)
 
-        grouped = collection.kind_of?(Hash) && collection.values.all? { |v| v.respond_to?(:to_a) }
+        grouped = collection.kind_of?(Hash) && collection.values.first.respond_to?(:to_a)
 
         if grouped? && !grouped && collection.present?
           raise "Grouped collection expecting a Hash {'Posts' => Post.all, 'Events' => Event.all} or a Hash {'Posts' => [['Post A', 1], ['Post B', 2]], 'Events' => [['Event A', 1], ['Event B', 2]]}"
@@ -92,11 +92,11 @@ module Effective
 
         @options_collection = (
           if polymorphic?
-            collection.transform_values { |group| group.map { |obj| [obj.to_s, "#{obj.class.model_name}_#{obj.id}"] } }
+            collection.inject({}) { |h, (k, group)| h[k] = group.map { |obj| [obj.to_s, "#{obj.class.model_name}_#{obj.id}"] }; h }
           elsif grouped
-            collection.transform_values { |group| group.to_a }
+            collection.inject({}) { |h, (k, group)| h[k] = group.map { |obj| obj }; h }
           else
-            collection.to_a
+            collection.map { |obj| obj }
           end
         )
       end
@@ -107,9 +107,9 @@ module Effective
             { group_method: :last, group_label_method: :first, option_key_method: :second, option_value_method: :first }
           elsif grouped?
             { group_method: :last, group_label_method: :first, option_key_method: :second, option_value_method: :first }
-          elsif options_collection[0].kind_of?(Array)
+          elsif options_collection.first.kind_of?(Array)
             { label_method: :first, value_method: :second }
-          elsif options_collection[0].kind_of?(ActiveRecord::Base)
+          elsif options_collection.first.kind_of?(ActiveRecord::Base)
             { label_method: :to_s, value_method: :id }
           else
             { label_method: :to_s, value_method: :to_s }

@@ -59,16 +59,23 @@ module Effective
       def assign_options_collection!
         super
 
-        if include_null && @options_collection.kind_of?(Array)
-          @options_collection.push(['---------------', '-', disabled: 'disabled'])
-          @options_collection.push([include_null, 'nil'])
+        return unless include_null
+
+        # Check for singles - transform the array
+        if options_collection.kind_of?(Array) && !options_collection.first.respond_to?(:to_a) # [:admin, :member]
+          @options_collection = options_collection.map { |obj| [obj, obj] }
         end
 
-        if include_null && @options_collection.kind_of?(Hash)
-          @options_collection[include_null] = [[include_null, 'nil']]
+        if options_collection.kind_of?(Array) && options_collection.first.respond_to?(:to_a)
+          options_collection.push(['---------------', '-', disabled: 'disabled'])
+          options_collection.push([include_null, 'nil'])
         end
 
-        @options_collection
+        if options_collection.kind_of?(Hash)
+          options_collection[include_null] = [[include_null, 'nil']]
+        end
+
+        options_collection
       end
 
       private
