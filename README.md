@@ -255,6 +255,18 @@ More info is available here:
 
 http://eonasdan.github.io/bootstrap-datetimepicker/Events/
 
+## Custom percent_field
+
+This custom form input uses no 3rd party jQuery plugins.
+
+It displays a percentage formatted value `100` or `12.500` but posts the "percentage as integer" value of `100000` or `12500` to the server.
+
+It's like the price field, but 3 digits instead of 2.
+
+```haml
+= f.percent_field :percent
+```
+
 ## Custom price_field
 
 This custom form input uses no 3rd party jQuery plugins.

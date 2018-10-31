@@ -13,8 +13,10 @@ module EffectiveBootstrapHelper
   # variations can be :dropup, :dropleft, :dropright
   # split can be true, false
   # right is to right align things
-  def dropdown(variation: nil, split: true, btn: 'btn-outline-primary', right: false, &block)
+  def dropdown(variation: nil, split: true, btn_class: nil, right: false, &block)
     raise 'expected a block' unless block_given?
+
+    btn_class = btn_class.presence || 'btn-outline-primary'
 
     @_dropdown_link_tos = []; yield
 
@@ -23,7 +25,7 @@ module EffectiveBootstrapHelper
     retval = if split
       first = @_dropdown_link_tos.first
       menu = content_tag(:div, @_dropdown_link_tos[1..-1].join.html_safe, class: ['dropdown-menu', ('dropdown-menu-right' if right)].compact.join(' '))
-      split = content_tag(:button, class: "btn #{btn} dropdown-toggle dropdown-toggle-split", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
+      split = content_tag(:button, class: "btn #{btn_class} dropdown-toggle dropdown-toggle-split", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
         content_tag(:span, 'Toggle Dropdown', class: 'sr-only')
       end
 
@@ -59,15 +61,17 @@ module EffectiveBootstrapHelper
     concat link_to(label, path, options)
   end
 
-  # # Works with dots do and dropdown do
+  # Works with dots do and dropdown do
   def dropdown_link_to(label, path, options = {})
+    btn_class = options.delete(:btn_class).presence || 'btn-outline-primary'
+
     unless @_dropdown_link_tos
       options[:class] = [options[:class], 'dropdown-item'].compact.join(' ')
       return link_to(label, path, options)
     end
 
     if @_dropdown_link_tos.length == 0
-      options[:class] = [options[:class], 'btn btn-outline-primary'].compact.join(' ') unless options[:class].to_s.include?('btn-')
+      options[:class] = [options[:class], 'btn', btn_class].compact.join(' ')
     else
       options[:class] = [options[:class], 'dropdown-item'].compact.join(' ')
     end
