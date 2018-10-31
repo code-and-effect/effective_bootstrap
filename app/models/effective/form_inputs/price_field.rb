@@ -12,24 +12,19 @@ module Effective
       end
 
       def input_html_options
-        { class: 'form-control effective_price', autocomplete: 'off', 'data-include-blank': include_blank? }
+        { class: 'form-control effective_price', autocomplete: 'off' }
       end
 
       private
 
       def price
-        return (include_blank? ? 0 : nil) unless value
+        return nil unless value
         value.kind_of?(Integer) ? value : ('%.2f' % (value / 100.0))
       end
 
       def currency
-        return (include_blank? ? 0.00 : nil) unless value
+        return nil unless value
         value.kind_of?(Integer) ? ('%.2f' % (value / 100.0)) : value
-      end
-
-      def include_blank? # default false
-        return @include_blank unless @include_blank.nil?
-        @include_blank = (options.delete(:include_blank) || false)
       end
 
     end

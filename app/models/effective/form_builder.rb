@@ -77,6 +77,10 @@ module Effective
       Effective::FormInputs::PasswordField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def percent_field(name, options = {})
+      Effective::FormInputs::PercentField.new(name, options, builder: self).to_html
+    end
+
     def phone_field(name, options = {})
       Effective::FormInputs::PhoneField.new(name, options, builder: self).to_html { super(name, options) }
     end

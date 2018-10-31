@@ -10,7 +10,7 @@ $(document).on 'change keyup', "input[type='text'].effective_price", (event) ->
   $input = $(event.target)
   value = $input.val().replace(/,/g, '')
 
-  unless $input.data('include-blank') && value == ''
+  unless value == ''
     value = (parseFloat(value || 0.00) * 100.00).toFixed(0)
 
   $input.siblings("input[type='hidden']").first().val(value)
@@ -19,11 +19,18 @@ $(document).on 'change keyup', "input[type='text'].effective_price", (event) ->
 $(document).on 'change', "input[type='text'].effective_price", (event) ->
   $input = $(event.target)
   value = $input.siblings("input[type='hidden']").first().val()
+  max = 2000000000
 
-  unless $input.data('include-blank') && value == ''
+  unless value == ''
     value = parseInt(value || 0)
-    value = 2000000000 if value > 2000000000 # 20 million is our max value
-    value = -2000000000 if value < -2000000000 # -20 million is our min value
+
+    if value > max # 20 million is our max value
+      value = max
+      $input.siblings("input[type='hidden']").first().val(max)
+
+    if value < -max # -20 million is our min value
+      value = -max
+      $input.siblings("input[type='hidden']").first().val(-max)
 
   if isNaN(value) == false && value != ''
     value = (value / 100.0) if value != 0
