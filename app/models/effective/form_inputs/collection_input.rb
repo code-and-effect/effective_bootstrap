@@ -82,6 +82,10 @@ module Effective
 
         grouped = collection.kind_of?(Hash) && collection.values.first.respond_to?(:to_a)
 
+        if collection.nil?
+          raise "Please include a collection"
+        end
+
         if grouped? && !grouped && collection.present?
           raise "Grouped collection expecting a Hash {'Posts' => Post.all, 'Events' => Event.all} or a Hash {'Posts' => [['Post A', 1], ['Post B', 2]], 'Events' => [['Event A', 1], ['Event B', 2]]}"
         end
