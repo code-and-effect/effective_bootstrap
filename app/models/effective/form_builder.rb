@@ -132,6 +132,15 @@ module Effective
       Effective::FormInputs::UrlField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    # Logics
+    def hide_if(*args, &block)
+      Effective::FormLogics::HideIf.new(*args, builder: self).to_html(&block)
+    end
+
+    def show_if(*args, &block)
+      Effective::FormLogics::ShowIf.new(*args, builder: self).to_html(&block)
+    end
+
   end
 end
 

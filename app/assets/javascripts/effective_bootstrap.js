@@ -1,5 +1,6 @@
 //= require ./effective_bootstrap/base
 //= require ./effective_bootstrap/form
+//= require ./effective_bootstrap/logic
 
 //= require ./effective_datetime/input
 //= require ./effective_date/input
