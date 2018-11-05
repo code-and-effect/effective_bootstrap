@@ -78,13 +78,9 @@ module Effective
       # This is a grouped polymorphic collection
       # [["Clinics", [["Clinc 50", "Clinic_50"], ["Clinic 43", "Clinic_43"]]], ["Contacts", [["Contact 544", "Contact_544"]]]]
       def assign_options_collection!
-        collection = options[:input].delete(:collection)
+        collection = options[:input].delete(:collection) || raise('Please include a collection')
 
         grouped = collection.kind_of?(Hash) && collection.values.first.respond_to?(:to_a)
-
-        if collection.nil?
-          raise "Please include a collection"
-        end
 
         if grouped? && !grouped && collection.present?
           raise "Grouped collection expecting a Hash {'Posts' => Post.all, 'Events' => Event.all} or a Hash {'Posts' => [['Post A', 1], ['Post B', 2]], 'Events' => [['Event A', 1], ['Event B', 2]]}"
@@ -96,13 +92,25 @@ module Effective
 
         @options_collection = (
           if polymorphic?
-            collection.inject({}) { |h, (k, group)| h[k] = group.map { |obj| [obj.to_s, "#{obj.class.model_name}_#{obj.id}"] }; h }
+            collection.inject({}) { |h, (k, group)| h[k] = translate(group).map { |obj| [obj.to_s, "#{obj.class.model_name}_#{obj.id}"] }; h }
           elsif grouped
-            collection.inject({}) { |h, (k, group)| h[k] = group.map { |obj| obj }; h }
+            collection.inject({}) { |h, (k, group)| h[k] = translate(group).map { |obj| obj }; h }
           else
-            collection.map { |obj| obj }
+            translate(collection).map { |obj| obj }
           end
         )
+      end
+
+      # Apply ActsAsArchived behavior. That's all for now.
+      def translate(collection)
+        return collection unless object.respond_to?(:new_record?)
+        return collection unless collection.respond_to?(:klass) && collection.klass.respond_to?(:acts_as_archived?)
+
+        if object.new_record?
+          collection.unarchived
+        else
+          collection.unarchived.or(collection.archived.where(collection.klass.primary_key => value))
+        end
       end
 
       def assign_options_collection_methods!
