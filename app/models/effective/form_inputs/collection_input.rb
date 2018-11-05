@@ -36,8 +36,8 @@ module Effective
         include_blank = options[:input].delete(:include_blank)
 
         @collection_options = {
-          checked: (checked || selected || passed_value || polymorphic_value || value),
-          selected: (selected || checked || passed_value || polymorphic_value || value),
+          checked: [checked, selected, passed_value, polymorphic_value, value].find { |value| value != nil },
+          selected: [selected, checked, passed_value, polymorphic_value, value].find { |value| value != nil },
           include_blank: include_blank
         }.compact
       end
