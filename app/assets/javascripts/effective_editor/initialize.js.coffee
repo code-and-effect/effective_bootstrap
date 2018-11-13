@@ -21,14 +21,20 @@
 
   if content_mode == 'code'
     quill.formatText(0, quill.getLength(), 'code-block', true)
-    quill.on 'text-change', -> $element.val(quill.getText())
+
+    quill.on 'text-change', ->
+      $element.val(quill.getText())
+      $element.trigger('change')
   else if content_mode == 'html'
     quill.on 'text-change', ->
       html = $(editor).children('.ql-editor').html()
       html = '' if html == '<p><br></p>' || html == '<p></p>'
       $element.val(html)
+      $element.trigger('change')
   else
-    quill.on 'text-change', -> $element.val(JSON.stringify(quill.getContents()))
+    quill.on 'text-change', ->
+      $element.val(JSON.stringify(quill.getContents()))
+      $element.trigger('change')
 
   $element.on 'quill:focus', (event) -> quill.focus()
 
