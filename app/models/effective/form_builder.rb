@@ -17,6 +17,7 @@ module Effective
       super
     end
 
+    alias_method :super_number_field, :number_field
     alias_method :super_text_field, :text_field
     alias_method :super_text_area, :text_area
 
@@ -57,6 +58,10 @@ module Effective
 
     def file_field(name, options = {})
       Effective::FormInputs::FileField.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
+    def float_field(name, options = {})
+      Effective::FormInputs::FloatField.new(name, options, builder: self).to_html
     end
 
     def form_group(name = nil, options = {}, &block)
