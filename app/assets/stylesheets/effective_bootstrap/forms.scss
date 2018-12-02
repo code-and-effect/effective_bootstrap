@@ -4,9 +4,11 @@
   align-items: center;
   position: relative;
 
-  .alert {
+  // This is the inline ajax flash next to the save button.
+  .effective-form-flash {
     position: absolute;
-    top: 4.0em;
+    top: 3.0em;
+    z-index: 1;
   }
 }
 

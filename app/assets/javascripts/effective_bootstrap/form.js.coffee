@@ -107,7 +107,7 @@ this.EffectiveForm ||= new class
 
   buildFlash: (status, message) ->
     $("
-      <div class='alert alert-dismissable alert-#{status} fade show' role='alert'>
+      <div class='effective-form-flash alert alert-dismissable alert-#{status} fade show' role='alert'>
         #{message}
         <button class='close' type='button' aria-label='Close' data-dismiss='alert'>
           <span aria-hidden='true'>&times;</span>
