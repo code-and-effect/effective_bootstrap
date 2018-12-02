@@ -15,6 +15,11 @@ module Effective
         { class: 'form-control effective_percent', autocomplete: 'off' }
       end
 
+      # This has gotta be a valid pattern
+      def validated?(name)
+        true
+      end
+
       private
 
       def percent_to_integer

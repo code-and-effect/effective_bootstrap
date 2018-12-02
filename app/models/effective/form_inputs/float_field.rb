@@ -10,6 +10,11 @@ module Effective
         { class: 'form-control effective_float', autocomplete: 'off', step: '0.01' }
       end
 
+      # This has gotta be a valid pattern
+      def validated?(name)
+        true
+      end
+
     end
   end
 end

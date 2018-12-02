@@ -165,8 +165,8 @@ module Effective
       return BLANK if options[:feedback] == false
 
       invalid = object.errors[name].to_sentence.presence if object.respond_to?(:errors)
-      invalid ||= options[:feedback][:invalid].delete(:text)
-      invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].compact.join(' and ')
+      invalid ||= options[:feedback][:invalid].delete(:text).presence
+      invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].compact.join(' and ').presence
       invalid ||= "can't be blank or is invalid"
 
       valid = options[:feedback][:valid].delete(:text) || "Look's good!"
@@ -191,6 +191,14 @@ module Effective
       obj = (object.class == Class) ? object : object.class
       return false unless obj.respond_to?(:validators_on)
 
+      if name.to_s.ends_with?('_id')
+        return required_presence?(obj, name) || required_presence?(obj, name[0...-3])
+      end
+
+      required_presence?(obj, name)
+    end
+
+    def required_presence?(obj, name)
       obj.validators_on(name).any? do |v|
         v.kind_of?(ActiveRecord::Validations::PresenceValidator) && required_options?(v.options)
       end
