@@ -14,3 +14,4 @@
 //= require ./effective_price/input
 //= require ./effective_radio/input
 //= require ./effective_select/input
+//= require ./effective_select_or_text/input

@@ -106,6 +106,11 @@ module Effective
       Effective::FormInputs::Select.new(name, options, builder: self).to_html
     end
 
+    def select_or_text(name, name_text, choices = nil, *args)
+      options = args.extract_options!.merge!(name_text: name_text, collection: choices)
+      Effective::FormInputs::SelectOrText.new(name, options, builder: self).to_html
+    end
+
     def submit(name = 'Save', options = {}, &block)
       (options = name; name = 'Save') if name.kind_of?(Hash)
       Effective::FormInputs::Submit.new(name, options, builder: self).to_html(&block)

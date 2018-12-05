@@ -1,0 +1,6 @@
+.effective-select-or-text {
+  display: flex;
+
+  > .form-group { flex-grow: 1; }
+  > a { margin: 2rem 0 0 1rem; }
+}

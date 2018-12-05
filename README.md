@@ -437,6 +437,37 @@ $(document).on 'change', '.something', (event) ->
 
 There is currently no support for using AJAX to load remote data.  This feature is supported by the underlying select2 library and will be implemented here at a future point.
 
+## Custom select_or_text_field
+
+This custom form input is unique. It takes in two different field names, one of them a select, the other a text field.
+
+It enforces an `XOR` between the two fields.
+
+It's intended for selecting a `belongs_to` or using a freeform text field pattern.
+
+This custom form input uses no 3rd party jQuery plugins.
+
+```haml
+= f.select_or_text_field :post_id, :post_text, Post.all
+= f.select_or_text_field :post_id, :post_text, Post.all, hint: 'Both select and text field will see this hint'
+= f.select_or_text_field :post_id, :post_text, Post.all, select: { hint: 'select only options' }, text: { hint: 'text field only options'}
+```
+
+The `f.object` should have two separate attributes, `post_id` and `post_text`.
+
+The javascript form input will enforce XOR, but you can also apply your own validation to also have the same effect as `required: true`
+
+```
+class PostSummary < ApplicationRecord
+  validate do
+    unless (post_id.present? ^ post_text.present?) # xor
+      self.errors.add(:post_id, 'please choose either post or post text')
+      self.errors.add(:post_text, 'please choose either post or post text')
+    end
+  end
+end
+```
+
 ## Custom submit and save
 
 The `f.submit` puts in a wrapper and a default save button, and does the whole icon spin when submit thing.
