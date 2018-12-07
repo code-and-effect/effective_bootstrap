@@ -3,7 +3,15 @@ module Effective
     class HideIf < Effective::FormLogic
 
       def to_html(&block)
-        content_tag(:div, options.merge(input_js_options), &block)
+        disabled_was = @builder.disabled
+
+        @builder.disabled = true if hide?
+
+        content = content_tag(:div, options.merge(input_js_options), &block)
+
+        @builder.disabled = disabled_was
+
+        content
       end
 
       def options
@@ -20,7 +28,7 @@ module Effective
       end
 
       def hide?
-        object.send(args.first) == args.second
+        (object.send(args.first) == args.second) || (object.send(args.first).to_s == args.second.to_s)
       end
 
     end
