@@ -1,8 +1,9 @@
 this.EffectiveForm ||= new class
-  current_submit: ''              # The $(.form-actions) that clicked
-  current_delete: ''              # If there's a rails ujs_delete link with the data-closeset selector, use this.
-  remote_form_payload: ''         # String containing html from server side render of this form
-  remote_form_flash: ''           # Array of Arrays
+  current_submit: ''                  # The $(.form-actions) that clicked
+  current_delete: ''                  # If there's a rails ujs_delete link with the data-closeset selector, use this.
+  remote_form_payload: ''             # String containing html from server side render of this form
+  remote_form_flash: ''               # Array of Arrays
+  remote_form_refresh_datatables: ''  # Array of Strings. effective_datatables inline_crud.js uses this
 
   validate: (form) ->
     valid = form.checkValidity()
