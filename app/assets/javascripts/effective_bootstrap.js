@@ -5,6 +5,7 @@
 //= require ./effective_datetime/input
 //= require ./effective_date/input
 //= require ./effective_time/input
+//= require ./effective_time_zone_select/input
 
 //= require ./effective_checks/input
 //= require ./effective_editor/input

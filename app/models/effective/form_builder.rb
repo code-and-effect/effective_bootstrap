@@ -138,6 +138,11 @@ module Effective
       Effective::FormInputs::TimeField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def time_zone_select(name, options = {})
+      opts = options.merge(collection: Effective::FormInputs::TimeZoneSelect.time_zone_collection)
+      Effective::FormInputs::TimeZoneSelect.new(name, opts, builder: self).to_html
+    end
+
     def url_field(name, options = {})
       Effective::FormInputs::UrlField.new(name, options, builder: self).to_html { super(name, options) }
     end
