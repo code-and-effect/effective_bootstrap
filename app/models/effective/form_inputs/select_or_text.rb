@@ -19,13 +19,15 @@ module Effective
         @text_options = { placeholder: 'Enter freeform', required: false }
           .merge(options[:text] || options[:text_field] || options.presence || {})
 
+        @email_field = options.fetch(:email, name_text.to_s.include?('email'))
+
         super
       end
 
       def to_html(&block)
         content_tag(:div, class: 'effective-select-or-text') do
           @builder.select(name, select_collection, select_options) +
-          @builder.text_field(name_text, text_options) +
+          @builder.send(email_field? ? :email_field : text_field, name_text, text_options) +
           link_to(icon('rotate-ccw'), '#', class: 'effective-select-or-text-switch', title: 'Switch between choice and freeform', 'data-effective-select-or-text': true)
         end
       end
@@ -41,6 +43,10 @@ module Effective
         return false if object.errors[name].present?
 
         object.send(name_text).present? || object.errors[name_text].present?
+      end
+
+      def email_field?
+        @email_field
       end
 
       def select_options
