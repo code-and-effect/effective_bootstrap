@@ -45,6 +45,7 @@ this.EffectiveForm ||= new class
     $form.find('.is-valid').removeClass('is-valid')
 
     $form.find('[type=submit]').removeAttr('disabled')
+    $form
 
   spin: -> @current_submit.addClass('form-current-submit') if @current_submit.length > 0
 
@@ -68,20 +69,22 @@ this.EffectiveForm ||= new class
       $form = $payload.find("form[data-remote-index='#{$target.data('remote-index')}']")
       $form = $payload.find('form').first() if $form.length == 0
       $form.attr('data-remote', true)
-
-    return if $form.length == 0
-
-    EffectiveBootstrap.initialize($form)
-    $target.replaceWith($form)
-    @remote_form_payload = ''
+      @remote_form_payload = ''
 
     # There's nothing to update if it was a successful delete
     return if was_delete
 
-    # We update the current submit to point to the new one.
+    # Process remote form
+    if $form.length > 0
+      EffectiveBootstrap.initialize($form)
+      $target.replaceWith($form)
+    else
+      $form = @reset($target) # There is no remote form. So we assume success and reset the submitted one.
+
     if @current_submit.length > 0
       @current_submit = $form.find("##{@current_submit.attr('id')}.form-actions")
 
+    # Process Flash
     if @remote_form_flash.length > 0
       @flash($form, flash[0], flash[1], true) for flash in @remote_form_flash
       @remote_form_flash = ''
@@ -116,7 +119,11 @@ this.EffectiveForm ||= new class
       </div>
     ")
 
-  setCurrentSubmit: ($submit) -> @current_submit = $submit if $submit.is('.form-actions')
+  setCurrentSubmit: ($submit) ->
+    if $submit.is('.form-actions')
+      @current_submit = $submit
+    else
+      @current_submit = ''
 
   setCurrentDelete: ($delete) -> @current_delete = $delete
 
