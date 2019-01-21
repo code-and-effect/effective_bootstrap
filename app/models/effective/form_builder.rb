@@ -22,7 +22,11 @@ module Effective
     alias_method :super_text_area, :text_area
 
     def check_box(name, options = {})
-      Effective::FormInputs::CheckBox.new(name, options, builder: self).to_html { super(name, options) }
+      Effective::FormInputs::CheckBox.new(name, options, builder: self).to_html {
+        checked_value = options.delete(:checked_value)
+        unchecked_value = options.delete(:unchecked_value)
+        super(name, options, checked_value, unchecked_value)
+      }
     end
 
     def checks(name, choices = nil, *args)
