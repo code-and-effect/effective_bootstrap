@@ -19,7 +19,7 @@ module Effective
       end
 
       def logic_options
-        { name: tag_name(args.first), value: args.second }
+        { name: tag_name(args.first), value: args.second.to_s }
       end
 
       def validate!(args)
