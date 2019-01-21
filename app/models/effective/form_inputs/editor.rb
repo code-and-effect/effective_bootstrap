@@ -30,8 +30,8 @@ module Effective
           # [{'header': [1, 2, 3, 4, false] }],
           ['bold', 'italic', 'underline'],
           ['link', 'image', 'video'], # also 'code-block'
-          [{'list': 'ordered'}, { 'list': 'bullet' }],
-          [{'align': [] }, 'clean'],
+          [{'list': 'ordered'}, {'list': 'bullet'}, 'blockquote'],
+          [{'align': [] }, 'clean']
         ]
       end
 
