@@ -23,9 +23,9 @@ module Effective
 
     def check_box(name, options = {})
       Effective::FormInputs::CheckBox.new(name, options, builder: self).to_html {
-        checked_value = options.delete(:checked_value)
-        unchecked_value = options.delete(:unchecked_value)
-        super(name, options, checked_value, unchecked_value)
+        checked_value = options.fetch(:checked_value, '1')
+        unchecked_value = options.fetch(:unchecked_value, '0')
+        super(name, options.except(:checked_value, :unchecked_value), checked_value, unchecked_value)
       }
     end
 
