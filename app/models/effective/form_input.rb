@@ -368,7 +368,7 @@ module Effective
         obj.reverse_merge!(defaults)
         obj
       else
-        raise 'unexpected object'
+        defaults.merge(text: obj.to_s)
       end
     end
 

@@ -19,9 +19,21 @@ module Effective
 
       def build_check_box_wrap(&block)
         if custom?
-          content_tag(:div, yield, class: 'form-group custom-control custom-checkbox' + (inline? ? ' custom-control-inline' : ''))
+          content_tag(:div, yield, options[:wrapper])
         else
-          content_tag(:div, yield, class: 'form-check' + (inline? ? ' form-check-inline' : ''))
+          content_tag(:div, yield, options[:wrapper])
+        end
+      end
+
+      def wrapper_options
+        if custom? && inline?
+          { class: 'form-group custom-control custom-checkbox custom-control-inline' }
+        elsif custom?
+          { class: 'form-group custom-control custom-checkbox' }
+        elsif inline?
+          { class: 'form-check form-check-inline' }
+        else
+          { class: 'form-check' }
         end
       end
 
@@ -45,7 +57,7 @@ module Effective
 
       def inline? # default false
         return @inline unless @inline.nil?
-        @inline = (options[:input].delete(:inline) == true)
+        @inline = ((options[:input] || {}).delete(:inline) == true)
       end
 
       def custom? # default true
