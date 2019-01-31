@@ -29,11 +29,14 @@ module Effective
       end
 
       def input_js_options
+        placeholder = options.delete(:placeholder)
+        placeholder = '' if placeholder == false
+
         opts = {
           theme: 'bootstrap',
           minimumResultsForSearch: 6,
           width: 'style',
-          placeholder: (options.delete(:placeholder) || 'Please choose'),
+          placeholder: (placeholder || 'Please choose'),
           allowClear: (true if include_blank?),
           tokenSeparators: ([',', ';', '\n', '\t'] if tags?),
           tags: (true if tags?),
