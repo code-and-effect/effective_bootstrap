@@ -27,7 +27,7 @@ module Effective
       def to_html(&block)
         content_tag(:div, class: 'effective-select-or-text') do
           @builder.select(name, select_collection, select_options) +
-          @builder.send(email_field? ? :email_field : text_field, name_text, text_options) +
+          @builder.send(email_field? ? :email_field : :text_field, name_text, text_options) +
           link_to(icon('rotate-ccw'), '#', class: 'effective-select-or-text-switch', title: 'Switch between choice and freeform', 'data-effective-select-or-text': true)
         end
       end
