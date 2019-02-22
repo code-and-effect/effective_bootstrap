@@ -1,7 +1,5 @@
 module EffectiveFormBuilderHelper
   def effective_form_with(**options, &block)
-    options[:class] = [options[:class], 'needs-validation', ('form-inline' if options[:layout] == :inline)].compact.join(' ')
-    options[:html] = (options[:html] || {}).merge(novalidate: true, onsubmit: 'return EffectiveForm.validate(this);')
 
     # Compute the default ID
     subject = Array(options[:scope] || options[:model]).last
@@ -14,6 +12,9 @@ module EffectiveFormBuilderHelper
     else
       "new_#{class_name}"
     end
+
+    options[:class] = [options[:class], 'needs-validation', ('form-inline' if options[:layout] == :inline), ('with-errors' if subject.respond_to?(:errors) && subject.errors.present?)].compact.join(' ')
+    options[:html] = (options[:html] || {}).merge(novalidate: true, onsubmit: 'return EffectiveForm.validate(this);')
 
     remote_index = options.except(:model).hash.abs
 

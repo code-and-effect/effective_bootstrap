@@ -130,6 +130,11 @@ module Effective
       Effective::FormInputs::Radios.new(name, options, builder: self).to_html
     end
 
+    def reset(name = 'Reset', options = {})
+      (options = name; name = 'Reset') if name.kind_of?(Hash)
+      Effective::FormInputs::Reset.new(name, options, builder: self).to_html
+    end
+
     def text_area(name, options = {})
       Effective::FormInputs::TextArea.new(name, options, builder: self).to_html { super(name, options) }
     end
