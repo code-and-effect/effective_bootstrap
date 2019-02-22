@@ -91,6 +91,7 @@ this.EffectiveForm ||= new class
     else
       @flash($form, 'success', '', true)
 
+    $form.trigger(if $form.hasClass('with-errors') then 'effective-form:error' else 'effective-form:success')
     $form.trigger('effective-form:complete')
     true
 
@@ -98,10 +99,8 @@ this.EffectiveForm ||= new class
     return unless @current_submit.length > 0
 
     if status == 'danger' || status == 'error'
-      $form.trigger('effective-form:error', message)
       @current_submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow', -> $form.trigger('effective-form:error-animation-done', message))
     else
-      $form.trigger('effective-form:success', message)
       @current_submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow', -> $form.trigger('effective-form:success-animation-done', message))
 
     if message? && !(status == 'success' && skip_success)
