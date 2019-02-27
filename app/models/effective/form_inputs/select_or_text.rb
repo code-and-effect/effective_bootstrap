@@ -38,7 +38,7 @@ module Effective
 
         value = object.send(name)
 
-        (value.present? && select_collection.include?(value)) || (object.send(name).blank? && object.send(name_text).blank?)
+        (value.present? && select_collection.include?(value)) || (value.blank? && object.send(name_text).blank?)
       end
 
       def text?
