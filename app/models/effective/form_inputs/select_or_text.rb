@@ -7,7 +7,7 @@ module Effective
       attr_accessor :text_options
 
       VISIBLE = {}
-      HIDDEN = { wrapper: { style: 'display: none;' } }
+      HIDDEN_AND_DISABLED = { wrapper: { style: 'display: none;' }, disabled: true }
 
       def initialize(name, options, builder:)
         @name_text = options.delete(:name_text) || raise('Please include a text method name')
@@ -36,13 +36,13 @@ module Effective
         return true if object.errors[name].present?
         return false if object.errors[name_text].present?
 
-        object.send(name).present? || (object.send(name).blank? && object.send(name_text).blank?)
+        value = object.send(name)
+
+        (value.present? && select_collection.include?(value)) || (object.send(name).blank? && object.send(name_text).blank?)
       end
 
       def text?
-        return false if object.errors[name].present?
-
-        object.send(name_text).present? || object.errors[name_text].present?
+        !select?
       end
 
       def email_field?
@@ -50,11 +50,11 @@ module Effective
       end
 
       def select_options
-        @select_options.merge(select? ? VISIBLE : HIDDEN)
+        @select_options.merge(select? ? VISIBLE : HIDDEN_AND_DISABLED)
       end
 
       def text_options
-        @text_options.merge(text? ? VISIBLE : HIDDEN)
+        @text_options.merge(text? ? VISIBLE : HIDDEN_AND_DISABLED)
       end
 
     end
