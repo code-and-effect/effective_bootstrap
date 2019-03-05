@@ -2076,7 +2076,8 @@ S2.define('select2/selection/eventRelay',[
       'open', 'opening',
       'close', 'closing',
       'select', 'selecting',
-      'unselect', 'unselecting'
+      'unselect', 'unselecting',
+      'focus'
     ];
 
     var preventableEvents = ['opening', 'closing', 'selecting', 'unselecting'];
