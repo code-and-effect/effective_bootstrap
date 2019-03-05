@@ -8,6 +8,10 @@ $(document).on 'select2:open', (event) ->
     $select.removeData('state')
     setTimeout ( => $select.select2('close') ), 0
 
+# For tabbing through
+# https://stackoverflow.com/questions/20989458/select2-open-dropdown-on-focus
+$(document).on 'focus', '.select2', (event) -> $(this).siblings('select').select2('open')
+
 # effective_select custom reinitialization functionality
 # This is a custom event intended to be manually triggered when the underlying options change
 # You can use this to dynamically disable options (with or without the effective_select hide_disabled: true)
