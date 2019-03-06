@@ -13,15 +13,18 @@ $(document).on('click', '[data-effective-select-or-text]', function(event) {
   $visible = $obj.children('.form-group:visible').first();
   $hidden = $obj.children('.form-group:not(:visible)').first();
 
-  visible_name = $visible.find('input,textarea,select').first().attr('name');
-  hidden_name = $hidden.find('input,textarea,select').first().attr('name');
+  $visible_input = $visible.find('input,textarea,select').first()
+  $hidden_input = $hidden.find('input,textarea,select').first()
 
-  if(visible_name == hidden_name) { $hidden.find('input,textarea,select').removeAttr('disabled'); }
+  required = $visible_input.prop('required') || $hidden_input.prop('required')
+
+  $hidden_input.prop('required', required)
+  $visible_input.removeAttr('required')
 
   $visible.fadeOut('fast', function() {
-    if(visible_name == hidden_name) { $(this).find('input,textarea,select').prop('disabled', true); }
-    $hidden.fadeIn('fast');
+    $hidden.prop('required', required).detach().insertAfter($visible).fadeIn('fast');
   });
 
   return false; // This implicitly calls event.preventDefault() to cancel the action, and prevent the link from going somewhere.
 });
+
