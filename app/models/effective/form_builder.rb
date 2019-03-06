@@ -82,6 +82,10 @@ module Effective
       Effective::FormInputs::NumberField.new(name, options, builder: self).to_html { super(name, options) }
     end
 
+    def number_text_field(name, options = {})
+      Effective::FormInputs::NumberTextField.new(name, options, builder: self).to_html
+    end
+
     def password_field(name, options = {})
       Effective::FormInputs::PasswordField.new(name, options, builder: self).to_html { super(name, options) }
     end
