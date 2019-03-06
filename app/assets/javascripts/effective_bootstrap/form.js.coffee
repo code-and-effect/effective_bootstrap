@@ -84,20 +84,23 @@ this.EffectiveForm ||= new class
     if @current_submit.length > 0
       @current_submit = $form.find("##{@current_submit.attr('id')}.form-actions")
 
-    was_error = $form.hasClass('with-errors')
-
     # Process Flash
+    flash_status = ''
+    flash_message = ''
+
     if @remote_form_flash.length > 0
-      for flash in @remote_form_flash
-        was_error = true if (flash[0] == 'danger' || flash[0] == 'error')
-        @flash($form, flash[0], flash[1], true)
+      flash_status = @remote_form_flash[0][0]
+      flash_message = @remote_form_flash[0][1]
 
-      @remote_form_flash = ''
-    else
-      @flash($form, 'success', '', true)
+    @flash($form, flash_status, flash_message, true)
 
-    $form.trigger(if was_error then 'effective-form:error' else 'effective-form:success')
-    $form.trigger('effective-form:complete')
+    # Fire off form events
+    was_error = ($form.hasClass('with-errors') || flash_status == 'danger' || flash_status == 'error')
+
+    $form.trigger((if was_error then 'effective-form:error' else 'effective-form:success'), flash_message)
+    $form.trigger('effective-form:complete', flash_message, was_error)
+
+    @remote_form_flash = ''
     true
 
   flash: ($form, status, message, skip_success = false) ->
