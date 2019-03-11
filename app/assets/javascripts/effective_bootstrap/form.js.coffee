@@ -85,7 +85,7 @@ this.EffectiveForm ||= new class
       @current_submit = $form.find("##{@current_submit.attr('id')}.form-actions")
 
     # Process Flash
-    flash_status = ''
+    flash_status = 'success'
     flash_message = ''
 
     if @remote_form_flash.length > 0
