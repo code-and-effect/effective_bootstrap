@@ -123,8 +123,11 @@ module EffectiveBootstrapHelper
       return link_to(label, path, merge_class_key(opts, 'dropdown-item'))
     end
 
+    strict = opts.delete(:strict)
+    active = (strict ? (request.fullpath == path) : request.fullpath.include?(path))
+
     # Regular nav link item
-    content_tag(:li, class: (request.fullpath.include?(path) ? 'nav-item active' : 'nav-item')) do
+    content_tag(:li, class: (active ? 'nav-item active' : 'nav-item')) do
       link_to(label, path, merge_class_key(opts, 'nav-link'))
     end
   end
