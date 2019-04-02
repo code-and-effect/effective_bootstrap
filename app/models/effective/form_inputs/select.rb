@@ -54,6 +54,7 @@ module Effective
           ('grouped' if (grouped? || polymorphic?)),
           ('hide-disabled' if hide_disabled?),
           ('tags-input' if tags?),
+          ('disable-open-on-focus' if disable_open_on_focus?),
         ].compact.join(' ')
 
         { class: classes, multiple: (true if multiple?), include_blank: (true if include_blank?), include_null: include_null }.compact
@@ -119,6 +120,11 @@ module Effective
       def single_selected?
         return @single_selected unless @single_selected.nil?
         @single_selected = (options.delete(:single_selected) || false)
+      end
+
+      def disable_open_on_focus?
+        return @disable_open_on_focus unless @disable_open_on_focus.nil?
+        @disable_open_on_focus = (options.delete(:disable_open_on_focus) || false)
       end
 
       def js_template

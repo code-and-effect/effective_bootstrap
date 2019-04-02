@@ -12,7 +12,7 @@ $(document).on 'select2:open', (event) ->
 # https://stackoverflow.com/questions/20989458/select2-open-dropdown-on-focus
 $(document).on 'select2:focus', (event) ->
   $select = $(event.target)
-  $select.select2('open') unless $select.prop('multiple')
+  $select.select2('open') unless $select.prop('multiple') || $select.hasClass('disable-open-on-focus')
 
 # effective_select custom reinitialization functionality
 # This is a custom event intended to be manually triggered when the underlying options change
