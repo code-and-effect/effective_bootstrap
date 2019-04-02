@@ -134,6 +134,8 @@ this.EffectiveForm ||= new class
 
   setCurrentDelete: ($delete) -> @current_delete = $delete
 
+  clearCurrentSubmit: -> @current_submit = ''
+
   finishDelete: ->
     if @current_delete.length > 0
       @current_delete.fadeOut('slow', -> $(this).remove())
