@@ -8,6 +8,7 @@
 //= require ./effective_time_zone_select/input
 
 //= require ./effective_checks/input
+//= require ./effective_ck_editor/input
 //= require ./effective_editor/input
 //= require ./effective_file/input
 //= require ./effective_number_text/input

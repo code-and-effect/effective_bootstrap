@@ -34,6 +34,10 @@ module Effective
       Effective::FormInputs::Checks.new(name, options, builder: self).to_html
     end
 
+    def ck_editor(name, options = {}, &block)
+      Effective::FormInputs::CkEditor.new(name, options, builder: self).to_html(&block)
+    end
+
     def date_field(name, options = {})
       Effective::FormInputs::DateField.new(name, options, builder: self).to_html { super(name, options) }
     end
