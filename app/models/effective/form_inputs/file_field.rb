@@ -3,7 +3,14 @@ module Effective
     class FileField < Effective::FormInput
 
       def build_input(&block)
-        build_attachments + build_uploads + super
+        case attachments_style
+        when :card
+          build_attachments + build_uploads + super
+        when :table, :ck_assets
+          super + build_uploads + build_attachments
+        else 
+          raise('unsupported attachments_style, try :card or :table')
+        end
       end
 
       def input_html_options
@@ -11,8 +18,9 @@ module Effective
           class: 'form-control form-control-file btn btn-outline-secondary',
           multiple: multiple?,
           direct_upload: true,
-          'data-progress-template': progress_template
-        }
+          'data-progress-template': progress_template,
+          'data-click-submit': (true if click_submit?),
+        }.compact
       end
 
       def multiple?
@@ -24,10 +32,63 @@ module Effective
 
         attachments = object.send(name).respond_to?(:length) ? object.send(name) : [object.send(name)]
 
-        content_tag(:div, attachments.map { |attachment| build_attachment(attachment) }.join.html_safe, class: 'attachments row')
+        case attachments_style
+        when :card
+          build_card_attachments(attachments)
+        when :table, :ck_assets
+          build_table_attachments(attachments)
+        else 
+          raise('unsupported attachments_style, try :card or :table')
+        end
       end
 
-      def build_attachment(attachment)
+      def build_table_attachments(attachments)
+        content_tag(:table, class: 'table table-hover effective_file_attachments') do
+          content_tag(:thead) do
+            content_tag(:tr) do
+              content_tag(:th, 'Image') +
+              content_tag(:th, 'Title') +
+              content_tag(:th, 'Size') +
+              content_tag(:th, '')
+            end
+          end + 
+          content_tag(:tbody) do
+            attachments.map { |attachment| content_tag(:tr, build_table_attachment(attachment)) }.join.html_safe
+          end
+        end
+      end
+
+      def build_table_attachment(attachment)
+        url = (@template.url_for(attachment) rescue false)
+        return unless url
+
+        content_tag(:td) do
+          if attachment.image?
+            content_tag(:img, '', class: '', src: url, alt: attachment.filename.to_s)
+          end
+        end +
+
+        content_tag(:td, link_to(attachment.filename, url)) +
+        content_tag(:td, (attachment.content_type + '<br>' + @template.number_to_human_size(attachment.byte_size)).html_safe) +
+
+        content_tag(:td) do
+          if attachments_style == :ck_assets 
+            content = if attachment.image?
+              content_tag(:img, '', class: '', src: url, alt: attachment.filename.to_s)
+            else
+              link_to(attachment.filename, url)
+            end
+
+            link_to('Attach', url, class: 'btn btn-primary', 'data-effective-file-insert-ck-asset': true, 'data-asset': content, 'data-asset-id': 3)
+          end
+        end
+      end
+
+      def build_card_attachments(attachments)
+        content_tag(:div, attachments.map { |attachment| build_card_attachment(attachment) }.join.html_safe, class: 'effective_file_attachments row')
+      end
+
+      def build_card_attachment(attachment)
         url = (@template.url_for(attachment) rescue false)
         return unless url
 
@@ -61,6 +122,15 @@ module Effective
           content_tag(:div, '', class: 'direct-upload__progress', style: 'width: 0%') +
           content_tag(:span, '$FILENAME$', class: 'direct-upload__filename')
         end
+      end
+
+      def click_submit?
+        return @click_submit unless @click_submit.nil?
+        @click_submit ||= (options.delete(:click_submit) || false)
+      end
+
+      def attachments_style
+        @attachments_style ||= (options[:input].delete(:attachments_style) || options[:input].delete(:attachment_style) || :card)
       end
 
     end

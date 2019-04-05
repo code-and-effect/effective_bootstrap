@@ -15,3 +15,5 @@ $(document).on 'direct-upload:error', (event) ->
 $(document).on 'direct-upload:end', (event) ->
   $("[data-direct-upload-id=#{event.detail.id}]").addClass('direct-upload--complete')
 
+$(document).on 'change', "input[type='file'][data-click-submit]", (event) ->
+  $(event.currentTarget).closest('form').find('button[type=submit],input[type=submit]').first().click()

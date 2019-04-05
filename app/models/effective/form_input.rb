@@ -7,7 +7,7 @@ module Effective
     EXCLUSIVE_CLASS_SUFFIXES = ['-primary', '-secondary', '-success', '-danger', '-warning', '-info', '-light', '-dark']
 
     delegate :object, to: :@builder
-    delegate :capture, :content_tag, :link_to, :icon, to: :@template
+    delegate :capture, :content_tag, :link_to, :icon, :asset_path, to: :@template
 
     # So this takes in the options for an entire form group.
     def initialize(name, options, builder:, html_options: nil)

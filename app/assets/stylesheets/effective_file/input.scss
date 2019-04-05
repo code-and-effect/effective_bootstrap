@@ -1,5 +1,4 @@
-.direct-uploads {
-}
+.direct-uploads {}
 
 .direct-upload {
   display: inline-block;
@@ -12,8 +11,8 @@
   line-height: 13px;
 }
 
-.direct-upload--pending {
-  opacity: 0.6;
+.direct-upload--pending { 
+  opacity: 0.6; 
 }
 
 .direct-upload__progress {
@@ -37,4 +36,9 @@
 
 input[type=file][data-direct-upload-url][disabled] {
   display: none;
+}
+
+// Attachments
+table.effective_file_attachments {
+  img { max-width: 128px; max-height: 128px;}
 }
