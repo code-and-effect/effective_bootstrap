@@ -62,24 +62,17 @@ module Effective
         url = (@template.url_for(attachment) rescue false)
         return unless url
 
-        content_tag(:td) do
-          if attachment.image?
-            content_tag(:img, '', class: '', src: url, alt: attachment.filename.to_s)
-          end
-        end +
+        image_tag = content_tag(:img, '', class: '', src: url, alt: attachment.filename.to_s)  if attachment.image?
+        link_tag = link_to(attachment.filename, url)
+        size_tag = (attachment.content_type + '<br>' + @template.number_to_human_size(attachment.byte_size)).html_safe
 
-        content_tag(:td, link_to(attachment.filename, url)) +
-        content_tag(:td, (attachment.content_type + '<br>' + @template.number_to_human_size(attachment.byte_size)).html_safe) +
+        content_tag(:td, image_tag) +
+        content_tag(:td, link_tag) +
+        content_tag(:td, size_tag) +
 
         content_tag(:td) do
           if attachments_style == :ck_assets 
-            content = if attachment.image?
-              content_tag(:img, '', class: '', src: url, alt: attachment.filename.to_s)
-            else
-              link_to(attachment.filename, url)
-            end
-
-            link_to('Attach', url, class: 'btn btn-primary', 'data-effective-file-insert-ck-asset': true, 'data-asset': content, 'data-asset-id': 3)
+            link_to('Attach', url, class: 'btn btn-primary', 'data-insert-ck-asset': true, alt: attachment.filename.to_s)
           end
         end
       end
