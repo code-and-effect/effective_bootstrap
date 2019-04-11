@@ -51,7 +51,7 @@ initCkeditor = ($element, input_options) ->
       { name: 'lists', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'] },
       { name: 'insert2', items: ['Table', 'EffectiveReferences', 'Blockquote', 'HorizontalRule', 'PageBreak'] },
       { name: 'colors', items: ['TextColor', 'BGColor'] },
-      { name: 'snippets', items: ['Templates', 'InsertSnippet'] }
+      { name: 'snippets', items: ['Templates'] }
     ],
     toolbar_simple: [
       { name: 'definedstyles', items: ['Format'] },
