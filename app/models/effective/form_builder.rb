@@ -76,6 +76,10 @@ module Effective
       Effective::FormInputs::FormGroup.new(name, options, builder: self).to_html(&block)
     end
 
+    def integer_field(name, options = {})
+      Effective::FormInputs::IntegerField.new(name, options, builder: self).to_html
+    end
+
     # This is gonna be a post?
     def remote_link_to(name, url, options = {}, &block)
       options[:href] ||= url
