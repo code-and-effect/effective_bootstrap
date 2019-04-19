@@ -13,15 +13,13 @@ module Effective
       def build_input(&block)
         content = if block_given?
           capture(&block)
-        elsif options[:input][:value]
-          options[:input].delete(:value)
         elsif resource_path
           link_to(value, resource_path, title: value.to_s)
         else
           value
         end
 
-        content_tag(:p, content, options[:input].except(:readonly, :required, :value).merge(id: tag_id))
+        content_tag(:p, content, options[:input].except(:readonly, :required).merge(id: tag_id))
       end
 
       def resource_path

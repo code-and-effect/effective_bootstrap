@@ -32,12 +32,11 @@ module Effective
 
         checked = options[:input].delete(:checked)
         selected = options[:input].delete(:selected)
-        passed_value = options[:input].delete(:value)
         include_blank = options[:input].delete(:include_blank)
 
         @collection_options = {
-          checked: [checked, selected, passed_value, polymorphic_value, value].find { |value| value != nil },
-          selected: [selected, checked, passed_value, polymorphic_value, value].find { |value| value != nil },
+          checked: [checked, selected, polymorphic_value, value].find { |value| value != nil },
+          selected: [selected, checked, polymorphic_value, value].find { |value| value != nil },
           include_blank: include_blank
         }.compact
       end

@@ -254,7 +254,8 @@ module Effective
     end
 
     def value
-      object.public_send(name) if object.respond_to?(name)
+      @_value ||= (options.delete(:value) || options[:input]&.delete(:value))
+      @_value ||= (object.public_send(name) if object.respond_to?(name))
     end
 
     def unique_id(item = nil)
