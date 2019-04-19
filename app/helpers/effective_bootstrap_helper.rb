@@ -1,6 +1,28 @@
 # Boostrap4 Helpers
 
 module EffectiveBootstrapHelper
+  # https://getbootstrap.com/docs/4.0/components/collapse/
+
+  # = collapse('toggle visibility') do
+  #   %p Something
+  #   %p Collapsed
+
+  # collapse(items.length, class: 'btn btn-primary') do
+  #   items.map { |item| content_tag(:div, item.to_s) }.join.html_safe
+  # end
+  def collapse(label, opts = {}, &block)
+    raise 'expected a block' unless block_given?
+
+    id = "collapse-#{''.object_id}"
+
+    link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': false }
+
+    content_tag(:a, label, link_opts.merge(opts)) +
+    content_tag(:div, class: 'collapse', id: id) do
+      content_tag(:div, capture(&block), class: 'card card-body mt-2')
+    end
+  end
+
   # Button Dropdowns
   # https://getbootstrap.com/docs/4.0/components/dropdowns/
   #
