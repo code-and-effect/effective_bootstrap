@@ -10,7 +10,7 @@ module Effective
       end
 
       def input_js_options
-        { format: format, sideBySide: true, showTodayButton: false, showClear: false, useCurrent: 'hour', disabledDates: disabled_dates.presence, minDate: min_date.presence, maxDate: max_date.presence }.compact
+        { format: format, sideBySide: true, showTodayButton: false, showClear: false, useCurrent: 'hour', disabledDates: disabled_dates.presence, minDate: min_date.presence, maxDate: max_date.presence, locale: I18n.locale }.compact
       end
 
       def input_group_options
