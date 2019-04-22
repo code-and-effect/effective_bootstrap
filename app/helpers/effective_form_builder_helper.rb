@@ -33,7 +33,7 @@ module EffectiveFormBuilderHelper
     end
 
     # Assign default ID
-    options[:id] ||= options[:html].delete(:id) || html_id
+    options[:id] ||= (options[:html].delete(:id) || html_id) unless options.key?(:id)
 
     without_error_proc do
       form_with(**options.merge(builder: Effective::FormBuilder), &block)
