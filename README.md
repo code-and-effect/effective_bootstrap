@@ -48,6 +48,16 @@ And to your `application.scss`:
 
 ## View Helpers
 
+### Collapse
+
+https://getbootstrap.com/docs/4.0/components/collapse/
+
+```haml
+= collapse('Click to collapse') do
+  %p You have revealed me!
+```
+
+
 ### Dropdown
 
 https://getbootstrap.com/docs/4.0/components/dropdowns/
