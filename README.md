@@ -33,6 +33,12 @@ Add the following to your `application.js`:
 //= require popper
 //= require bootstrap
 //= require effective_bootstrap
+
+// The datepickers will use momentjs locales.
+// You can add locales for momentjs like this:
+
+//= require 'moment/locale/es'
+//= require 'moment/locale/nl'
 ```
 
 And to your `application.scss`:
