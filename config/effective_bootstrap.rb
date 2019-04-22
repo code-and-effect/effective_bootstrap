@@ -21,4 +21,7 @@ EffectiveBootstrap.setup do |config|
   # end
   config.authorization_method = Proc.new { |controller, action, resource| authorize!(action, resource) }
 
+  # Replaces rails_ujs data-confirm with a custom inline implementation.
+  # You will need to recompile assets (or "rm -rf tmp/") if you change this.
+  config.use_custom_data_confirm = true
 end

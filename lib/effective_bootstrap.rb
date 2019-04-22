@@ -7,6 +7,8 @@ module EffectiveBootstrap
   # The following are all valid config keys
   mattr_accessor :authorization_method
 
+  mattr_accessor :use_custom_data_confirm
+
   def self.setup
     yield self
   end

@@ -1,0 +1,22 @@
+# These next three methods hijack jquery_ujs data-confirm and do it our own way with a double click confirm
+
+if <%= !!EffectiveBootstrap.use_custom_data_confirm %> && $.rails
+  $(document).on 'confirm', (event) ->
+    $obj = $(event.target)
+
+    if $obj.data('confirmed')
+      true
+    else
+      $obj.data('confirm-original', $obj.html())
+      $obj.html($obj.data('confirm'))
+      $obj.data('confirmed', true)
+      setTimeout(
+        (->
+          $obj.data('confirmed', false)
+          $obj.html($obj.data('confirm-original'))
+        )
+        , 4000)
+      false # don't show the confirmation dialog
+
+  $.rails.confirm = (message) -> true 
+  $(document).on 'confirm:complete', (event) -> $(event.target).data('confirmed')
