@@ -34,11 +34,9 @@ Add the following to your `application.js`:
 //= require bootstrap
 //= require effective_bootstrap
 
-// The datepickers will use momentjs locales.
-// You can add locales for momentjs like this:
-
-//= require 'moment/locale/es'
-//= require 'moment/locale/nl'
+# The date picker form inputs use momentjs locales. To add a locale:
+//= require moment/locale/es
+//= require moment/locale/nl
 ```
 
 And to your `application.scss`:
