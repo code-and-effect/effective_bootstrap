@@ -33,6 +33,7 @@ module Effective
           'form-group form-actions',
           ('form-actions-inline' if inline?),
           ('form-actions-bordered' if border?),
+          ('form-actions-reset' if reset?),
           ('justify-content-start' if left? && layout == :vertical),
           ('justify-content-center' if center? && layout == :vertical),
           ('justify-content-end' if right? && layout == :vertical)
@@ -75,6 +76,11 @@ module Effective
       def right?
         return @right unless @right.nil?
         @right = (options.delete(:right) || false)
+      end
+
+      def reset?
+        return @reset unless @reset.nil?
+        @reset = (options.delete(:reset) || false)
       end
 
       def icon_name

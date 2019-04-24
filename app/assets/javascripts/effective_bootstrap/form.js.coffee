@@ -144,13 +144,13 @@ this.EffectiveForm ||= new class
 # Sets EffectiveBootstrap. current_click.
 # This displays the spinner here, and directs any flash messages before and after loadRemoteForm
 $(document).on 'click', '.form-actions a[data-remote],.form-actions button[type=submit]', (event) ->
-  $submit = $(@)
-  $form = $submit.closest('form')
+  $submits = $(@).parent()
+  $form = $submits.closest('form')
 
-  if ($form.attr('method') || '').toLowerCase() == 'get'
-    setTimeout((-> EffectiveForm.reset($form)), 2000) 
+  if $submits.hasClass('form-actions-reset') || ($form.attr('method') || '').toLowerCase() == 'get'
+    setTimeout((-> EffectiveForm.reset($form)), 2500) 
 
-  EffectiveForm.setCurrentSubmit($submit.parent())
+  EffectiveForm.setCurrentSubmit($submits)
   EffectiveForm.spin()
 
 # This actually attached the handlers to a remote ajax form when it or an action inside it triggers a remote thing.
