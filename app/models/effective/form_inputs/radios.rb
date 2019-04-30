@@ -44,18 +44,18 @@ module Effective
         if buttons? || cards?
           { class: "form-group #{tag_id}" }
         else
-          { class: "form-group effective-radios #{tag_id}" }
+          { class: "form-group #{tag_id} #{button_group_class}" }
         end
       end
 
       def button_group_class
         [
           'effective-radios',
-          ('no-feedback' if options[:feedback] == false),
           ('btn-group btn-group-toggle' if buttons?),
           ('card-deck' if cards?),
-          ('is-invalid' if options[:feedback] && has_error?(name)),
-          ('is-valid' if options[:feedback] && has_error? && !has_error?(name))
+          ('no-feedback' unless feedback_options),
+          ('is-invalid' if feedback_options && has_error?(name)),
+          ('is-valid' if feedback_options && has_error? && !has_error?(name))
         ].compact.join(' ')
       end
 
