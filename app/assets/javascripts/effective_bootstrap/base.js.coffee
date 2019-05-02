@@ -5,6 +5,8 @@ this.EffectiveBootstrap ||= new class
       $element = $(element)
       options = $element.data('input-js-options')
 
+      return true unless (options['method_name'] || '').length > 0
+
       method_name = options['method_name']
       delete options['method_name']
 
