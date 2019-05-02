@@ -48,15 +48,16 @@ And to your `application.scss`:
 
 ## View Helpers
 
+All these examples are in [haml](https://github.com/haml/haml).
+
 ### Collapse
 
 https://getbootstrap.com/docs/4.0/components/collapse/
 
 ```haml
-= collapse('Click to collapse') do
+= collapse('Click to collapse/expand') do
   %p You have revealed me!
 ```
-
 
 ### Dropdown
 
@@ -114,6 +115,23 @@ https://getbootstrap.com/docs/4.0/components/navbar/
 ```
 
 `nav_link_to` will automatically insert the `.active` class based on the request path.
+
+### Tabs
+
+https://getbootstrap.com/docs/4.0/components/navs/#tabs
+
+```haml
+= tabs do
+  = tab 'Demographics' do
+    %p Demographics tab
+
+  = tab 'Orders' do
+    %p Orders tab
+
+  - if resource.logs.present?
+    = tab 'Logs' do
+      %p Logs tab
+```
 
 ## Icon Helpers
 
