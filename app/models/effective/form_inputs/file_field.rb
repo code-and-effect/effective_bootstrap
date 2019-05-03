@@ -15,7 +15,7 @@ module Effective
 
       def input_html_options
         {
-          class: 'form-control form-control-file btn btn-outline-secondary',
+          class: 'form-control form-control-file btn-outline-secondary',
           multiple: multiple?,
           direct_upload: true,
           'data-progress-template': progress_template,

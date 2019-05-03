@@ -42,3 +42,5 @@ input[type=file][data-direct-upload-url][disabled] {
 table.effective_file_attachments {
   img { max-width: 128px; max-height: 128px;}
 }
+
+input.form-control-file { padding-bottom: 2.75rem; }
