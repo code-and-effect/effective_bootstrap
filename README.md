@@ -153,6 +153,12 @@ Add this to your view:
 %nav= paginate(@posts, per_page: 10)
 ```
 
+or
+
+```haml
+%nav.d-flex.justify-content-center= paginate(@posts, per_page: 10)
+```
+
 ### Tabs
 
 https://getbootstrap.com/docs/4.0/components/navs/#tabs
