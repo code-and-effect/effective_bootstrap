@@ -172,6 +172,57 @@ module EffectiveBootstrapHelper
     content_tag(:div, '', class: 'dropdown-divider')
   end
 
+  # Pagination
+  #
+  # https://getbootstrap.com/docs/4.0/components/pagination/
+  # Builds a pagination based on the given collection, current url and params[:page]
+  #
+  # = paginate(@posts, per_page: 10)
+  #
+  # Add this to your model
+  # scope :paginate, -> (page: nil, per_page: 10) {
+  #   page = (page || 1).to_i
+  #   offset = [(page - 1), 0].max * per_page
+
+  #   limit(per_page).offset(offset)
+  # }
+  #
+  # Add this to your controller:
+  # @posts = Post.all.paginate(page: params[:page])
+  #
+  # Add this to your view
+  # %nav= paginate(@posts, per_page: 10)
+  #
+  def paginate(collection, per_page:, url: nil)
+    raise 'expected an ActiveRecord::Relation' unless collection.respond_to?(:limit) && collection.respond_to?(:offset)
+
+    count = collection.limit(nil).offset(nil).count
+
+    page = (params[:page] || 1).to_i
+    pages = (count.to_f / per_page).ceil
+
+    uri = URI(url || request.fullpath)
+    params = Rack::Utils.parse_nested_query(uri.query)
+    url = uri.path + '?'
+
+    content_tag(:ul, class: 'pagination') do
+      content_tag(:li, class: ['page-item', ('disabled' if page <= 1)].compact.join(' ')) do
+        link_to(url + params.merge('page' => page - 1).to_query, class: 'page-link', 'aria-label': 'Previous', title: 'Previous') do
+          content_tag(:span, '&laquo;'.html_safe, 'aria-hidden': true) + content_tag(:span, 'Previous', class: 'sr-only')
+        end
+      end + (1..pages).map do |index|
+        content_tag(:li, class: ['page-item', ('active' if index == page)].compact.join(' '), title: "Page #{index}") do
+          link_to(index, (url + params.merge('page' => index).to_query), class: 'page-link')
+        end
+      end.join.html_safe + 
+      content_tag(:li, class: ['page-item', ('disabled' if page >= pages)].compact.join(' ')) do
+        link_to(url + params.merge('page' => page + 1).to_query, class: 'page-link', 'aria-label': 'Next', title: 'Next') do
+          content_tag(:span, '&raquo;'.html_safe, 'aria-hidden': true) + content_tag(:span, 'Next', class: 'sr-only')
+        end
+      end
+    end
+  end
+
   # Tabs DSL
   # Inserts both the tablist and the tabpanel
 

@@ -116,6 +116,43 @@ https://getbootstrap.com/docs/4.0/components/navbar/
 
 `nav_link_to` will automatically insert the `.active` class based on the request path.
 
+### Pagination
+
+https://getbootstrap.com/docs/4.0/components/pagination/
+
+Builds a pagination based on the given collection, current url and params[:page].
+
+The collection must be an ActiveRecord relation.
+
+```haml
+= paginate(@posts, per_page: 10)
+```
+
+Add this to your model:
+
+```ruby
+scope :paginate, -> (page: nil, per_page:) {
+  page = (page || 1).to_i
+  offset = [(page - 1), 0].max * per_page
+
+  limit(per_page).offset(offset)
+}
+```
+
+Add this to your controller:
+
+```ruby
+def index
+  @posts = Post.all.paginate(page: params[:page], per_page: 10)
+end
+```
+
+Add this to your view:
+
+```haml
+%nav= paginate(@posts, per_page: 10)
+```
+
 ### Tabs
 
 https://getbootstrap.com/docs/4.0/components/navs/#tabs
