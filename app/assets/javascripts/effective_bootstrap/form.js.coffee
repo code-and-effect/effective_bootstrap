@@ -1,6 +1,7 @@
 this.EffectiveForm ||= new class
   current_submit: ''                  # The $(.form-actions) that clicked
   current_delete: ''                  # If there's a rails ujs_delete link with the data-closeset selector, use this.
+  remote_form_commit: ''              # String containing the last params[:commit]
   remote_form_payload: ''             # String containing html from server side render of this form
   remote_form_flash: ''               # Array of Arrays
   remote_form_refresh_datatables: ''  # Array of Strings. effective_datatables inline_crud.js uses this
@@ -100,19 +101,25 @@ this.EffectiveForm ||= new class
     # Fire off form events
     was_error = ($form.hasClass('with-errors') || flash_status == 'danger' || flash_status == 'error')
 
-    $form.trigger((if was_error then 'effective-form:error' else 'effective-form:success'), flash_message)
-    $form.trigger('effective-form:complete', flash_message, was_error)
+    if was_error
+      $form.trigger('effective-form:error', [flash_message, @remote_form_commit])
+    else
+      $form.trigger('effective-form:success', [flash_message, @remote_form_commit])
+
+    $form.trigger('effective-form:complete', @remote_form_commit, [flash_message, @remote_form_commit, was_error])
 
     @remote_form_flash = ''
+    @remote_form_commit = ''
+    @current_submit = ''
     true
 
   flash: ($form, status, message, skip_success = false) ->
     return unless @current_submit.length > 0
 
     if status == 'danger' || status == 'error'
-      @current_submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow', -> $form.trigger('effective-form:error-animation-done', message))
+      @current_submit.find('.eb-icon-x').show().delay(1000).fadeOut('slow', -> $form.trigger('effective-form:error-animation-done', @remote_form_commit, message))
     else
-      @current_submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow', -> $form.trigger('effective-form:success-animation-done', message))
+      @current_submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow', -> $form.trigger('effective-form:success-animation-done', @remote_form_commit, message))
 
     if message? && !(status == 'success' && skip_success)
       @current_submit.prepend(@buildFlash(status, message))
