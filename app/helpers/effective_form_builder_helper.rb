@@ -13,10 +13,18 @@ module EffectiveFormBuilderHelper
       "new_#{class_name}"
     end
 
-    options[:class] = [options[:class], 'needs-validation', ('form-inline' if options[:layout] == :inline), ('with-errors' if subject.respond_to?(:errors) && subject.errors.present?)].compact.join(' ')
+    options[:class] = [
+      options[:class], 
+      'needs-validation', 
+      ('form-inline' if options[:layout] == :inline), 
+      ('with-errors' if subject.respond_to?(:errors) && subject.errors.present?)
+    ].compact.join(' ')
+
     options[:html] = (options[:html] || {}).merge(novalidate: true, onsubmit: 'return EffectiveForm.validate(this);')
 
     remote_index = options.except(:model).hash.abs
+
+    options[:remote] = true if respond_to?(:inline_datatable?) && inline_datatable?
 
     if options.delete(:remote) == true
       @_effective_remote_index ||= 0
