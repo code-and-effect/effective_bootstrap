@@ -218,7 +218,7 @@ module EffectiveBootstrapHelper
         end
       end.join.html_safe + 
       content_tag(:li, class: ['page-item', ('disabled' if page >= last)].compact.join(' ')) do
-        link_to(url + params.merge('page' => page + 1).to_query, class: 'page-link', 'aria-label': 'Next', title: 'Next') do
+        link_to((page >= last ? '#' : url + params.merge('page' => page + 1).to_query), class: 'page-link', 'aria-label': 'Next', title: 'Next') do
           content_tag(:span, '&raquo;'.html_safe, 'aria-hidden': true) + content_tag(:span, 'Next', class: 'sr-only')
         end
       end
