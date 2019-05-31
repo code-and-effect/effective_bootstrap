@@ -108,3 +108,8 @@ form.form-inline .select2-container--bootstrap {
   .select2-results__option[aria-selected=true] { display: none; }
   .select2-results__option:last-child[aria-selected=true] { display: inline-block; visibility: hidden; height: 1px; }
 }
+
+// When in a bootstrap modal fix
+.modal-body .select2-container--open {
+  z-index: 9999999;
+}
