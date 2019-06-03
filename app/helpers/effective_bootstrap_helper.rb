@@ -4,22 +4,26 @@ module EffectiveBootstrapHelper
   # https://getbootstrap.com/docs/4.0/components/collapse/
 
   # = collapse('toggle visibility') do
-  #   %p Something
-  #   %p Collapsed
+  #   %p Something Collapsed
 
-  # collapse(items.length, class: 'btn btn-primary') do
+  # = collapse('already expanded', show: true) do
+  #   %p Something Expanded
+
+  # collapse(items.length, class: 'btn btn-primary', card_class: 'mt-2') do
   #   items.map { |item| content_tag(:div, item.to_s) }.join.html_safe
   # end
   def collapse(label, opts = {}, &block)
     raise 'expected a block' unless block_given?
 
     id = "collapse-#{''.object_id}"
+    show = (opts.delete(:show) == true)
 
-    link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': false }
+    link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
+    card_class = opts.delete(:card_class)
 
     content_tag(:a, label, link_opts.merge(opts)) +
-    content_tag(:div, class: 'collapse', id: id) do
-      content_tag(:div, capture(&block), class: 'card card-body mt-2')
+    content_tag(:div, id: id, class: ['collapse', ('show' if show)].compact.join(' ')) do
+      content_tag(:div, capture(&block), class: ['card', 'card-body', card_class.presence].compact.join(' '))
     end
   end
 
