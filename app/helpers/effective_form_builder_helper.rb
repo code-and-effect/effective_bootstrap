@@ -27,7 +27,8 @@ module EffectiveFormBuilderHelper
     options[:remote] = true if respond_to?(:inline_datatable?) && inline_datatable?
 
     if options.delete(:remote) == true
-      @_effective_remote_index ||= 0
+      @_effective_remote_index ||= {}
+      remote_index = remote_index + 1 if @_effective_remote_index[remote_index]
 
       if options[:html][:data].kind_of?(Hash)
         options[:html][:data][:remote] = true
@@ -38,6 +39,8 @@ module EffectiveFormBuilderHelper
       end
 
       html_id = "#{html_id}_#{remote_index}"
+
+      @_effective_remote_index[remote_index] = true
     end
 
     # Assign default ID
