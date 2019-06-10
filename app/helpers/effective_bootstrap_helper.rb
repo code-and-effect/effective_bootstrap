@@ -213,16 +213,16 @@ module EffectiveBootstrapHelper
 
     content_tag(:ul, class: 'pagination') do
       content_tag(:li, class: ['page-item', ('disabled' if page <= 1)].compact.join(' ')) do
-        link_to(url + params.merge('page' => page - 1).to_query, class: 'page-link', 'aria-label': 'Previous', title: 'Previous') do
+        link_to((page <= 1 ? '#' : url + params.merge('page' => page - 1).to_query), class: 'page-link', 'aria-label': 'Previous', title: 'Previous', 'aria-disabled': ('true' if page <= 1), 'tabindex': ('-1' if page <= 1)) do
           content_tag(:span, '&laquo;'.html_safe, 'aria-hidden': true) + content_tag(:span, 'Previous', class: 'sr-only')
         end
       end + (1..last).map do |index|
         content_tag(:li, class: ['page-item', ('active' if index == page)].compact.join(' '), title: "Page #{index}") do
           link_to(index, (url + params.merge('page' => index).to_query), class: 'page-link')
         end
-      end.join.html_safe + 
+      end.join.html_safe +
       content_tag(:li, class: ['page-item', ('disabled' if page >= last)].compact.join(' ')) do
-        link_to((page >= last ? '#' : url + params.merge('page' => page + 1).to_query), class: 'page-link', 'aria-label': 'Next', title: 'Next') do
+        link_to((page >= last ? '#' : url + params.merge('page' => page + 1).to_query), class: 'page-link', 'aria-label': 'Next', title: 'Next', 'aria-disabled': ('true' if page >= last), 'tabindex': ('-1' if page >= last)) do
           content_tag(:span, '&raquo;'.html_safe, 'aria-hidden': true) + content_tag(:span, 'Next', class: 'sr-only')
         end
       end

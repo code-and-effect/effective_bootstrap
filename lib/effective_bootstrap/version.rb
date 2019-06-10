@@ -1,3 +1,3 @@
 module EffectiveBootstrap
-  VERSION = '0.5.13'.freeze
+  VERSION = '0.5.15'.freeze
 end
