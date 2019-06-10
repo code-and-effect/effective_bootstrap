@@ -169,7 +169,7 @@ module Effective
       invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].compact.join(' and ').presence
       invalid ||= "can't be blank or is invalid"
 
-      valid = options[:feedback][:valid].delete(:text) || "Look's good!"
+      valid = options[:feedback][:valid].delete(:text) || 'Looks good!'
 
       content_tag(:div, invalid.html_safe, options[:feedback][:invalid]) +
       content_tag(:div, valid.html_safe, options[:feedback][:valid])
