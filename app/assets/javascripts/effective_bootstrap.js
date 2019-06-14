@@ -3,6 +3,7 @@
 //= require ./effective_bootstrap/form
 //= require ./effective_bootstrap/logic
 //= require ./effective_bootstrap/other
+//= require ./effective_bootstrap/tabs
 
 //= require ./effective_datetime/input
 //= require ./effective_date/input
