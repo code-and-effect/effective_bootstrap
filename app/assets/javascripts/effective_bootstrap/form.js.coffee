@@ -4,7 +4,6 @@ this.EffectiveForm ||= new class
   remote_form_commit: ''              # String containing the last params[:commit]
   remote_form_payload: ''             # String containing html from server side render of this form
   remote_form_flash: ''               # Array of Arrays
-  remote_form_refresh_datatables: ''  # Array of Strings. effective_datatables inline_crud.js uses this
 
   validate: (form) ->
     valid = form.checkValidity()
