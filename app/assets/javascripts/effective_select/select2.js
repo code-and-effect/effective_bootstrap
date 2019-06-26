@@ -5376,6 +5376,7 @@ S2.define('select2/core',[
           evt.preventDefault();
         } else if (key === KEYS.ENTER || key === KEYS.TAB) {
           self.trigger('results:select', {});
+          self.close();
 
           evt.preventDefault();
         } else if ((key === KEYS.SPACE && evt.ctrlKey)) {
