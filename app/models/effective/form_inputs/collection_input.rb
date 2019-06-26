@@ -103,13 +103,21 @@ module Effective
       # Apply ActsAsArchived behavior. That's all for now.
       def translate(collection)
         return collection unless object.respond_to?(:new_record?)
-        return collection unless collection.respond_to?(:klass) && collection.klass.respond_to?(:acts_as_archived?)
+        return collection unless collection.respond_to?(:klass)
 
-        if object.new_record?
-          collection.unarchived
-        else
-          collection.unarchived.or(collection.archived.where(collection.klass.primary_key => value))
+        if collection.klass.respond_to?(:acts_as_archived?)
+          collection = if object.new_record?
+            collection.unarchived
+          else
+            collection.unarchived.or(collection.archived.where(collection.klass.primary_key => value))
+          end
         end
+
+        if respond_to?(:ajax?) && ajax? # effective_select
+          collection = collection.where(collection.klass.primary_key => value)
+        end
+
+        collection
       end
 
       def assign_options_collection_methods!

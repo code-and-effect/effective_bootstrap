@@ -43,6 +43,7 @@ module Effective
           template: js_template,
           containerClass: ('hide-disabled' if hide_disabled?),
           dropdownClass: ('hide-disabled' if hide_disabled?),
+          ajax: ({ url: ajax_url, dataType: 'json', delay: 250 } if ajax?)
         }.compact
       end
 
@@ -82,6 +83,10 @@ module Effective
         options_collection
       end
 
+      def ajax?
+        ajax_url.present?
+      end
+
       private
 
       def include_null
@@ -103,7 +108,6 @@ module Effective
 
       def multiple?
         return @multiple unless @multiple.nil?
-
         @multiple = options.key?(:multiple) ? options.delete(:multiple) : (tags? || name.to_s.ends_with?('_ids'))
       end
 
@@ -130,6 +134,10 @@ module Effective
       def js_template
         return @js_template unless @js_template.nil?
         @js_template = options.delete(:template)
+      end
+
+      def ajax_url
+        @ajax_url ||= (options.delete(:ajax_url) || options.delete(:ajax) || options.delete(:url))
       end
 
     end
