@@ -2,7 +2,10 @@
 # Fixes https://github.com/select2/select2/issues/3106
 $(document).on 'select2:select', 'select', (event) ->
   $el = $(event.params.data.element)
-  $(this).append($el.detach()).trigger('change') if $el.closest('select').hasClass('tags-input')
+
+  if $el.closest('select').hasClass('tags-input')
+    $(this).append($el.detach()).trigger('change')
+
   true
 
 # Disable dropdown opening when clicking the clear button
@@ -19,32 +22,10 @@ $(document).on 'select2:open', (event) ->
 # For tabbing through
 # https://stackoverflow.com/questions/20989458/select2-open-dropdown-on-focus
 $(document).on 'focus', '.select2-selection.select2-selection--single', (event) ->
-  $(event.currentTarget).closest('.select2-container').siblings('select:enabled').select2('open');
+  $(event.currentTarget).closest('.select2-container').siblings('select:enabled').select2('open')
 
 $(document).on 'select2:closing', (event) ->
   $(event.target).data('select2').$selection.one('focus focusin', (event) -> event.stopPropagation())
-
-$(document).on 'keydown', '.select2-container', (event) ->
-  console.log $(event.target)
-  console.log $(event.currentTarget)
-
-  #return unless event.keyCode == 9
-
-  id = $(event.target).closest('.select2-container').find('.select2-results').children('ul').attr('id')
-  return unless id.length > 0 # select2-charge_accounting_code_id-results
-
-  $select = $("select##{id.substring(8, id.length - 8)}")
-  return unless $select.length > 0
-
-  $option = $select.data('select2').$dropdown.find('.select2-results__option--highlighted')
-  return unless $option.length > 0
-
-  id = $option.attr('id')
-  return unless id.length > 0
-
-  value = id.substring(id.lastIndexOf('-') + 1)
-
-  $select.val(value).trigger('change')
 
 # effective_select custom reinitialization functionality
 # This is a custom event intended to be manually triggered when the underlying options change
