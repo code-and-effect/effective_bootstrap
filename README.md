@@ -510,7 +510,56 @@ $(document).on 'change', '.something', (event) ->
 
 ### AJAX Support
 
-There is currently no support for using AJAX to load remote data.  This feature is supported by the underlying select2 library and will be implemented here at a future point.
+Provide the `ajax_url: ` method to use AJAX remote data source.
+
+In your form:
+
+```ruby
+= f.input :user_id, User.all, ajax_url: users_select2_ajax_index_path
+```
+
+In your `routes.rb`:
+
+```ruby
+resources :select2_ajax, only: [] do
+  get :users, on: :collection
+end
+```
+
+In your controller:
+
+```ruby
+class Select2AjaxController < ApplicationController
+  def users
+    # Collection
+    collection = User.all
+
+    # Search
+    if (term = params[:term]).present?
+      collection = collection.where('name ILIKE ?', "%#{term}%").or(collection.where('id::TEXT LIKE ?', "%#{term}%"))
+    end
+
+    # Paginate
+    per_page = 20
+    page = (params[:page] || 1).to_i
+    last = (collection.reselect(:id).count.to_f / per_page).ceil
+    more = page < last
+
+    offset = [(page - 1), 0].max * per_page
+    collection = collection.limit(per_page).offset(offset)
+
+    # Results
+    results = collection.map { |user| { id: user.to_param, text: user.to_s } }
+
+    respond_to do |format|
+      format.js do
+        render json: { results: results, pagination: { more: more } }
+      end
+    end
+  end
+
+end
+```
 
 ## Custom select_or_text_field
 
