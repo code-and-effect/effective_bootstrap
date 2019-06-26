@@ -36,7 +36,6 @@ $(document).on 'select2:closing', (event) ->
 # $(document).on 'change', "select[name$='[something_id]']", (event) ->
 #   ...add/remove/disable this select field's options...
 #   $(event.target).select2().trigger('select2:reinitialize')
-
 $(document).on 'select2:reinitialize', (event) ->
   $select = $(event.target)
 
