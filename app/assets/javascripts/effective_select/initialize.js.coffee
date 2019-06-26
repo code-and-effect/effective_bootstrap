@@ -50,12 +50,4 @@ $(document).on 'change', "select.effective_select.polymorphic", (event) ->
   $select.siblings("input[type='hidden'][name$='_type]']").val(value.split('_')[0] || '')
   $select.siblings("input[type='hidden'][name$='_id]']").val(value.split('_')[1] || '')
 
-# Keep the order of selected tags
-# Fixes https://github.com/select2/select2/issues/3106
-$(document).on 'select2:select', 'select', (event) ->
-  $el = $(event.params.data.element)
-
-  if $el.closest('select').hasClass('tags-input')
-    $(this).append($el.detach()).trigger('change')
-  true
 
