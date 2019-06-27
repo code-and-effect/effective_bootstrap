@@ -515,7 +515,7 @@ Provide the `ajax_url: ` method to use AJAX remote data source.
 In your form:
 
 ```ruby
-= f.input :user_id, User.all, ajax_url: users_select2_ajax_index_path
+= f.select :user_id, User.all, ajax_url: users_select2_ajax_index_path
 ```
 
 In your `routes.rb`:
