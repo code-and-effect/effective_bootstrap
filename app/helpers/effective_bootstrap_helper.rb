@@ -197,7 +197,7 @@ module EffectiveBootstrapHelper
   # Add this to your view
   # %nav= paginate(@posts, per_page: 10)
   #
-  def paginate(collection, per_page:, url: nil)
+  def bootstrap_paginate(collection, per_page:, url: nil)
     raise 'expected an ActiveRecord::Relation' unless collection.respond_to?(:limit) && collection.respond_to?(:offset)
 
     count = collection.limit(nil).offset(nil).count
@@ -228,6 +228,9 @@ module EffectiveBootstrapHelper
       end
     end
   end
+
+  # Let Kaminari override this method.
+  alias_method(:paginate, :bootstrap_paginate) unless (respond_to?(:paginate) || defined?(Kaminari))
 
   # Tabs DSL
   # Inserts both the tablist and the tabpanel
