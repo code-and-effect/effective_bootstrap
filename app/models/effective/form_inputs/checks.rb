@@ -55,9 +55,9 @@ module Effective
 
         text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK).html_safe
 
-        content_tag((inline? ? :label : :legend), options[:label]) do
+        content_tag(:label, options[:label]) do
           text + content_tag(:div, class: 'effective-checks-actions text-muted') do
-            unless disabled?
+            unless disabled? || !actions?
               link_to('Select All', '#', 'data-effective-checks-all': true) + ' - ' + link_to('Select None', '#', 'data-effective-checks-none': true)
             end
           end
@@ -87,6 +87,11 @@ module Effective
         else
           { class: 'form-check-label' }
         end
+      end
+
+      def actions? # default true
+        return @actions unless @actions.nil?
+        @actions = (options.delete(:actions) != false)
       end
 
     end
