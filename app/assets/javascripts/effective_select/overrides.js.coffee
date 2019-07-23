@@ -22,7 +22,7 @@ $(document).on 'select2:open', (event) ->
 # For tabbing through
 # https://stackoverflow.com/questions/20989458/select2-open-dropdown-on-focus
 $(document).on 'focus', '.select2-selection.select2-selection--single', (event) ->
-  $(event.currentTarget).closest('.select2-container').siblings('select:enabled').select2('open')
+  $(event.currentTarget).closest('.select2-container').siblings('select:enabled:not(.disable-open-on-focus)').select2('open')
 
 $(document).on 'select2:closing', (event) ->
   $(event.target).data('select2').$selection.one('focus focusin', (event) -> event.stopPropagation())
