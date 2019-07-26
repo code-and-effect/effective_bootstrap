@@ -86,6 +86,10 @@ module Effective
       Effective::FormInputs::RemoteLinkTo.new(name, options, builder: self).to_html(&block)
     end
 
+    def search_field(name, options = {})
+      Effective::FormInputs::SearchField.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
     def number_field(name, options = {})
       Effective::FormInputs::NumberField.new(name, options, builder: self).to_html { super(name, options) }
     end
