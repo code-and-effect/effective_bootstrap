@@ -197,7 +197,7 @@ module EffectiveBootstrapHelper
   # Add this to your view
   # %nav= paginate(@posts, per_page: 10)
   #
-  def bootstrap_paginate(collection, per_page:, url: nil, count: nil)
+  def bootstrap_paginate(collection, per_page:, url: nil, count: nil, window: 2)
     raise 'expected an ActiveRecord::Relation' unless collection.respond_to?(:limit) && collection.respond_to?(:offset)
 
     count ||= collection.limit(nil).offset(nil).count # You can pass the total count, or not.
@@ -207,25 +207,67 @@ module EffectiveBootstrapHelper
 
     return unless last > 1 # If there's only 1 page, don't render a pagination at all.
 
+    # Build URL
     uri = URI(url || request.fullpath)
     params = Rack::Utils.parse_nested_query(uri.query)
     url = uri.path + '?'
 
+    # Pagination Tags
+    prev_tag = content_tag(:li, class: ['page-item', ('disabled' if page <= 1)].compact.join(' ')) do
+      link_to(content_tag(:span, 'Previous'.html_safe), (page <= 1 ? '#' : url + params.merge('page' => page - 1).to_query),
+        class: 'page-link', 'aria-label': 'Previous', title: 'Previous', 'aria-disabled': ('true' if page <= 1), 'tabindex': ('-1' if page <= 1)
+      )
+    end
+
+    next_tag = content_tag(:li, class: ['page-item', ('disabled' if page >= last)].compact.join(' ')) do
+      link_to(content_tag(:span, 'Next'.html_safe), (page >= last ? '#' : url + params.merge('page' => page + 1).to_query),
+        class: 'page-link', 'aria-label': 'Next', title: 'Next', 'aria-disabled': ('true' if page >= last), 'tabindex': ('-1' if page >= last)
+      )
+    end
+
+    dots_tag = content_tag(:li, class: 'page-item disabled') do
+      link_to('...', '#', class: 'page-link', 'aria-label': '...', 'aria-disabled': true, tabindex: '-1')
+    end
+
+    # Calculate Windows
+    left = 1.upto(last).to_a.first(1 + (window * 2))
+    middle = ([1, 1 + page - window].max).upto([page + window - 1, last].min).to_a
+    right = 1.upto(last).to_a.last(1 + (window * 2))
+
+    if left.include?(page + 1)
+      left = left - right
+      middle = []
+      right = [last]
+    elsif right.include?(page - 1)
+      left = [1]
+      middle = []
+      right = right - left
+    elsif middle.include?(page)
+      left = [1]
+      middle = middle - left - right
+      right = [last]
+    end
+
+    left_dots = (dots_tag if left == [1] && last > (window * 2 + 1))
+    right_dots = (dots_tag if right == [last] && last > (window * 2 + 1))
+
+    # Render the pagination
     content_tag(:ul, class: 'pagination') do
-      content_tag(:li, class: ['page-item', ('disabled' if page <= 1)].compact.join(' ')) do
-        link_to((page <= 1 ? '#' : url + params.merge('page' => page - 1).to_query), class: 'page-link', 'aria-label': 'Previous', title: 'Previous', 'aria-disabled': ('true' if page <= 1), 'tabindex': ('-1' if page <= 1)) do
-          content_tag(:span, 'Previous'.html_safe)
-        end
-      end + (1..last).map do |index|
-        content_tag(:li, class: ['page-item', ('active' if index == page)].compact.join(' '), title: "Page #{index}") do
-          link_to(index, (url + params.merge('page' => index).to_query), class: 'page-link')
-        end
-      end.join.html_safe +
-      content_tag(:li, class: ['page-item', ('disabled' if page >= last)].compact.join(' ')) do
-        link_to((page >= last ? '#' : url + params.merge('page' => page + 1).to_query), class: 'page-link', 'aria-label': 'Next', title: 'Next', 'aria-disabled': ('true' if page >= last), 'tabindex': ('-1' if page >= last)) do
-          content_tag(:span, 'Next'.html_safe)
-        end
-      end
+      [
+        prev_tag,
+        (left || []).map { |index| bootstrap_paginate_tag(index, page, url, params) },
+        left_dots,
+        (middle || []).compact.map { |index| bootstrap_paginate_tag(index, page, url, params) },
+        right_dots,
+        (right || []).map { |index| bootstrap_paginate_tag(index, page, url, params) },
+        next_tag
+      ].flatten.join.html_safe
+    end
+  end
+
+  def bootstrap_paginate_tag(index, page, url, params)
+    content_tag(:li, class: ['page-item', ('active' if index == page)].compact.join(' '), title: "Page #{index}") do
+      link_to(index, (url + params.merge('page' => index).to_query), class: 'page-link')
     end
   end
 
