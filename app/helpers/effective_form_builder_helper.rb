@@ -14,9 +14,9 @@ module EffectiveFormBuilderHelper
     end
 
     options[:class] = [
-      options[:class], 
-      'needs-validation', 
-      ('form-inline' if options[:layout] == :inline), 
+      options[:class],
+      'needs-validation',
+      ('form-inline' if options[:layout] == :inline),
       ('with-errors' if subject.respond_to?(:errors) && subject.errors.present?)
     ].compact.join(' ')
 

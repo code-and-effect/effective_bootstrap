@@ -197,10 +197,10 @@ module EffectiveBootstrapHelper
   # Add this to your view
   # %nav= paginate(@posts, per_page: 10)
   #
-  def bootstrap_paginate(collection, per_page:, url: nil)
+  def bootstrap_paginate(collection, per_page:, url: nil, count: nil)
     raise 'expected an ActiveRecord::Relation' unless collection.respond_to?(:limit) && collection.respond_to?(:offset)
 
-    count = collection.limit(nil).offset(nil).count
+    count ||= collection.limit(nil).offset(nil).count # You can pass the total count, or not.
 
     page = (params[:page] || 1).to_i
     last = (count.to_f / per_page).ceil
@@ -214,7 +214,7 @@ module EffectiveBootstrapHelper
     content_tag(:ul, class: 'pagination') do
       content_tag(:li, class: ['page-item', ('disabled' if page <= 1)].compact.join(' ')) do
         link_to((page <= 1 ? '#' : url + params.merge('page' => page - 1).to_query), class: 'page-link', 'aria-label': 'Previous', title: 'Previous', 'aria-disabled': ('true' if page <= 1), 'tabindex': ('-1' if page <= 1)) do
-          content_tag(:span, '&laquo;'.html_safe, 'aria-hidden': true) + content_tag(:span, 'Previous', class: 'sr-only')
+          content_tag(:span, 'Previous'.html_safe)
         end
       end + (1..last).map do |index|
         content_tag(:li, class: ['page-item', ('active' if index == page)].compact.join(' '), title: "Page #{index}") do
@@ -223,7 +223,7 @@ module EffectiveBootstrapHelper
       end.join.html_safe +
       content_tag(:li, class: ['page-item', ('disabled' if page >= last)].compact.join(' ')) do
         link_to((page >= last ? '#' : url + params.merge('page' => page + 1).to_query), class: 'page-link', 'aria-label': 'Next', title: 'Next', 'aria-disabled': ('true' if page >= last), 'tabindex': ('-1' if page >= last)) do
-          content_tag(:span, '&raquo;'.html_safe, 'aria-hidden': true) + content_tag(:span, 'Next', class: 'sr-only')
+          content_tag(:span, 'Next'.html_safe)
         end
       end
     end
