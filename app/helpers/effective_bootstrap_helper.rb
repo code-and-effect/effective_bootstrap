@@ -230,37 +230,35 @@ module EffectiveBootstrapHelper
     end
 
     # Calculate Windows
-    pages = 1.upto(last).to_a
-    left = pages.first(1 + (window * 2))
-    right = pages.last(1 + (window * 2))
-    middle = ([1, 1 + page - window].max).upto([page + window - 1, last].min).to_a
+    length = 1 + (window * 2)
+    left = 1.upto(last).to_a.first(length)
+    right = 1.upto(last).to_a.last(length)
+    center = []
 
-    if left.include?(page + 1)
+    if last <= (length + 2)
+      left = left - right
+      right = right - left
+    elsif left.include?(page + 1)
       right = [last]
       left = left - right
-      middle = []
     elsif right.include?(page - 1)
       left = [1]
       right = right - left
-      middle = []
-    elsif middle.include?(page)
-      middle = middle
+    else
       left = [1]
       right = [last]
+      center = (page - window + 1).upto(page + window - 1).to_a
     end
-
-    left_dots = (dots_tag if left == [1] && last > (window * 2 + 1))
-    right_dots = (dots_tag if right == [last] && last > (window * 2 + 1))
 
     # Render the pagination
     content_tag(:ul, class: 'pagination') do
       [
         prev_tag,
-        (left || []).map { |index| bootstrap_paginate_tag(index, page, url, params) },
-        left_dots,
-        (middle || []).compact.map { |index| bootstrap_paginate_tag(index, page, url, params) },
-        right_dots,
-        (right || []).map { |index| bootstrap_paginate_tag(index, page, url, params) },
+        left.map { |index| bootstrap_paginate_tag(index, page, url, params) },
+        (dots_tag if last > length && left == [1]),
+        center.map { |index| bootstrap_paginate_tag(index, page, url, params) },
+        (dots_tag if last > length && right == [last]),
+        right.map { |index| bootstrap_paginate_tag(index, page, url, params) },
         next_tag
       ].flatten.join.html_safe
     end
