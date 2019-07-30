@@ -197,15 +197,15 @@ module EffectiveBootstrapHelper
   # Add this to your view
   # %nav= paginate(@posts, per_page: 10)
   #
-  def bootstrap_paginate(collection, per_page:, url: nil, count: nil, window: 2)
+  def bootstrap_paginate(collection, per_page:, url: nil, window: 2, collection_count: nil, render_single_page: false)
     raise 'expected an ActiveRecord::Relation' unless collection.respond_to?(:limit) && collection.respond_to?(:offset)
 
-    count ||= collection.limit(nil).offset(nil).count # You can pass the total count, or not.
+    collection_count ||= collection.limit(nil).offset(nil).count # You can pass the total count, or not.
 
     page = (params[:page] || 1).to_i
-    last = (count.to_f / per_page).ceil
+    last = (collection_count.to_f / per_page).ceil
 
-    return unless last > 1 # If there's only 1 page, don't render a pagination at all.
+    return unless (last > 1 || render_single_page) # If there's only 1 page, don't render a pagination at all.
 
     # Build URL
     uri = URI(url || request.fullpath)
@@ -230,21 +230,22 @@ module EffectiveBootstrapHelper
     end
 
     # Calculate Windows
-    left = 1.upto(last).to_a.first(1 + (window * 2))
+    pages = 1.upto(last).to_a
+    left = pages.first(1 + (window * 2))
+    right = pages.last(1 + (window * 2))
     middle = ([1, 1 + page - window].max).upto([page + window - 1, last].min).to_a
-    right = 1.upto(last).to_a.last(1 + (window * 2))
 
     if left.include?(page + 1)
+      right = [last]
       left = left - right
       middle = []
-      right = [last]
     elsif right.include?(page - 1)
       left = [1]
-      middle = []
       right = right - left
+      middle = []
     elsif middle.include?(page)
+      middle = middle
       left = [1]
-      middle = middle - left - right
       right = [last]
     end
 
