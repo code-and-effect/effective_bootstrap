@@ -9,7 +9,7 @@ module EffectiveBootstrapHelper
   # = collapse('already expanded', show: true) do
   #   %p Something Expanded
 
-  # collapse(items.length, class: 'btn btn-primary', card_class: 'mt-2') do
+  # collapse(items.length, class: 'btn btn-primary', class: 'mt-2') do
   #   items.map { |item| content_tag(:div, item.to_s) }.join.html_safe
   # end
   def collapse(label, opts = {}, &block)
@@ -19,7 +19,7 @@ module EffectiveBootstrapHelper
     show = (opts.delete(:show) == true)
 
     link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
-    card_class = opts.delete(:card_class)
+    card_class = opts.delete(:class) || 'my-2'
 
     content_tag(:a, label, link_opts.merge(opts)) +
     content_tag(:div, id: id, class: ['collapse', ('show' if show)].compact.join(' ')) do
