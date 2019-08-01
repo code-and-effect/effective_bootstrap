@@ -59,4 +59,5 @@ $(document).on 'select2:reinitialize', (event) ->
   $select.trigger('change')
   true
 
-
+$(document).on 'reset', 'form', (event) ->
+  $(event.currentTarget).find('select').val('').trigger('change.select2')

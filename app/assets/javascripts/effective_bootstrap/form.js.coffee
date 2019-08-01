@@ -164,3 +164,6 @@ $(document).on 'ajax:beforeSend', 'form[data-remote]', (event) ->
 $(document).on 'ajax:beforeSend', '[data-method=delete]', (event) ->
   if ($delete = $(@)).data('closest')
     EffectiveForm.setCurrentDelete($delete.closest($delete.data('closest')))
+
+$(document).on 'reset', 'form', (event) ->
+  EffectiveForm.reset($(event.currentTarget))
