@@ -19,11 +19,12 @@ module EffectiveBootstrapHelper
     show = (opts.delete(:show) == true)
 
     link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
-    card_class = opts.delete(:class) || 'my-2'
+    div_class = opts.delete(:div_class)
+    card_class = opts.delete(:card_class) || 'my-2'
 
     content_tag(:a, label, link_opts.merge(opts)) +
-    content_tag(:div, id: id, class: ['collapse', ('show' if show)].compact.join(' ')) do
-      content_tag(:div, capture(&block), class: ['card', 'card-body', card_class.presence].compact.join(' '))
+    content_tag(:div, id: id, class: ['collapse', div_class, ('show' if show)].compact.join(' ')) do
+      content_tag(:div, capture(&block), class: ['card', 'card-body', card_class].compact.join(' '))
     end
   end
 
