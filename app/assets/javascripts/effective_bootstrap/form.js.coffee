@@ -50,6 +50,12 @@ this.EffectiveForm ||= new class
     $form.find('[type=submit]').removeAttr('disabled')
     $form
 
+  clear: ($form) ->
+    $form.find('input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('')
+    $form.find('textarea').val('')
+    $form.find('select').val('').trigger('change.select2')
+    $form.find('input[type=checkbox],input[type=radio]').prop('checked', false).trigger('change')
+
   spin: -> @current_submit.addClass('form-current-submit') if @current_submit.length > 0
 
   beforeAjax: ($form) ->
@@ -165,5 +171,12 @@ $(document).on 'ajax:beforeSend', '[data-method=delete]', (event) ->
   if ($delete = $(@)).data('closest')
     EffectiveForm.setCurrentDelete($delete.closest($delete.data('closest')))
 
+# Clear
 $(document).on 'reset', 'form', (event) ->
-  EffectiveForm.reset($(event.currentTarget))
+  $form = $(event.currentTarget)
+  EffectiveForm.reset($form)
+
+$(document).on 'clear', 'form', (event) ->
+  $form = $(event.currentTarget)
+  EffectiveForm.reset($form)
+  setTimeout -> EffectiveForm.clear($form)

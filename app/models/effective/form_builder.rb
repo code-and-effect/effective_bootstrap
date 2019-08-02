@@ -21,6 +21,11 @@ module Effective
     alias_method :super_text_field, :text_field
     alias_method :super_text_area, :text_area
 
+    def clear(name = 'Clear', options = {})
+      (options = name; name = 'Clear') if name.kind_of?(Hash)
+      Effective::FormInputs::Clear.new(name, options, builder: self).to_html
+    end
+
     def check_box(name, options = {})
       Effective::FormInputs::CheckBox.new(name, options, builder: self).to_html {
         checked_value = options.fetch(:checked_value, '1')
