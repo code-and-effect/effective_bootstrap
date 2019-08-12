@@ -235,8 +235,9 @@ module EffectiveBootstrapHelper
     left = 1.upto(last).to_a.first(length)
     right = 1.upto(last).to_a.last(length)
     center = []
+    max = length + 2
 
-    if last <= (length + 2)
+    if last <= max
       left = left - right
       right = right - left
     elsif left.include?(page + 1)
@@ -256,9 +257,9 @@ module EffectiveBootstrapHelper
       [
         prev_tag,
         left.map { |index| bootstrap_paginate_tag(index, page, url, params) },
-        (dots_tag if last > length && left == [1]),
+        (dots_tag if last > max && left == [1]),
         center.map { |index| bootstrap_paginate_tag(index, page, url, params) },
-        (dots_tag if last > length && right == [last]),
+        (dots_tag if last > max && right == [last]),
         right.map { |index| bootstrap_paginate_tag(index, page, url, params) },
         next_tag
       ].flatten.join.html_safe
