@@ -18,7 +18,7 @@ module Effective
       end
 
       def datetime_to_s # ruby
-        value&.strftime('%F')
+        (value&.strftime('%F') rescue nil)
       end
 
       def pattern # html

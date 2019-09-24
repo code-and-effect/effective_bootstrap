@@ -18,7 +18,7 @@ module Effective
       end
 
       def datetime_to_s # ruby
-        value&.strftime(am_pm? ? '%I:%M %p' : '%H:%M')
+        (value&.strftime(am_pm? ? '%I:%M %p' : '%H:%M') rescue nil)
       end
 
       def pattern # html

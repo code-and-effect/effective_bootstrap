@@ -22,7 +22,7 @@ module Effective
       end
 
       def datetime_to_s # ruby
-        value&.strftime(am_pm? ? '%F %I:%M %p' : '%F %H:%M')
+        (value&.strftime(am_pm? ? '%F %I:%M %p' : '%F %H:%M') rescue nil)
       end
 
       def pattern # html
@@ -64,7 +64,7 @@ module Effective
 
       def parse_object_date(obj)
         if obj.respond_to?(:strftime)
-          obj.strftime('%F')
+          (obj.strftime('%F') rescue nil)
         elsif obj.kind_of?(Range) && obj.first.respond_to?(:strftime)
           [obj.first].tap do |dates|
             dates << (dates.last + 1.day) until (dates.last + 1.day) > obj.last
