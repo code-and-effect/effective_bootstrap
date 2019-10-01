@@ -32,7 +32,18 @@
       $element.val(html)
       $element.trigger('change')
   else
-    quill.on 'text-change', ->
+    quill.on 'text-change', (delta, oldDelta, source) ->
+      # If this is insert link...
+      if delta['ops'] && delta['ops'].some( (element) -> element['attributes'] && element['attributes']['link'] )
+        length = quill.getLength()
+        range = quill.getSelection(true)
+
+        if (range.index + range.length + 1 == length)
+          quill.insertText(length - 1, " ", 'link', false);
+          quill.setSelection(range.index + range.length + 2);
+        else
+         quill.setSelection(range.index + range.length + 1);
+
       $element.val(JSON.stringify(quill.getContents()))
       $element.trigger('change')
 
