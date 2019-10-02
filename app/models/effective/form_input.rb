@@ -404,7 +404,7 @@ module Effective
     # https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/base.rb#L120
     def tag_id(index = nil)
       case
-      when @builder.object_name.empty?
+      when @builder.object_name.blank?
         sanitized_method_name.dup
       when index
         "#{sanitized_object_name}_#{index}_#{sanitized_method_name}"

@@ -24,7 +24,7 @@ module Effective
       sanitized_method_name = name.to_s.sub(/\?$/, "")
 
       case
-      when @builder.object_name.empty?
+      when @builder.object_name.blank?
         "#{sanitized_method_name}#{multiple ? "[]" : ""}"
       when index
         "#{@builder.object_name}[#{index}][#{sanitized_method_name}]#{multiple ? "[]" : ""}"
