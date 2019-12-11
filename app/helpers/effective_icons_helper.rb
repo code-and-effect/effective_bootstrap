@@ -8,7 +8,7 @@ module EffectiveIconsHelper
     options.reverse_merge!(nocomment: true)
     options[:class] = [options[:class], "eb-icon eb-icon-#{svg}"].compact.join(' ')
 
-    inline_svg("icons/#{svg}.svg", options)
+    inline_svg_tag("icons/#{svg}.svg", options)
   end
 
   def icon_to(svg, url, options = {})
