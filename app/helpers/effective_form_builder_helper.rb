@@ -24,7 +24,12 @@ module EffectiveFormBuilderHelper
 
     remote_index = options.except(:model).hash.abs
 
-    options[:remote] = true if respond_to?(:inline_datatable?) && inline_datatable?
+    options[:local] = true unless options.key?(:local)
+
+    if respond_to?(:inline_datatable?) && inline_datatable?
+      options[:remote] = true
+      options[:local] = false
+    end
 
     if options.delete(:remote) == true
       @_effective_remote_index ||= {}
