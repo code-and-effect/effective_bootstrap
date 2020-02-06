@@ -1,6 +1,21 @@
 # Boostrap4 Helpers
 
 module EffectiveBootstrapHelper
+  # This is a special variant of collapse
+  # = accordion do
+  #   = collapse('Add thing...') do
+  #     %p Something to add
+  def accordion(options = nil, &block)
+    (options ||= {})[:class] = "accordion #{options.delete(:class)}".strip
+
+    id = "accordion-#{''.object_id}"
+
+    @_accordion_active = id
+    content = content_tag(:div, capture(&block), options.merge(id: id))
+    @_accordion_active = nil
+    content
+  end
+
   # https://getbootstrap.com/docs/4.0/components/collapse/
 
   # = collapse('toggle visibility') do
@@ -19,12 +34,29 @@ module EffectiveBootstrapHelper
     show = (opts.delete(:show) == true)
 
     link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
+
+    link_opts[:class] = opts.delete(:link_class) || 'btn btn-link'
     div_class = opts.delete(:div_class)
     card_class = opts.delete(:card_class) || 'my-2'
 
-    content_tag(:a, label, link_opts.merge(opts)) +
-    content_tag(:div, id: id, class: ['collapse', div_class, ('show' if show)].compact.join(' ')) do
-      content_tag(:div, capture(&block), class: ['card', 'card-body', card_class].compact.join(' '))
+    if @_accordion_active
+      # Accordion collapse
+      content_tag(:div, class: "card mb-0") do
+        content_tag(:div, class: "card-header") do
+          content_tag(:h2, class: "mb-0") do
+            content_tag(:button, label, link_opts.merge(class: "btn btn-link"))
+          end
+        end +
+        content_tag(:div, id: id, class: ['collapse', div_class, ('show' if show)].compact.join(' '), "data-parent": "##{@_accordion_active}") do
+          content_tag(:div, capture(&block), class: "card-body")
+        end
+      end
+    else
+      # Normal collapse
+      content_tag(:a, label, link_opts) +
+      content_tag(:div, id: id, class: ['collapse', div_class, ('show' if show)].compact.join(' ')) do
+        content_tag(:div, capture(&block), class: ['card', 'card-body', card_class].compact.join(' '))
+      end
     end
   end
 
