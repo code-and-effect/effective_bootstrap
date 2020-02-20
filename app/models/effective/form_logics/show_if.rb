@@ -19,7 +19,7 @@ module Effective
       end
 
       def logic_options
-        { name: tag_name(args.first), value: args.second.to_s }.merge(input_logic_options)
+        { name: tag_name(args.first), value: args.second.to_s, needDisable: !show? }.merge(input_logic_options)
       end
 
       def input_logic_options
