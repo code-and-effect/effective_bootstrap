@@ -231,6 +231,8 @@ The default is `layout: :vertical`.
 
 All standard form fields have been implemented as per [Rails 5.1 FormHelper](http://api.rubyonrails.org/v5.1/classes/ActionView/Helpers/FormHelper.html)
 
+When working as a `remote: true` form, you can also pass `flash_success: true|false` and `flash_error: true|false` to control the flash behaviour. By default, the errors will be displayed, and the success will be hidden.
+
 ### Options
 
 There are three sets of options hashes that you can pass into any form input:
