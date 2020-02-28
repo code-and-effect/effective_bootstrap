@@ -12,6 +12,14 @@
   }
 }
 
+form[data-remote="true"]:not(.show-flash-success) {
+  .effective-form-flash.alert-success { display: none; }
+}
+
+form[data-remote="true"].hide-flash-danger {
+  .effective-form-flash.alert-danger { display: none; }
+}
+
 .form-actions-inline.justify-content-end {
   margin-left: 0.5em;
 

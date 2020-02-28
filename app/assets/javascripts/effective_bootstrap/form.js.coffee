@@ -101,7 +101,7 @@ this.EffectiveForm ||= new class
       flash_status = @remote_form_flash[0][0]
       flash_message = @remote_form_flash[0][1]
 
-    @flash($form, flash_status, flash_message, true)
+    @flash($form, flash_status, flash_message)
 
     # Fire off form events
     was_error = ($form.hasClass('with-errors') || flash_status == 'danger' || flash_status == 'error')
@@ -118,7 +118,7 @@ this.EffectiveForm ||= new class
     @current_submit = ''
     true
 
-  flash: ($form, status, message, skip_success = false) ->
+  flash: ($form, status, message) ->
     return unless @current_submit.length > 0
 
     if status == 'danger' || status == 'error'
@@ -126,7 +126,7 @@ this.EffectiveForm ||= new class
     else
       @current_submit.find('.eb-icon-check').show().delay(1000).fadeOut('slow', -> $form.trigger('effective-form:success-animation-done', @remote_form_commit, message))
 
-    if message? && !(status == 'success' && skip_success)
+    if (message || '').length > 0
       @current_submit.prepend(@buildFlash(status, message))
 
   clearFlash: -> @current_submit.find('.alert').remove() if @current_submit.length > 0
