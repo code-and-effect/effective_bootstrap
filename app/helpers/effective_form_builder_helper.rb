@@ -13,7 +13,7 @@ module EffectiveFormBuilderHelper
       "new_#{class_name}"
     end
 
-    options[:html] = (options[:html] || {}).merge(novalidate: true, onsubmit: 'return EffectiveForm.validate(this);')
+    options[:html] = (options[:html] || {}).merge(novalidate: true, onsubmit: 'return EffectiveForm.validate(this)')
 
     remote_index = options.except(:model).hash.abs
 
