@@ -31,3 +31,23 @@
   if options.needDisable
     $element.find('input,textarea,select').prop('disabled', true)
 
+(this.EffectiveBootstrap || {}).effective_show_if_any = ($element, options) ->
+
+  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  values = JSON.parse(options.value)
+
+  $affects.on 'change', (event) ->
+    selected = $(event.target).val()
+    found = values.find((value) => (value == selected || "#{value}" == "#{selected}"))
+
+    if found
+      $element.fadeIn()
+      $element.find('input,textarea,select').removeAttr('disabled')
+    else
+      $element.hide()
+      $element.find('input,textarea,select').prop('disabled', true)
+
+  # Maybe disable it now
+  if options.needDisable
+    $element.find('input,textarea,select').prop('disabled', true)
+

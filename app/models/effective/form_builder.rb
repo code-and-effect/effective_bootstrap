@@ -186,6 +186,10 @@ module Effective
       Effective::FormLogics::ShowIf.new(*args, builder: self).to_html(&block)
     end
 
+    def show_if_any(*args, &block)
+      Effective::FormLogics::ShowIfAny.new(*args, builder: self).to_html(&block)
+    end
+
   end
 end
 
