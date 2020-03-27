@@ -1,11 +1,10 @@
 (this.EffectiveBootstrap || {}).effective_hide_if = ($element, options) ->
-
-  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']").first()
 
   $affects.on 'change', (event) ->
     if $(event.target).val() == options.value
       $element.hide()
-      element.find('input,textarea,select').prop('disabled', true)
+      $element.find('input,textarea,select').prop('disabled', true)
     else
       $element.fadeIn()
       $element.find('input,textarea,select').removeAttr('disabled')
@@ -16,8 +15,7 @@
 
 
 (this.EffectiveBootstrap || {}).effective_show_if = ($element, options) ->
-
-  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']").first()
 
   $affects.on 'change', (event) ->
     if $(event.target).val() == options.value
@@ -32,8 +30,7 @@
     $element.find('input,textarea,select').prop('disabled', true)
 
 (this.EffectiveBootstrap || {}).effective_show_if_any = ($element, options) ->
-
-  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']").first()
   values = JSON.parse(options.value)
 
   $affects.on 'change', (event) ->
