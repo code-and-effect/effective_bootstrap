@@ -8,7 +8,7 @@ module Effective
           build_attachments + build_uploads + super
         when :table, :ck_assets
           super + build_uploads + build_attachments
-        else 
+        else
           raise('unsupported attachments_style, try :card or :table')
         end
       end
@@ -27,6 +27,10 @@ module Effective
         name.to_s.pluralize == name.to_s
       end
 
+      def required_presence?(obj, name)
+        super(obj, name) && Array(object.public_send(name)).none? { |file| file.attached? }
+      end
+
       def build_attachments
         return ''.html_safe unless object.respond_to?(name) && object.send(name).respond_to?(:attached?) && object.send(name).attached?
 
@@ -37,7 +41,7 @@ module Effective
           build_card_attachments(attachments)
         when :table, :ck_assets
           build_table_attachments(attachments)
-        else 
+        else
           raise('unsupported attachments_style, try :card or :table')
         end
       end
@@ -51,7 +55,7 @@ module Effective
               content_tag(:th, 'Size') +
               content_tag(:th, '')
             end
-          end + 
+          end +
           content_tag(:tbody) do
             attachments.map { |attachment| content_tag(:tr, build_table_attachment(attachment)) }.join.html_safe
           end
@@ -62,7 +66,7 @@ module Effective
         url = (@template.url_for(attachment) rescue false)
         return unless url
 
-        image_tag = content_tag(:img, '', class: '', src: url, alt: attachment.filename.to_s)  if attachment.image?
+        image_tag = content_tag(:img, '', class: '', src: url, alt: attachment.filename.to_s) if attachment.image?
         link_tag = link_to(attachment.filename, url)
         size_tag = (attachment.content_type + '<br>' + @template.number_to_human_size(attachment.byte_size)).html_safe
 
@@ -71,7 +75,7 @@ module Effective
         content_tag(:td, size_tag) +
 
         content_tag(:td) do
-          if attachments_style == :ck_assets 
+          if attachments_style == :ck_assets
             link_to('Attach', url, class: 'btn btn-primary', 'data-insert-ck-asset': true, alt: attachment.filename.to_s)
           end
         end
