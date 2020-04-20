@@ -125,7 +125,13 @@ module Effective
           if polymorphic?
             { group_method: :last, group_label_method: :first, option_key_method: :second, option_value_method: :first }
           elsif grouped?
-            { group_method: :last, group_label_method: :first, option_key_method: :second, option_value_method: :first }
+            first = Array(options_collection.values.first).first
+
+            if first.kind_of?(ActiveRecord::Base)
+              { group_method: :last, group_label_method: :first, option_value_method: :to_s, option_key_method: :id }
+            else
+              { group_method: :last, group_label_method: :first, option_value_method: :first, option_key_method: :second }
+            end
           elsif options_collection.first.kind_of?(Array)
             { label_method: :first, value_method: :second }
           elsif options_collection.first.kind_of?(ActiveRecord::Base)
