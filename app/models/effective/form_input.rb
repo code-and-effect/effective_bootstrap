@@ -200,7 +200,10 @@ module Effective
 
     def required_presence?(obj, name)
       obj.validators_on(name).any? do |v|
-        v.kind_of?(ActiveRecord::Validations::PresenceValidator) && required_options?(v.options)
+        (
+          v.kind_of?(ActiveRecord::Validations::PresenceValidator) ||
+          v.kind_of?(ActiveModel::Validations::AcceptanceValidator)
+        ) && required_options?(v.options)
       end
     end
 
@@ -240,7 +243,9 @@ module Effective
       obj = (object.class == Class) ? object : object.class
       return false unless obj.respond_to?(:validators_on)
 
-      obj.validators_on(name).any? { |v| !v.kind_of?(ActiveRecord::Validations::PresenceValidator) }
+      obj.validators_on(name).any? do |v|
+        !(v.kind_of?(ActiveRecord::Validations::PresenceValidator) || v.kind_of?(ActiveModel::Validations::AcceptanceValidator))
+      end
     end
 
     def input_group?
