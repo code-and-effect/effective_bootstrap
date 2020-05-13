@@ -2,7 +2,14 @@
   $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
 
   $affects.on 'change', (event) ->
-    if $(event.target).val() == options.value
+    $target = $(event.target)
+    matches = ($target.val() == options.value)
+
+    if $target.is("[type='checkbox']")
+      matches = matches || ($target.is(':checked') && "#{options.value}" == 'true')
+      matches = matches || (!$target.is(':checked') && ("#{options.value}" == 'false' || "#{options.value}" == ''))
+
+    if matches
       $element.hide()
       $element.find('input,textarea,select').prop('disabled', true)
     else
@@ -18,7 +25,14 @@
   $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
 
   $affects.on 'change', (event) ->
-    if $(event.target).val() == options.value
+    $target = $(event.target)
+    matches = ($target.val() == options.value)
+
+    if $target.is("[type='checkbox']")
+      matches = matches || ($target.is(':checked') && "#{options.value}" == 'true')
+      matches = matches || (!$target.is(':checked') && ("#{options.value}" == 'false' || "#{options.value}" == ''))
+
+    if matches
       $element.fadeIn()
       $element.find('input,textarea,select').removeAttr('disabled')
     else
