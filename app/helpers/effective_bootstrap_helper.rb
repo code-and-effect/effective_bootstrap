@@ -37,7 +37,7 @@ module EffectiveBootstrapHelper
 
     link_opts[:class] = opts.delete(:link_class) || 'btn btn-link'
     div_class = opts.delete(:div_class)
-    card_class = opts.delete(:card_class) || 'my-2'
+    card_class = opts.delete(:card_class) || 'card card-body my-2'
 
     if @_accordion_active
       # Accordion collapse
@@ -55,7 +55,7 @@ module EffectiveBootstrapHelper
       # Normal collapse
       content_tag(:a, label, link_opts) +
       content_tag(:div, id: id, class: ['collapse', div_class, ('show' if show)].compact.join(' ')) do
-        content_tag(:div, capture(&block), class: ['card', 'card-body', card_class].compact.join(' '))
+        content_tag(:div, capture(&block), class: card_class)
       end
     end
   end
