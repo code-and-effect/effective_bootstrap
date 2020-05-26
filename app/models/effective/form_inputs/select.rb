@@ -77,7 +77,9 @@ module Effective
         end
 
         if options_collection.kind_of?(Hash)
-          options_collection[include_null] = [Struct.new(:to_s, :id).new(include_null, 'nil')]
+          options_collection[include_null] = [
+            Struct.new(:to_s, :id, :first, :second).new(include_null, 'nil', include_null, 'nil')
+          ]
         end
 
         options_collection
