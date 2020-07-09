@@ -28,7 +28,7 @@ module Effective
       end
 
       def required_presence?(obj, name)
-        super(obj, name) && Array(object.public_send(name)).none? { |file| file.attached? }
+        super(obj, name) && Array(object.public_send(name)).length == 0
       end
 
       def build_attachments
