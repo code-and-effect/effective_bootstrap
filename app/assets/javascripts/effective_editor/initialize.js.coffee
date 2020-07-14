@@ -8,6 +8,7 @@ Quill.register('modules/imageResize', window.ImageResize.default)
 
   active_storage = options['active_storage']
   delete options['active_storage']
+
   content_mode = options['content_mode']
   delete options['content_mode']
 
@@ -58,6 +59,7 @@ Quill.register('modules/imageResize', window.ImageResize.default)
   if active_storage
     quill.getModule('toolbar').addHandler('image', -> createImage(quill))
 
+# Active Support Direct Upload
 createImage = (quill) ->
   input = document.createElement('input')
   input.setAttribute('type', 'file')
@@ -75,7 +77,10 @@ createImage = (quill) ->
     uploadImage(quill, file)
 
 uploadImage = (quill, file) ->
-  console.log('uploading...')
+  $form = $(quill.container).closest('form')
+
+  EffectiveForm.setCurrentSubmit($form.find('.form-actions').first())
+  EffectiveForm.submitting($form)
 
   fd = new FormData()
   fd.append('blob', file)
@@ -83,13 +88,12 @@ uploadImage = (quill, file) ->
   upload = new ActiveStorage.DirectUpload(file, '/rails/active_storage/direct_uploads')
 
   upload.create (error, blob) ->
-    console.log(error)
-    console.log(blob)
+    if error
+      alert("Unable to upload: #{error}")
+    else
+      insertImage(quill, "/rails/active_storage/blobs/#{blob.signed_id}/#{blob.filename}")
 
-    if(error)
-      return alert("Unable to upload: #{error}")
-
-    insertImage(quill, "/rails/active_storage/blobs/#{blob.signed_id}/#{blob.filename}")
+    EffectiveForm.reset($form)
 
 insertImage = (quill, url) ->
   quill.insertEmbed(quill.getSelection().index, 'image', url)
