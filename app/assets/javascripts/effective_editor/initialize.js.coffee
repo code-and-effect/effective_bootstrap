@@ -79,24 +79,33 @@ createImage = (quill) ->
 uploadImage = (quill, file) ->
   $form = $(quill.container).closest('form')
 
-  EffectiveForm.setCurrentSubmit($form.find('.form-actions').first())
+  # Insert the image here
+  index = try quill.getSelection().index catch err then 0
+
+  # Apply progress indicators
+  quill.disable()
+  quill.insertText(index, "Uploading image...", 'italic': true)
+  EffectiveForm.setCurrentSubmit($form.find('.form-actions'))
   EffectiveForm.submitting($form)
 
+  # Do the direct upload
   fd = new FormData()
   fd.append('blob', file)
 
   upload = new ActiveStorage.DirectUpload(file, '/rails/active_storage/direct_uploads')
 
+  # After it's been uploaded
   upload.create (error, blob) ->
-    if error
-      alert("Unable to upload: #{error}")
-    else
-      insertImage(quill, "/rails/active_storage/blobs/#{blob.signed_id}/#{blob.filename}")
-
+    # Remove progress indicators
+    quill.enable()
+    quill.deleteText(index, 18)
     EffectiveForm.reset($form)
 
-insertImage = (quill, url) ->
-  quill.insertEmbed(quill.getSelection().index, 'image', url)
+    if error
+      return alert("Unable to upload: #{error}")
+
+    # Insert the image as an embed with url
+    quill.insertEmbed(index, 'image', "/rails/active_storage/blobs/#{blob.signed_id}/#{blob.filename}")
 
 # This is the read only region. Always delta.
 (this.EffectiveBootstrap || {}).effective_editor_tag = ($element, options) ->
