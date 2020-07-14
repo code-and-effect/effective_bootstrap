@@ -1,5 +1,8 @@
 # https://quilljs.com/docs/download/
 # https://github.com/quilljs/quill
+
+Quill.register('modules/imageResize', window.ImageResize.default)
+
 (this.EffectiveBootstrap || {}).effective_editor = ($element, options) ->
   editor = '#' + $element.attr('id') + '_editor'
 

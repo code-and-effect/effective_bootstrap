@@ -15,7 +15,7 @@ module Effective
 
       def input_js_options
         {
-          modules: { toolbar: toolbar, syntax: (content_mode == :code) },
+          modules: { toolbar: toolbar, imageResize: imageResize, syntax: (content_mode == :code) },
           theme: 'snow',
           placeholder: "Add #{name.to_s.pluralize}...",
           content_mode: content_mode,
@@ -34,6 +34,18 @@ module Effective
           [{'list': 'ordered'}, {'list': 'bullet'}, 'blockquote'],
           [{'align': [] }, 'clean']
         ]
+      end
+
+      def imageResize
+        {
+          displaySize: true,
+          displayStyles: {
+            backgroundColor: 'black',
+            border: 'none',
+            color: 'white'
+          },
+          modules: [ 'Resize', 'DisplaySize' ]
+        }
       end
 
       def active_storage
