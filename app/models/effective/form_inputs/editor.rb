@@ -18,7 +18,8 @@ module Effective
           modules: { toolbar: toolbar, syntax: (content_mode == :code) },
           theme: 'snow',
           placeholder: "Add #{name.to_s.pluralize}...",
-          content_mode: content_mode
+          content_mode: content_mode,
+          active_storage: active_storage
         }
       end
 
@@ -33,6 +34,16 @@ module Effective
           [{'list': 'ordered'}, {'list': 'bullet'}, 'blockquote'],
           [{'align': [] }, 'clean']
         ]
+      end
+
+      def active_storage
+        return @active_storage unless @active_storage.nil?
+
+        @active_storage = if options.key?(:active_storage)
+          options.delete(:active_storage)
+        else
+          defined?(ActiveStorage).present?
+        end
       end
 
       def content_mode # default false

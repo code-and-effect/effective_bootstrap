@@ -3,6 +3,8 @@
 (this.EffectiveBootstrap || {}).effective_editor = ($element, options) ->
   editor = '#' + $element.attr('id') + '_editor'
 
+  active_storage = options['active_storage']
+  delete options['active_storage']
   content_mode = options['content_mode']
   delete options['content_mode']
 
@@ -50,7 +52,8 @@
   $element.on 'quill:focus', (event) -> quill.focus()
 
   # Active Storage support
-  quill.getModule('toolbar').addHandler('image', -> createImage(quill))
+  if active_storage
+    quill.getModule('toolbar').addHandler('image', -> createImage(quill))
 
 createImage = (quill) ->
   input = document.createElement('input')
