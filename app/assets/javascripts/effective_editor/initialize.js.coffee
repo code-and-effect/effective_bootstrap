@@ -49,6 +49,45 @@
 
   $element.on 'quill:focus', (event) -> quill.focus()
 
+  # Active Storage support
+  quill.getModule('toolbar').addHandler('image', -> createImage(quill))
+
+createImage = (quill) ->
+  input = document.createElement('input')
+  input.setAttribute('type', 'file')
+  input.click()
+
+  input.onchange = ->
+    file = input.files[0]
+
+    if(/^image\//.test(file.type) == false)
+      return alert('Please upload an image')
+
+    if file.size > 20000000
+      return alert('Please upload an image less than 20mb')
+
+    uploadImage(quill, file)
+
+uploadImage = (quill, file) ->
+  console.log('uploading...')
+
+  fd = new FormData()
+  fd.append('blob', file)
+
+  upload = new ActiveStorage.DirectUpload(file, '/rails/active_storage/direct_uploads')
+
+  upload.create (error, blob) ->
+    console.log(error)
+    console.log(blob)
+
+    if(error)
+      return alert("Unable to upload: #{error}")
+
+    insertImage(quill, "/rails/active_storage/blobs/#{blob.signed_id}/#{blob.filename}")
+
+insertImage = (quill, url) ->
+  quill.insertEmbed(quill.getSelection().index, 'image', url)
+
 # This is the read only region. Always delta.
 (this.EffectiveBootstrap || {}).effective_editor_tag = ($element, options) ->
   quill = new Quill('#' + $element.attr('id'), options)
