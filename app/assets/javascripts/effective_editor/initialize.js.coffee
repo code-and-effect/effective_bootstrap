@@ -56,7 +56,7 @@ Quill.register('modules/imageResize', window.ImageResize.default)
   $element.on 'quill:focus', (event) -> quill.focus()
 
   # Active Storage support
-  if active_storage
+  if active_storage and content_mode != 'code'
     quill.getModule('toolbar').addHandler('image', -> createImage(quill))
 
 # Active Support Direct Upload
