@@ -29,17 +29,15 @@ module Effective
       end
 
       def input_js_options
-        placeholder = options.delete(:placeholder)
-        placeholder = '' if placeholder == false
-
         opts = {
           theme: 'bootstrap',
-          minimumResultsForSearch: 6,
+          minimumResultsForSearch: (freeform? ? 0 : 6),
           width: 'style',
-          placeholder: (placeholder || 'Please choose'),
+          placeholder: placeholder,
           allowClear: (true if include_blank?),
           tokenSeparators: ([',', ';', '\n', '\t'] if tags?),
           tags: (true if tags?),
+          noResults: no_results,
           template: js_template,
           containerClass: ('hide-disabled' if hide_disabled?),
           dropdownClass: ('hide-disabled' if hide_disabled?),
@@ -51,6 +49,7 @@ module Effective
         classes = [
           'effective_select',
           'form-control',
+          ('freeform' if freeform?),
           ('polymorphic' if polymorphic?),
           ('grouped' if (grouped? || polymorphic?)),
           ('hide-disabled' if hide_disabled?),
@@ -109,11 +108,13 @@ module Effective
       end
 
       def multiple?
+        return false if freeform?
         return @multiple unless @multiple.nil?
         @multiple = options.key?(:multiple) ? options.delete(:multiple) : (tags? || name.to_s.ends_with?('_ids'))
       end
 
       def tags?
+        return true if freeform?
         return @tags unless @tags.nil?
         @tags = (options.delete(:tags) || false)
       end
@@ -133,9 +134,37 @@ module Effective
         @disable_open_on_focus = (options.delete(:disable_open_on_focus) || false)
       end
 
+      def freeform?
+        return @freeform unless @freeform.nil?
+        @freeform = (options.delete(:freeform) || false)
+      end
+
+      def no_results
+        return @no_results unless @no_results.nil?
+
+        @no_results = options.delete(:no_results) 
+
+        if freeform?
+          @no_results ||= 'No results. To create a new one, press ENTER after typing your own free form response.'
+        end
+      end
+
       def js_template
         return @js_template unless @js_template.nil?
         @js_template = options.delete(:template)
+      end
+
+      def placeholder
+        return @placeholder unless @placeholder.nil?
+
+        obj = options.delete(:placeholder)
+
+        @placeholder = case obj
+        when nil then 
+          (freeform? ? 'Choose or enter' : 'Please choose')
+        when false then ''
+        else obj
+        end
       end
 
       def ajax_url

@@ -28,6 +28,11 @@ matchWithHtml = (params, data) ->
       options['templateSelection'] = formatWithHtml
       options['matcher'] = matchWithHtml
 
+  if options['noResults']
+    noResults = options['noResults']
+    delete options['noResults']
+    options['language'] = { noResults: (_) -> noResults }
+
   $select = $element.select2(options)
 
   # effective_select custom class functionality
@@ -49,5 +54,3 @@ $(document).on 'change', "select.effective_select.polymorphic", (event) ->
 
   $select.siblings("input[type='hidden'][name$='_type]']").val(value.split('_')[0] || '')
   $select.siblings("input[type='hidden'][name$='_id]']").val(value.split('_')[1] || '')
-
-
