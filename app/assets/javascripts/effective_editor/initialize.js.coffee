@@ -2,6 +2,7 @@
 # https://github.com/quilljs/quill
 
 Quill.register('modules/imageResize', window.ImageResize.default)
+Quill.register('modules/imageDrop', window.QuillImageDropAndPaste)
 
 (this.EffectiveBootstrap || {}).effective_editor = ($element, options) ->
   editor = '#' + $element.attr('id') + '_editor'
@@ -11,6 +12,15 @@ Quill.register('modules/imageResize', window.ImageResize.default)
 
   content_mode = options['content_mode']
   delete options['content_mode']
+
+  if options['modules']['imageDropAndPaste']
+    # Image Drop & Paste
+    # https://github.com/chenjuneking/quill-image-drop-and-paste
+    dropImage = (imageDataUrl, type, imageData) ->
+      file = imageData.toFile(type.replace('/', '.'))
+      uploadImage(quill, file)
+
+    options['modules']['imageDropAndPaste'] = { handler: dropImage }
 
   quill = new Quill($element.siblings(editor).get(0), options)
   content = $element.val() || ''
