@@ -72,29 +72,42 @@ module EffectiveBootstrapHelper
   # variations can be :dropup, :dropleft, :dropright
   # split can be true, false
   # right is to right align things
-  def dropdown(variation: nil, split: true, btn_class: nil, right: false, &block)
+  def dropdown(variation: nil, split: true, btn_class: nil, btn_content: nil, right: false, &block)
     raise 'expected a block' unless block_given?
 
     btn_class = btn_class.presence || 'btn-outline-primary'
 
-    @_dropdown_link_tos = []; yield
+    @_dropdown_link_tos = []
+    @_dropdown_split = split
+
+    # process dropdown_link_tos
+    yield
 
     return @_dropdown_link_tos.first if @_dropdown_link_tos.length <= 1
 
-    retval = if split
-      first = @_dropdown_link_tos.first
-      menu = content_tag(:div, @_dropdown_link_tos[1..-1].join.html_safe, class: ['dropdown-menu', ('dropdown-menu-right' if right)].compact.join(' '))
-      split = content_tag(:button, class: "btn #{btn_class} dropdown-toggle dropdown-toggle-split", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
-        content_tag(:span, 'Toggle Dropdown', class: 'sr-only')
-      end
+    # Build tags
+    first = @_dropdown_link_tos.first
 
+    button = content_tag(:button, class: "btn #{btn_class} dropdown-toggle" + (split ? " dropdown-toggle-split" : ''), type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
+      btn_content || content_tag(:span, 'Toggle Dropdown', class: 'sr-only')
+    end
+
+    menu = if split
+      content_tag(:div, @_dropdown_link_tos[1..-1].join.html_safe, class: ['dropdown-menu', ('dropdown-menu-right' if right)].compact.join(' '))
+    else
+      content_tag(:div, @_dropdown_link_tos.join.html_safe, class: ['dropdown-menu', ('dropdown-menu-right' if right)].compact.join(' '))
+    end
+
+    retval = if split
       content_tag(:div, class: 'btn-group') do
         content_tag(:div, class: ['btn-group', variation.to_s.presence].compact.join(' '), role: 'group') do
-          [:dropleft].include?(variation) ? (split + menu) : (first + split + menu)
+          [:dropleft].include?(variation) ? (button + menu) : (first + button + menu)
         end + ([:dropleft].include?(variation) ? first : '').html_safe
       end
     else
-      raise 'split false is unsupported'
+      content_tag(:div, class: 'dropdown') do
+        button + menu
+      end
     end
 
     @_dropdown_link_tos = nil
@@ -129,7 +142,7 @@ module EffectiveBootstrapHelper
       return link_to(label, path, options)
     end
 
-    if @_dropdown_link_tos.length == 0
+    if @_dropdown_link_tos.length == 0 && @_dropdown_split
       options[:class] = [options[:class], 'btn', btn_class].compact.join(' ')
     else
       options[:class] = [options[:class], 'dropdown-item'].compact.join(' ')
