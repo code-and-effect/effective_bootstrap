@@ -57,7 +57,7 @@ module Effective
           ('disable-open-on-focus' if disable_open_on_focus?),
         ].compact.join(' ')
 
-        { class: classes, multiple: (true if multiple?), include_blank: (true if include_blank?), include_null: include_null }.compact
+        { class: classes, multiple: (true if multiple?), include_blank: (true if include_blank?) }.compact
       end
 
       def assign_options_collection!
@@ -142,7 +142,7 @@ module Effective
       def no_results
         return @no_results unless @no_results.nil?
 
-        @no_results = options.delete(:no_results) 
+        @no_results = options.delete(:no_results)
 
         if freeform?
           @no_results ||= 'No results. To create a new one, press ENTER after typing your own free form response.'
@@ -160,7 +160,7 @@ module Effective
         obj = options.delete(:placeholder)
 
         @placeholder = case obj
-        when nil then 
+        when nil then
           (freeform? ? 'Choose or enter' : 'Please choose')
         when false then ''
         else obj

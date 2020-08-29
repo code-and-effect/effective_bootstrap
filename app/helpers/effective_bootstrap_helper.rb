@@ -121,7 +121,7 @@ module EffectiveBootstrapHelper
   def dots(options = nil, &block)
     (options ||= {})[:class] = "dropdown dropdown-dots #{options.delete(:class)}".strip
 
-    content_tag(:span, options) do
+    content_tag(:div, options) do
       content_tag(:button, class: "btn btn-dots dropdown-toggle #{options.delete(:button_class)}", 'aria-expanded': true, 'aria-haspopup': true, 'data-toggle': 'dropdown', type: 'button') do
       end + content_tag(:div, capture(&block), class: 'dropdown-menu')
     end

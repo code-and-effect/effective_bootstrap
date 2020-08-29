@@ -36,7 +36,7 @@ module Effective
 
         @collection_options = {
           checked: [checked, selected, polymorphic_value, value].find { |value| value != nil },
-          selected: [selected, checked, polymorphic_value, value].find { |value| value != nil },
+          selected: ([selected, checked, polymorphic_value, value].find { |value| value != nil } unless kind_of?(Effective::FormInputs::Radios)),
           include_blank: include_blank
         }.compact
       end
