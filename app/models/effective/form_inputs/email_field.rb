@@ -3,7 +3,7 @@ module Effective
     class EmailField < Effective::FormInput
 
       def input_html_options
-        { class: 'form-control', placeholder: 'someone@example.com' }
+        { class: 'form-control', placeholder: 'someone@example.com', id: tag_id }
       end
 
       def input_group_options

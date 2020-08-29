@@ -1,9 +1,9 @@
 module EffectiveFormBuilderHelper
   def effective_form_with(**options, &block)
-
     # Compute the default ID
     subject = Array(options[:scope] || options[:model]).last
     class_name = subject.class.name.underscore
+    unique_id = options.except(:model).hash.abs
 
     html_id = if subject.kind_of?(Symbol)
       subject.to_s
@@ -14,9 +14,6 @@ module EffectiveFormBuilderHelper
     end
 
     options[:html] = (options[:html] || {}).merge(novalidate: true, onsubmit: 'return EffectiveForm.validate(this)')
-
-    remote_index = options.except(:model).hash.abs
-
     options[:local] = true unless options.key?(:local)
 
     if respond_to?(:inline_datatable?) && inline_datatable?
@@ -33,21 +30,27 @@ module EffectiveFormBuilderHelper
       ('hide-flash-danger' if options[:remote] && options.key?(:flash_error) && !options[:flash_error])
     ].compact.join(' ')
 
-    if options.delete(:remote) == true
-      @_effective_remote_index ||= {}
-      remote_index = remote_index + 1 if @_effective_remote_index[remote_index]
+    if options[:remote] || options[:unique_ids]
+      @_effective_unique_id ||= {}
 
-      if options[:html][:data].kind_of?(Hash)
-        options[:html][:data][:remote] = true
-        options[:html][:data]['data-remote-index'] = remote_index
-      else
-        options[:html]['data-remote'] = true
-        options[:html]['data-remote-index'] = remote_index
+      if @_effective_unique_id.key?(unique_id)
+        unique_id = unique_id + @_effective_unique_id.length
       end
 
-      html_id = "#{html_id}_#{remote_index}"
+      options[:unique_id] = unique_id
+      html_id = "#{html_id}_#{unique_id}"
 
-      @_effective_remote_index[remote_index] = true
+      @_effective_unique_id[unique_id] = true
+    end
+
+    if options.delete(:remote) == true
+      if options[:html][:data].kind_of?(Hash)
+        options[:html][:data][:remote] = true
+        options[:html][:data]['data-remote-index'] = unique_id
+      else
+        options[:html]['data-remote'] = true
+        options[:html]['data-remote-index'] = unique_id
+      end
     end
 
     # Assign default ID

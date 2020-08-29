@@ -14,7 +14,11 @@ module Effective
       end
 
       def input_html_options
-        { class: 'btn btn-warning', data: { method: :delete, remote: true, confirm: "Really delete<br>#{object}?".html_safe } }
+        {
+          class: 'btn btn-warning',
+          id: tag_id,
+          data: { method: :delete, remote: true, confirm: "Really delete<br>#{object}?".html_safe }
+        }
       end
 
       def border?

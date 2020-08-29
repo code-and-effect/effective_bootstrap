@@ -229,6 +229,8 @@ As well, you can specify `layout: :vertical`, `layout: :horizontal`, or `layout:
 
 The default is `layout: :vertical`.
 
+If you would like each form and its fields to have unique ids, use `unique_ids: true`.
+
 All standard form fields have been implemented as per [Rails 5.1 FormHelper](http://api.rubyonrails.org/v5.1/classes/ActionView/Helpers/FormHelper.html)
 
 When working as a `remote: true` form, you can also pass `flash_success: true|false` and `flash_error: true|false` to control the flash behaviour. By default, the errors will be displayed, and the success will be hidden.

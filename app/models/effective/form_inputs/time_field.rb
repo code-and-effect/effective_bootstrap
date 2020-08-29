@@ -5,7 +5,8 @@ module Effective
       def input_html_options
         {
           class: ['form-control', 'effective_date_time_picker', 'effective_time', ('not-date-linked' if not_date_linked?)].compact.join(' '),
-          pattern: pattern
+          pattern: pattern,
+          id: tag_id
         }
       end
 

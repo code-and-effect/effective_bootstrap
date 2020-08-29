@@ -6,7 +6,7 @@ module Effective
       DEFAULT_CELL_MASK = '(999) 999-9999'
 
       def input_html_options
-        { class: 'form-control effective_phone', placeholder: '(555) 555-5555' }
+        { class: 'form-control effective_phone', placeholder: '(555) 555-5555', id: tag_id }
       end
 
       def input_js_options

@@ -20,6 +20,7 @@ module Effective
     alias_method :super_number_field, :number_field
     alias_method :super_text_field, :text_field
     alias_method :super_text_area, :text_area
+    alias_method :super_hidden_field, :hidden_field
 
     def clear(name = 'Clear', options = {})
       (options = name; name = 'Clear') if name.kind_of?(Hash)
@@ -83,6 +84,10 @@ module Effective
 
     def form_group(name = nil, options = {}, &block)
       Effective::FormInputs::FormGroup.new(name, options, builder: self).to_html(&block)
+    end
+
+    def hidden_field(name = nil, options = {})
+      Effective::FormInputs::HiddenField.new(name, options, builder: self).to_html
     end
 
     def integer_field(name, options = {})
@@ -196,4 +201,3 @@ module Effective
 
   end
 end
-

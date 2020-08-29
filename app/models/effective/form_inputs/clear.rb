@@ -9,7 +9,7 @@ module Effective
       end
 
       def input_html_options
-        { class: 'btn btn-primary', type: 'clear' }
+        { class: 'btn btn-primary', type: 'clear', id: tag_id }
       end
 
       def icon_name

@@ -3,7 +3,7 @@ module Effective
     class ErrorField < Effective::FormInput
 
       def input_html_options
-        { class: 'alert alert-danger' }
+        { class: 'alert alert-danger', id: tag_id }
       end
 
       def to_html(&block)

@@ -7,7 +7,7 @@ module Effective
       end
 
       def input_html_options
-        { class: 'form-control effective_number_text', autocomplete: 'off' }
+        { class: 'form-control effective_number_text', autocomplete: 'off', id: tag_id }
       end
 
     end

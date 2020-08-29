@@ -24,7 +24,7 @@ module Effective
     end
 
     def input_html_options
-      { class: 'form-control' }
+      { class: 'form-control', id: tag_id }
     end
 
     def input_js_options
@@ -408,7 +408,7 @@ module Effective
 
     # https://github.com/rails/rails/blob/master/actionview/lib/action_view/helpers/tags/base.rb#L120
     def tag_id(index = nil)
-      case
+      id = case
       when @builder.object_name.empty?
         sanitized_method_name.dup
       when index
@@ -416,6 +416,8 @@ module Effective
       else
         "#{sanitized_object_name}_#{sanitized_method_name}"
       end.downcase.parameterize
+
+      @builder.options[:unique_ids] ? "#{id}_#{@builder.options[:unique_id]}" : id
     end
 
     def sanitized_object_name

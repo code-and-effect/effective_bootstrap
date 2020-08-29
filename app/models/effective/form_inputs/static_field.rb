@@ -3,7 +3,7 @@ module Effective
     class StaticField < Effective::FormInput
 
       def input_html_options
-        { class: 'form-control-plaintext', readonly: false }
+        { class: 'form-control-plaintext', readonly: false, id: tag_id }
       end
 
       def feedback_options

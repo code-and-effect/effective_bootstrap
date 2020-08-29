@@ -15,6 +15,7 @@ module Effective
 
       def input_html_options
         {
+          id: tag_id,
           class: 'form-control form-control-file btn-outline-secondary',
           multiple: multiple?,
           direct_upload: true,

@@ -57,7 +57,7 @@ module Effective
           ('disable-open-on-focus' if disable_open_on_focus?),
         ].compact.join(' ')
 
-        { class: classes, multiple: (true if multiple?), include_blank: (true if include_blank?) }.compact
+        { class: classes, multiple: (true if multiple?), include_blank: (true if include_blank?), id: tag_id }.compact
       end
 
       def assign_options_collection!

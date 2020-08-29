@@ -7,7 +7,7 @@ module Effective
       end
 
       def input_html_options
-        { class: 'form-control', placeholder: 'one@example.com,two@example.com' }
+        { class: 'form-control', placeholder: 'one@example.com,two@example.com', id: tag_id }
       end
 
       def input_group_options

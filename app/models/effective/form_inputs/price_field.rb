@@ -12,7 +12,7 @@ module Effective
       end
 
       def input_html_options
-        { class: 'form-control effective_price', autocomplete: 'off' }
+        { class: 'form-control effective_price', autocomplete: 'off', id: tag_id }
       end
 
       private
