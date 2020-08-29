@@ -94,7 +94,7 @@ module Effective
           content_tag(:div, class: 'card mb-3') do
             if attachment.image?
               content_tag(:div, class: 'card-body') do
-                content_tag(:img, '', class: 'img-fluid', src: url, alt: attachment.filename.to_s) +
+                image_tag(url, alt: attachment.filename.to_s, class: 'img-fluid') +
                 link_to(attachment.filename, url, class: 'card-link')
               end
             else
