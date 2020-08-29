@@ -154,11 +154,13 @@ module EffectiveBootstrapHelper
   end
 
   # Works with dots ao and dropdown do
-  def dropdown_divider
+  def dropdown_divider(options = {})
+    options[:class] = [options[:class], 'dropdown-divider'].compact.join(' ')
+
     unless @_dropdown_link_tos
-      content_tag(:div, '', class: 'dropdown-divider')
+      content_tag(:div, '', options)
     else
-      @_dropdown_link_tos << content_tag(:div, '', class: 'dropdown-divider')
+      @_dropdown_link_tos << content_tag(:div, '', options)
       nil
     end
   end
