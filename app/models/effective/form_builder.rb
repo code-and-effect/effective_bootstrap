@@ -100,6 +100,10 @@ module Effective
       Effective::FormInputs::RemoteLinkTo.new(name, options, builder: self).to_html(&block)
     end
 
+    def rich_text_area(name, options = {})
+      Effective::FormInputs::RichTextArea.new(name, options, builder: self).to_html { super(name, options) }
+    end
+
     def search_field(name, options = {})
       Effective::FormInputs::SearchField.new(name, options, builder: self).to_html { super(name, options) }
     end
