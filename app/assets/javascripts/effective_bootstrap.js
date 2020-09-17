@@ -13,7 +13,7 @@
 //= require ./effective_clear/input
 //= require ./effective_checks/input
 //= require ./effective_ck_editor/input
-//= require ./effective_editor/input
+
 //= require ./effective_file/input
 //= require ./effective_integer/input
 //= require ./effective_number_text/input

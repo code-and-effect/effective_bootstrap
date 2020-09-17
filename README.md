@@ -323,7 +323,7 @@ The end date selector will have its date <= start_date disabled.
 To disable this behaviour, call with `date_linked: false`.
 
 ```ruby
-= f.input :end_at, date_linked: false
+= f.date_field :end_at, date_linked: false
 ```
 
 ### Events
@@ -333,6 +333,34 @@ The date picker library doesn't trigger a regular `change`. Instead you must wat
 More info is available here:
 
 http://eonasdan.github.io/bootstrap-datetimepicker/Events/
+
+## Custom editor
+
+A drop in ready rich text editor based on
+
+https://quilljs.com/
+
+To use the editor, you must make additional javascript and stylesheet includes:
+
+In your application.js
+
+```
+//= require effective_bootstrap
+//= require effective_bootstrap_editor
+```
+
+In your application.scss
+
+```
+@import 'effective_bootstrap';
+@import 'effective_bootstrap_editor';
+```
+
+And then in any form, instead of a text area:
+
+```
+= f.editor :body
+```
 
 ## Custom percent_field
 
@@ -620,6 +648,8 @@ The `f.save` is purely a input submit button.
   = f.save 'Save 1'
   = f.save 'Save 2'
 ```
+
+
 
 
 ## License

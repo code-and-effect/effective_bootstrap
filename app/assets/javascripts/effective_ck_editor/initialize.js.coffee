@@ -1,4 +1,3 @@
-# http://eonasdan.github.io/bootstrap-datetimepicker/Options/
 (this.EffectiveBootstrap || {}).effective_ck_editor = ($element, options) ->
   setupCkeditor($element)
   initCkeditor($element, $element.data('input-js-options'))
