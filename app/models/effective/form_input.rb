@@ -5,8 +5,20 @@ module Effective
     attr_accessor :name, :options
 
     BLANK = ''.html_safe
+    EMPTY_HASH = {}
+
     EXCLUSIVE_CLASS_PREFIXES = [] # None
     EXCLUSIVE_CLASS_SUFFIXES = ['-primary', '-secondary', '-success', '-danger', '-warning', '-info', '-light', '-dark']
+
+    DEFAULT_INPUT_GROUP_OPTIONS = { input_group: { class: 'input-group' }, prepend: false, append: false }
+
+    HORIZONTAL_LABEL_OPTIONS = { class: 'col-sm-2 col-form-label'}
+    INLINE_LABEL_OPTIONS = { class: 'sr-only' }
+
+    DEFAULT_FEEDBACK_OPTIONS = { valid: { class: 'valid-feedback' }, invalid: { class: 'invalid-feedback' } }
+
+    HORIZONTAL_WRAPPER_OPTIONS = { class: 'form-group row' }
+    VERTICAL_WRAPPER_OPTIONS = { class: 'form-group' }
 
     delegate :object, to: :@builder
     delegate :capture, :content_tag, :image_tag, :link_to, :icon, :asset_path, to: :@template
@@ -22,7 +34,7 @@ module Effective
     end
 
     def input_group_options
-      { input_group: { class: 'input-group' }, prepend: false, append: false }
+      DEFAULT_INPUT_GROUP_OPTIONS
     end
 
     def input_html_options
@@ -30,17 +42,17 @@ module Effective
     end
 
     def input_js_options
-      {}
+      EMPTY_HASH
     end
 
     def label_options
       case layout
       when :horizontal
-        { class: 'col-sm-2 col-form-label'}
+        HORIZONTAL_LABEL_OPTIONS
       when :inline
-        { class: 'sr-only' }
+        INLINE_LABEL_OPTIONS
       else
-        { }
+        EMPTY_HASH
       end
     end
 
@@ -49,7 +61,7 @@ module Effective
       when :inline
         false
       else
-        { valid: { class: 'valid-feedback' }, invalid: { class: 'invalid-feedback' } }
+        DEFAULT_FEEDBACK_OPTIONS
       end
     end
 
@@ -65,9 +77,9 @@ module Effective
     def wrapper_options
       case layout
       when :horizontal
-        { class: 'form-group row' }
+        HORIZONTAL_WRAPPER_OPTIONS
       else
-        { class: 'form-group' }
+        VERTICAL_WRAPPER_OPTIONS
       end
     end
 
@@ -349,13 +361,13 @@ module Effective
     end
 
     def merge_defaults!(obj, defaults)
-      defaults = {} if defaults.nil?
+      defaults = EMPTY_HASH if defaults.nil?
 
       case obj
       when false
         false
       when nil, true
-        defaults
+        defaults.dup
       when String
         defaults.merge(text: obj)
       when Hash
