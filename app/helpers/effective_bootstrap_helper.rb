@@ -86,7 +86,7 @@ module EffectiveBootstrapHelper
   DROPDOWN_BTN_CLASS = 'btn-sm btn-outline-primary'
   DROPDOWN_TOGGLE_DROPDOWN = "<span class='sr-only'>Toggle Dropdown</span>".html_safe
 
-  def dropdown(variation: nil, split: true, btn_class: DROPDOWN_BTN_CLASS, btn_content: nil, right: false, &block)
+  def dropdown(variation: nil, split: true, btn_class: nil, btn_content: nil, right: false, &block)
     raise 'expected a block' unless block_given?
 
     # Process all dropdown_link_tos
@@ -101,7 +101,7 @@ module EffectiveBootstrapHelper
 
     button_opts = (split ? DROPDOWN_SPLIT_OPTS : DROPDOWN_UNSPLIT_OPTS)
 
-    if btn_class != DROPDOWN_BTN_CLASS
+    if (btn_class || DROPDOWN_BTN_CLASS) != DROPDOWN_BTN_CLASS
       button_opts[:class] = button_opts[:class].sub(DROPDOWN_BTN_CLASS, btn_class)
     end
 
