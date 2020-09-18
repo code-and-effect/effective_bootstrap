@@ -34,7 +34,7 @@ module Effective
     end
 
     def input_js_options
-      { 'data-input-js-options' => JSON.generate({method_name: input_js_options_method_name}.merge(logic_options)) }
+      { 'data-input-js-options' => JSON.generate({method_name: input_js_options_method_name}.merge!(logic_options)) }
     end
 
     def input_js_options_method_name

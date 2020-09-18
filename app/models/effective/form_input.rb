@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Effective
   class FormInput
     attr_accessor :name, :options
@@ -166,7 +168,7 @@ module Effective
 
       invalid = object.errors[name].to_sentence.presence if object.respond_to?(:errors)
       invalid ||= options[:feedback][:invalid].delete(:text).presence
-      invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].compact.join(' and ').presence
+      invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].tap(&:compact!).join(' and ').presence
       invalid ||= "can't be blank or is invalid"
 
       valid = options[:feedback][:valid].delete(:text) || 'Looks good!'
@@ -268,7 +270,7 @@ module Effective
         item_value = (item.send(value_method).to_s.parameterize.presence rescue nil)
       end
 
-      [tag_id, item_value, object_id].compact.join('_')
+      [tag_id, item_value, object_id].tap(&:compact!).join('_')
     end
 
     private
@@ -282,7 +284,7 @@ module Effective
       # effective_bootstrap specific options
       layout = options.delete(:layout) # Symbol
       wrapper = options.delete(:wrapper) # Hash
-      input_group = { append: options.delete(:append), prepend: options.delete(:prepend), input_group: options.delete(:input_group) }.compact
+      input_group = { append: options.delete(:append), prepend: options.delete(:prepend), input_group: options.delete(:input_group) }.tap(&:compact!)
 
       feedback = options.delete(:feedback) # Hash
       label = options.delete(:label) # String or Hash
@@ -317,11 +319,11 @@ module Effective
       # Server side validation
       if has_error?
         if has_error?(name)
-          options[:input][:class] = [options[:input][:class], 'is-invalid'].compact.join(' ')
+          options[:input][:class] = (options[:input][:class] ? "#{options[:input][:class]} is-invalid" : 'is-invalid')
         elsif reset_feedback?
           # Nothing
         else
-          options[:input][:class] = [options[:input][:class], 'is-valid'].compact.join(' ')
+          options[:input][:class] = (options[:input][:class] ? "#{options[:input][:class]} is-valid" : 'is-valid')
         end
       end
 
@@ -333,7 +335,7 @@ module Effective
         options[:input][:readonly] = 'readonly'
 
         unless options[:input][:class].to_s.include?('form-control-plaintext')
-          options[:input][:class] = options[:input][:class].to_s.sub('form-control', 'form-control-plaintext')
+          options[:input][:class] = (options[:input][:class] || '').sub('form-control', 'form-control-plaintext')
         end
       end
 
@@ -357,7 +359,7 @@ module Effective
       when String
         defaults.merge(text: obj)
       when Hash
-        html_classes = (obj[:class].to_s.split(' ') + defaults[:class].to_s.split(' ')).uniq
+        html_classes = ((obj[:class] || '').split(' ') + (defaults[:class] || '').split(' ')).uniq
 
         # Try to smart merge bootstrap classes
         if (exclusive = html_classes.select { |c| c.include?('-') }).length > 1
@@ -421,11 +423,11 @@ module Effective
     end
 
     def sanitized_object_name
-      @builder.object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
+      @sanitized_object_name ||= @builder.object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
     end
 
     def sanitized_method_name
-      name.to_s.sub(/\?$/, "")
+      @sanitized_method_name ||= name.to_s.sub(/\?$/, "")
     end
 
     def input_js_options_method_name
