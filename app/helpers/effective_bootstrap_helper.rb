@@ -74,18 +74,24 @@ module EffectiveBootstrapHelper
   # variations can be :dropup, :dropleft, :dropright
   # split can be true, false
   # right is to right align things
-  DEFAULT_DROPDOWN_OPTS = {class: "btn dropdown-toggle ", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false}
-  SPLIT_DROPDOWN_OPTS = {class: "btn dropdown-toggle dropdown-toggle-split ", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false}
+  DROPDOWN_SPLIT_OPTS = {class: "btn dropdown-toggle dropdown-toggle-split btn-sm btn-outline-primary", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false}
+  DROPDOWN_UNSPLIT_OPTS= {class: "btn dropdown-toggle btn-sm btn-outline-primary", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false}
 
-  def dropdown(variation: nil, split: true, btn_class: nil, btn_content: nil, right: false, &block)
+  DROPDOWN_DROPLEFT_GROUP_OPTS = {class: 'btn-group'}
+  DROPDOWN_DROPLEFT_OPTS = {class: 'btn-group dropleft', role: 'group'}
+
+  DROPDOWN_MENU_OPTS = {class: 'dropdown-menu'}
+  DROPDOWN_MENU_RIGHT_OPTS = {class: 'dropdown-menu dropdown-menu-right'}
+
+  DROPDOWN_BTN_CLASS = 'btn-sm btn-outline-primary'
+  DROPDOWN_TOGGLE_DROPDOWN = "<span class='sr-only'>Toggle Dropdown</span>".html_safe
+
+  def dropdown(variation: nil, split: true, btn_class: DROPDOWN_BTN_CLASS, btn_content: nil, right: false, &block)
     raise 'expected a block' unless block_given?
 
-    btn_class = btn_class.presence || 'btn-outline-primary'
-
+    # Process all dropdown_link_tos
     @_dropdown_link_tos = []
     @_dropdown_split = split
-
-    # process dropdown_link_tos
     yield
 
     return @_dropdown_link_tos.first if @_dropdown_link_tos.length <= 1
@@ -93,26 +99,29 @@ module EffectiveBootstrapHelper
     # Build tags
     first = @_dropdown_link_tos.first
 
-    button_opts = (split ? SPLIT_DROPDOWN_OPTS : DEFAULT_DROPDOWN_OPTS)
-    button_opts[:class] = button_opts[:class] + (btn_class.presence || 'btn-outline-primary')
+    button_opts = (split ? DROPDOWN_SPLIT_OPTS : DROPDOWN_UNSPLIT_OPTS)
 
-    button = content_tag(:button, button_opts) do
-      btn_content || content_tag(:span, 'Toggle Dropdown', class: 'sr-only')
+    if btn_class != DROPDOWN_BTN_CLASS
+      button_opts[:class] = button_opts[:class].sub(DROPDOWN_BTN_CLASS, btn_class)
     end
 
-    menu_klass = (right ? 'dropdown-menu dropdown-menu-right' : 'dropdown-menu')
+    button = content_tag(:button, button_opts) do
+      btn_content || DROPDOWN_TOGGLE_DROPDOWN
+    end
+
+    menu_opts = (right ? DROPDOWN_MENU_RIGHT_OPTS : DROPDOWN_MENU_OPTS)
 
     menu = if split
-      content_tag(:div, @_dropdown_link_tos[1..-1].join.html_safe, class: menu_klass)
+      content_tag(:div, @_dropdown_link_tos[1..-1].join.html_safe, menu_opts)
     else
-      content_tag(:div, @_dropdown_link_tos.join.html_safe, class: menu_klass)
+      content_tag(:div, @_dropdown_link_tos.join.html_safe, menu_opts)
     end
 
     @_dropdown_link_tos = nil
 
     if split && variation == :dropleft
-      content_tag(:div, class: 'btn-group') do
-        content_tag(:div, (button + menu), class: 'btn-group dropleft', role: 'group') + first.html_safe
+      content_tag(:div, DROPDOWN_DROPLEFT_GROUP_OPTS) do
+        content_tag(:div, (button + menu), DROPDOWN_DROPLEFT_OPTS) + first.html_safe
       end
     elsif split
       content_tag(:div, class: 'btn-group') do
@@ -146,14 +155,14 @@ module EffectiveBootstrapHelper
     btn_class = options.delete(:btn_class).presence || 'btn-outline-primary'
 
     unless @_dropdown_link_tos
-      options[:class] = (options[:class] ? ('dropdown-item' + ' ' + options[:class]) : 'dropdown-item')
+      options[:class] = (options[:class] ? "dropdown-item #{options[:class]}" : 'dropdown-item')
       return link_to(label, path, options)
     end
 
     if @_dropdown_link_tos.length == 0 && @_dropdown_split
-      options[:class] = options[:class] ? ('btn' + ' ' + btn_class + ' ' + options[:class]) : ('btn' + ' ' + btn_class)
+      options[:class] = (options[:class] ? "btn #{btn_class} #{options[:class]}" : "btn #{btn_class}")
     else
-      options[:class] = options[:class] ? ('dropdown-item' + ' ' + options[:class]) : 'dropdown-item'
+      options[:class] = (options[:class] ? "dropdown-item #{options[:class]}" : 'dropdown-item')
     end
 
     @_dropdown_link_tos << link_to(label, path, options)
