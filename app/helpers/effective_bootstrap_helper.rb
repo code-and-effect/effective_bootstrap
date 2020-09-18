@@ -89,9 +89,12 @@ module EffectiveBootstrapHelper
   def dropdown(variation: nil, split: true, btn_class: nil, btn_content: nil, right: false, &block)
     raise 'expected a block' unless block_given?
 
+    btn_class ||= DROPDOWN_BTN_CLASS
+
     # Process all dropdown_link_tos
     @_dropdown_link_tos = []
     @_dropdown_split = split
+    @_dropdown_button_class = btn_class
     yield
 
     return @_dropdown_link_tos.first if @_dropdown_link_tos.length <= 1
@@ -101,7 +104,7 @@ module EffectiveBootstrapHelper
 
     button_opts = (split ? DROPDOWN_SPLIT_OPTS : DROPDOWN_UNSPLIT_OPTS)
 
-    if (btn_class || DROPDOWN_BTN_CLASS) != DROPDOWN_BTN_CLASS
+    if btn_class != DROPDOWN_BTN_CLASS
       button_opts[:class] = button_opts[:class].sub(DROPDOWN_BTN_CLASS, btn_class)
     end
 
@@ -152,7 +155,7 @@ module EffectiveBootstrapHelper
 
   # Works with dots do and dropdown do
   def dropdown_link_to(label, path, options = {})
-    btn_class = options.delete(:btn_class).presence || 'btn-outline-primary'
+    btn_class = options.delete(:btn_class).presence || @_dropdown_button_class || 'btn-outline-primary'
 
     unless @_dropdown_link_tos
       options[:class] = (options[:class] ? "dropdown-item #{options[:class]}" : 'dropdown-item')
