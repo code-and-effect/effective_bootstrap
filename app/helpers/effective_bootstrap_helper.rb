@@ -32,7 +32,7 @@ module EffectiveBootstrapHelper
   def collapse(label, opts = {}, &block)
     raise 'expected a block' unless block_given?
 
-    id = "collapse-#{''.object_id}"
+    id = "collapse-#{String.new.object_id}"
     show = (opts.delete(:show) == true)
 
     link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
