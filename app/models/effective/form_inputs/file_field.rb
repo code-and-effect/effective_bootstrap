@@ -5,9 +5,9 @@ module Effective
       def build_input(&block)
         case attachments_style
         when :card
-          build_attachments + build_uploads + super
+          build_existing_attachments + build_attachments + build_uploads + super
         when :table, :ck_assets
-          super + build_uploads + build_attachments
+          super + build_existing_attachments + build_uploads + build_attachments
         else
           raise('unsupported attachments_style, try :card or :table')
         end
@@ -30,6 +30,16 @@ module Effective
 
       def required_presence?(obj, name)
         super(obj, name) && Array(object.public_send(name)).length == 0
+      end
+
+      def build_existing_attachments
+        return ''.html_safe unless multiple?
+
+        attachments = object.send(name)
+
+        attachments.map.with_index do |attachment, index|
+          @builder.hidden_field(name, multiple: true, id: (tag_id + "_#{index}"), value: attachment.signed_id)
+        end.join.html_safe
       end
 
       def build_attachments
