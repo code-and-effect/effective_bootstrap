@@ -15,11 +15,12 @@ module Effective
 
       def input_js_options
         {
-          modules: { 
-            toolbar: toolbar, 
-            imageResize: imageResize, 
+          modules: {
+            toolbar: toolbar,
+            imageResize: imageResize,
             imageDropAndPaste: imageDropAndPaste,
-            syntax: (content_mode == :code) 
+            magicUrl: magicUrl,
+            syntax: (content_mode == :code)
           },
           theme: 'snow',
           placeholder: "Add #{name.to_s.pluralize}...",
@@ -42,7 +43,7 @@ module Effective
       end
 
       def imageDropAndPaste
-        active_storage && !(content_mode == :code) 
+        active_storage && !(content_mode == :code)
       end
 
       def imageResize
@@ -55,6 +56,10 @@ module Effective
           },
           modules: [ 'Resize', 'DisplaySize' ]
         }
+      end
+
+      def magicUrl
+        true
       end
 
       def active_storage
