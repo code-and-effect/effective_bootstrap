@@ -8,7 +8,7 @@ module EffectiveBootstrap
     end
 
     initializer 'effective_bootstrap.assets' do |app|
-      app.config.assets.precompile += ['icons/*']
+      app.config.assets.precompile += ['effective_bootstrap_manifest.js', 'icons/*']
     end
 
   end
