@@ -2,7 +2,7 @@ module EffectiveFormBuilderHelper
   def effective_form_with(**options, &block)
     # Compute the default ID
     subject = Array(options[:scope] || options[:model]).last
-    class_name = subject.class.name.underscore
+    class_name = subject.class.name.parameterize.underscore
     unique_id = options.except(:model).hash.abs
 
     html_id = if subject.kind_of?(Symbol)
@@ -55,6 +55,17 @@ module EffectiveFormBuilderHelper
 
     # Assign default ID
     options[:id] ||= (options[:html].delete(:id) || html_id) unless options.key?(:id)
+
+    # Assign url if engine present
+    options[:url] ||= if options[:engine] && options[:model].present?
+      resource = Effective::Resource.new(options[:model])
+
+      if subject.respond_to?(:persisted?) && subject.persisted?
+        resource.action_path(:update, subject)
+      elsif subject.respond_to?(:new_record?) && subject.new_record?
+        resource.action_path(:create)
+      end
+    end
 
     without_error_proc do
       form_with(**options.merge(builder: Effective::FormBuilder), &block)
