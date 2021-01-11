@@ -203,5 +203,13 @@ module Effective
       Effective::FormLogics::ShowIfAny.new(*args, builder: self).to_html(&block)
     end
 
+    # Has Many
+    def has_many(name, options = {}, &block)
+      association = object.class.reflect_on_all_associations.find { |a| a.name == name && a.options[:autosave] }
+      raise(":#{name} must be an accepts_nested_attributes has_many association") if association.blank?
+
+      Effective::FormInputs::HasMany.new(name, options, builder: self).to_html(&block)
+    end
+
   end
 end

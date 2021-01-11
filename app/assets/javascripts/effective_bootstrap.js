@@ -15,6 +15,7 @@
 //= require ./effective_ck_editor/input
 
 //= require ./effective_file/input
+//= require ./effective_has_many/input
 //= require ./effective_integer/input
 //= require ./effective_number_text/input
 //= require ./effective_percent/input
