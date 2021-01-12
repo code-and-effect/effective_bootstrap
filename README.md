@@ -42,8 +42,8 @@ Add the following to your `application.js`:
 And to your `application.scss`:
 
 ```sass
-@import 'bootstrap';
-@import 'effective_bootstrap';
+@import 'bootstrap'
+@import 'effective_bootstrap'
 ```
 
 ## View Helpers
@@ -373,7 +373,7 @@ Just add `has_many` and `accepts_nested_attributes_for` like normal and then use
 ```ruby
 class Author < ApplicationRecord
   has_many :books
-  accepts_nested_attributes_for :books
+  accepts_nested_attributes_for :books, allow_destroy: true
 end
 ```
 
@@ -389,6 +389,8 @@ and
 ```
 
 If `Book` has an integer `position` field, there will be reorder buttons to drag & drop reorder the items.
+
+If `allow_destroy: true` there will be remove buttons.
 
 You can customize the has many behaviour by passing the following:
 
