@@ -26,7 +26,15 @@ body.dragging * {
   }
 }
 
+.form-has-many .has-many-move svg {
+  margin-top: 6px;
+}
+
 // Specific Styles
 .form-has-many {
-  .has-many-move svg { margin-top: 6px; }
+  .has-many-move { display: none; }
+}
+
+.form-has-many.reordering {
+  .has-many-move { display: inline-block; }
 }
