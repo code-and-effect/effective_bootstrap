@@ -205,8 +205,11 @@ module Effective
 
     # Has Many
     def has_many(name, collection = nil, options = {}, &block)
-      association = object.class.reflect_on_all_associations.find { |a| a.name == name && a.options[:autosave] }
-      raise(":#{name} must be an accepts_nested_attributes has_many association") if association.blank?
+      association = object.class.reflect_on_all_associations.find { |a| a.name == name }
+      raise("expected #{object.class.name} to has_many :#{name}") if association.blank?
+
+      nested_attributes_options = (object.class.nested_attributes_options || {})[name]
+      raise("expected #{object.class.name} to accepts_nested_attributes_for :#{name}") if nested_attributes_options.blank?
 
       options = collection if collection.kind_of?(Hash)
       options.merge!(collection: collection) if collection && !collection.kind_of?(Hash)

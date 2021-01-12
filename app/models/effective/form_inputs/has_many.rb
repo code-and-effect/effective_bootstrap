@@ -26,13 +26,44 @@ module Effective
         @display ||= (options[:input].delete(:cards) ? :cards : :rows)
       end
 
+      # add: false
+      def add?
+        return @add unless @add.nil?
+
+        @add ||= begin
+          add = options[:input].delete(:add)
+          add.nil? ? true : add
+        end
+      end
+
+      # remove: false
+      def remove?
+        return @remove unless @remove.nil?
+
+        @remove ||= begin
+          remove = options[:input].delete(:remove)
+
+          if remove != nil
+            remove
+          else
+            opts = (object.class.nested_attributes_options[name] || {})
+            opts[:update_only] != true && opts[:allow_destroy] != false
+          end
+        end
+      end
+
       # reorder: true
       def reorder?
         return @reorder unless @reorder.nil?
 
         @reorder ||= begin
           reorder = options[:input].delete(:reorder)
-          reorder.nil? ? object.send(name).new.respond_to?(:position) : reorder
+
+          if reorder != nil
+            reorder
+          else
+            build_resource().class.columns_hash['position']&.type == :integer
+          end
         end
       end
 
@@ -43,18 +74,26 @@ module Effective
       end
 
       def has_many_links_for(block)
+        return BLANK unless add? || reorder?
+
         content_tag(:div, class: 'has-many-links text-center mt-2') do
-          [link_to_add(block), (link_to_reorder(block) if reorder?)].compact.join(' ').html_safe
+          [(link_to_add(block) if add?), (link_to_reorder(block) if reorder?)].compact.join(' ').html_safe
         end
       end
 
       def render_resource(resource, block)
-        remove = link_to_remove(resource)
+        remove = BLANK
 
         content = @builder.fields_for(name, resource) do |form|
-          remove = (form.super_hidden_field(:_destroy) + remove) if resource.persisted?
-          block.call(form)
+          fields = block.call(form)
+
+          remove += form.super_hidden_field(:_destroy) if remove? && resource.persisted?
+          remove += form.super_hidden_field(:position) if reorder? && !fields.include?('][position]')
+
+          fields
         end
+
+        remove += link_to_remove(resource) if remove?
 
         content_tag(:div, render_fields(content, remove), class: 'has-many-fields')
       end
@@ -75,7 +114,7 @@ module Effective
       end
 
       def render_template(block)
-        resource = object.send(name).new
+        resource = build_resource()
         index = object.send(name).index(resource)
 
         html = render_resource(resource, block)
@@ -89,7 +128,6 @@ module Effective
         content_tag(
           :button,
           icon('plus-circle') + 'Add Another',
-          href: '#',
           class: 'has-many-add btn btn-secondary',
           title: 'Add Another',
           data: {
@@ -103,7 +141,6 @@ module Effective
         content_tag(
           :button,
           icon('list') + 'Reorder',
-          href: '#',
           class: 'has-many-reorder btn btn-secondary',
           title: 'Reorder',
           data: {
@@ -116,7 +153,6 @@ module Effective
         content_tag(
           :button,
           icon('trash-2') + 'Remove',
-          href: '#',
           class: 'has-many-remove btn btn-danger',
           title: 'Remove',
           data: {
@@ -127,7 +163,11 @@ module Effective
       end
 
       def has_many_move
-        content_tag(:span, icon('move'), class: 'has-many-move')
+        @has_many_move ||= content_tag(:span, icon('move'), class: 'has-many-move')
+      end
+
+      def build_resource
+        @build_resource ||= object.send(name).build().tap { |resource| object.send(name).delete(resource) }
       end
 
     end

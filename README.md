@@ -362,6 +362,46 @@ And then in any form, instead of a text area:
 = f.editor :body
 ```
 
+## Custom has_many
+
+This custom form input was inspired by [cocoon](https://github.com/nathanvda/cocoon) but works with more magic.
+
+This nested form builder allows has_many resources to be created, updated, destroyed and reordered.
+
+Just add `has_many` and `accepts_nested_attributes_for` like normal and then use it in the form:
+
+```ruby
+class Author < ApplicationRecord
+  has_many :books
+  accepts_nested_attributes_for :books
+end
+```
+
+and
+
+```haml
+= effective_form_with(model: author) do |f|
+  = f.text_field :name
+
+  = f.has_many :books do |fb|
+    = fb.text_field :title
+    = fb.date_field :published_at
+```
+
+If `Book` has an integer `position` field, there will be reorder buttons to drag & drop reorder the items.
+
+You can customize the has many behaviour by passing the following:
+
+```haml
+= f.has_many :books, add: true, remove: true, reorder: true
+```
+
+or add an html class:
+
+```haml
+= f.has_many :books, class: 'tight'
+```
+
 ## Custom percent_field
 
 This custom form input uses no 3rd party jQuery plugins.
