@@ -9,16 +9,30 @@ module Effective
       end
 
       def input_html_options
-        { class: 'form-has-many' }
+        { class: 'form-has-many mb-4' }
+      end
+
+      def input_js_options
+        { sortable: true }
+      end
+
+      def collection
+        Array(options[:input][:collection] || object.send(name))
+      end
+
+      # :rows, :cards
+      def layout_as
+        @layout_as ||= (options[:input].delete(:as) || :rows)
       end
 
       private
 
       def has_many_fields_for(block)
-        object.send(name).map { |resource| render_resource(resource, block) }.join.html_safe
+        collection.map { |resource| render_resource(resource, block) }.join.html_safe
       end
 
       def render_resource(resource, block)
+        move = content_tag(:span, icon('move'), class: 'has-many-move')
         destroy = ''.html_safe
 
         fields = @builder.fields_for(name, resource) do |form|
@@ -26,8 +40,22 @@ module Effective
           block.call(form)
         end
 
+        remove = destroy + link_to_remove(resource)
+
+        # Now render based on layout
         content_tag(:div, class: 'has-many-fields') do
-          fields + destroy + link_to_remove(resource)
+          case layout_as
+          when :rows
+            content_tag(:div, class: 'form-row') do
+              content_tag(:div, move, class: 'col-auto') +
+              content_tag(:div, fields, class: 'col mr-auto') +
+              content_tag(:div, remove, class: 'col-auto')
+            end
+          when :cards
+            raise('unsupported')
+          else
+            fields + remove
+          end
         end
       end
 
@@ -49,7 +77,7 @@ module Effective
           :button,
           icon('plus-circle') + title,
           href: '#',
-          class: 'btn btn-secondary',
+          class: 'has-many-add btn btn-secondary',
           title: title,
           data: {
             'effective-form-has-many-add': true,
@@ -57,7 +85,7 @@ module Effective
           }
         )
 
-        content_tag(:div, button, class: 'has-many-links')
+        content_tag(:div, button, class: 'has-many-links text-center mt-2')
       end
 
       def link_to_remove(resource)
@@ -67,7 +95,7 @@ module Effective
           :button,
           icon('trash-2') + title,
           href: '#',
-          class: 'btn btn-danger',
+          class: 'has-many-remove btn btn-danger',
           title: title,
           data: {
             'confirm': "Remove #{resource}?",

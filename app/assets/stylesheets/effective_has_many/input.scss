@@ -1,0 +1,32 @@
+body.dragging,
+body.dragging * {
+  cursor: move !important;
+  .has-many-move { opacity: 0.25; }
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+
+  .has-many-move { display: none; }
+}
+
+.form-has-many div.has-many-placeholder {
+  position: relative;
+  height: 2rem;
+
+  &:before {
+    position: absolute;
+    content: '';
+    background-image: asset-data-url('icons/arrow-right-circle.svg');
+    background-repeat: no-repeat;
+    height: 2rem;
+    width: 2rem;
+  }
+}
+
+// Specific Styles
+.form-has-many {
+  .has-many-move svg { margin-top: 6px; }
+}

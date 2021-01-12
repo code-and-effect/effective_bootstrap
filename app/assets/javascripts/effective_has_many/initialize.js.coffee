@@ -1,3 +1,12 @@
+(this.EffectiveBootstrap || {}).effective_has_many = ($element, options) ->
+  if options.sortable
+    $element.sortable(
+      containerSelector: '.form-has-many',
+      itemSelector: '.has-many-fields',
+      handle: '.has-many-move'
+      placeholder: "<div class='has-many-placeholder'></div>"
+    )
+
 $(document).on 'click', '[data-effective-form-has-many-add]', (event) ->
   event.preventDefault()
 

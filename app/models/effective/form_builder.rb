@@ -204,9 +204,12 @@ module Effective
     end
 
     # Has Many
-    def has_many(name, options = {}, &block)
+    def has_many(name, collection = nil, options = {}, &block)
       association = object.class.reflect_on_all_associations.find { |a| a.name == name && a.options[:autosave] }
       raise(":#{name} must be an accepts_nested_attributes has_many association") if association.blank?
+
+      options = collection if collection.kind_of?(Hash)
+      options.merge!(collection: collection) if collection && !collection.kind_of?(Hash)
 
       Effective::FormInputs::HasMany.new(name, options, builder: self).to_html(&block)
     end
