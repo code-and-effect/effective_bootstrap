@@ -388,20 +388,22 @@ and
     = fb.date_field :published_at
 ```
 
-If `Book` has an integer `position` field, there will be reorder buttons to drag & drop reorder the items.
+If `:books` can be destroyed, a hidden field `_destroy` will automatically be added to each set of fields and a Remove button will be displayed to remove the item.
 
-If `allow_destroy: true` there will be remove buttons.
+If the `Book` model has an integer `position` attribute, a hidden field `position` will automatically be added to each set of fields and a Reorder button will be displayed to drag&drop reorder items.
 
-You can customize the has many behaviour by passing the following:
+You can customize this behaviour by passing the following:
 
 ```haml
-= f.has_many :books, add: true, remove: true, reorder: true
+= f.has_many :books, add: true, remove: true, reorder: true do |fb|
+  = fb.text_field :title
 ```
 
 or add an html class:
 
 ```haml
-= f.has_many :books, class: 'tight'
+= f.has_many :books, class: 'tight' do |fb|
+  = fb.text_field :title
 ```
 
 ## Custom percent_field
