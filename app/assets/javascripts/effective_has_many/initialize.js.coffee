@@ -4,7 +4,22 @@
       containerSelector: '.form-has-many',
       itemSelector: '.has-many-fields',
       handle: '.has-many-move'
-      placeholder: "<div class='has-many-placeholder'></div>"
+      placeholder: "<div class='has-many-placeholder' />",
+      onDrop: ($item, container, _super) ->
+        $hasMany = $(container.target)
+        $fields = $hasMany.children('.has-many-fields:not(.marked-for-destruction)')
+
+        positions = $fields.find("input[name$='[position]']").map(-> this.value).get()
+
+        if positions.length > 0
+          index = Math.min.apply(Math, positions) || 0
+
+          $fields.each((_, obj) ->
+            $(obj).find("input[name$='[position]']").first().val(index)
+            index = index + 1
+          )
+
+        _super($item, container)
     )
 
 $(document).on 'click', '[data-effective-form-has-many-add]', (event) ->
@@ -31,7 +46,7 @@ $(document).on 'click', '[data-effective-form-has-many-remove]', (event) ->
 
   if $input.length > 0
     $input.val('true')
-    $fields.fadeOut('slow')
+    $fields.addClass('marked-for-destruction').fadeOut('slow')
   else
     $fields.fadeOut('slow', -> this.remove())
 
