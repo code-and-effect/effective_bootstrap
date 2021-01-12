@@ -37,7 +37,7 @@ $(document).on 'click', '[data-effective-form-has-many-add]', (event) ->
   uid = (new Date).valueOf()
   template = $obj.data('effective-form-has-many-template').replace(/HASMANYINDEX/g, uid)
 
-  $fields = $(template).hide().fadeIn('slow')
+  $fields = $(template).hide().fadeIn('fast')
   EffectiveBootstrap.initialize($fields)
   $obj.closest('.has-many-links').before($fields)
 
@@ -56,9 +56,9 @@ $(document).on 'click', '[data-effective-form-has-many-remove]', (event) ->
 
   if $input.length > 0
     $input.val('true')
-    $fields.addClass('marked-for-destruction').fadeOut('slow')
+    $fields.addClass('marked-for-destruction').fadeOut('fast')
   else
-    $fields.fadeOut('slow', -> this.remove())
+    $fields.fadeOut('fast', -> this.remove())
 
   assignPositions($hasMany)
   true
@@ -69,6 +69,9 @@ $(document).on 'click', '[data-effective-form-has-many-reorder]', (event) ->
   $obj = $(event.currentTarget)
   $hasMany = $obj.closest('.form-has-many')
   return unless $hasMany.length > 0
+
+  $fields = $hasMany.children('.has-many-fields:not(.marked-for-destruction)')
+  return unless $fields.length > 1
 
   $hasMany.toggleClass('reordering')
   true

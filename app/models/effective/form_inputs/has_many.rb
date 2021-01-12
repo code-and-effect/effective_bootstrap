@@ -4,7 +4,11 @@ module Effective
       BLANK = ''.html_safe
 
       def to_html(&block)
-        content_tag(:div, options[:input]) do
+        object.send(name).build() if build? && collection.blank?
+
+        errors = (@builder.error(name) if errors?) || BLANK
+
+        errors + content_tag(:div, options[:input]) do
           has_many_fields_for(block) + has_many_links_for(block)
         end
       end
@@ -21,12 +25,22 @@ module Effective
         Array(options[:input][:collection] || object.send(name))
       end
 
-      # cards: true
+      # cards: false
       def display
         @display ||= (options[:input].delete(:cards) ? :cards : :rows)
       end
 
-      # add: false
+      # build: true
+      def build?
+        return @build unless @build.nil?
+
+        @build ||= begin
+          build = options[:input].delete(:build)
+          build.nil? ? true : build
+        end
+      end
+
+      # add: true
       def add?
         return @add unless @add.nil?
 
@@ -36,7 +50,17 @@ module Effective
         end
       end
 
-      # remove: false
+      # errors: true
+      def errors?
+        return @errors unless @errors.nil?
+
+        @errors ||= begin
+          errors = options[:input].delete(:errors)
+          errors.nil? ? true : errors
+        end
+      end
+
+      # remove: true
       def remove?
         return @remove unless @remove.nil?
 
@@ -77,7 +101,7 @@ module Effective
         return BLANK unless add? || reorder?
 
         content_tag(:div, class: 'has-many-links text-center mt-2') do
-          [(link_to_add(block) if add?), (link_to_reorder(block) if reorder?)].compact.join(' ').html_safe
+          [*(link_to_add(block) if add?), *(link_to_reorder(block) if reorder?)].join(' ').html_safe
         end
       end
 
@@ -115,9 +139,14 @@ module Effective
 
       def render_template(block)
         resource = build_resource()
-        index = object.send(name).index(resource)
+        index = collection.length
 
         html = render_resource(resource, block)
+
+        unless html.include?("#{name}_attributes][#{index}]")
+          raise('unexpected index. unable to render resource template.')
+        end
+
         html.gsub!("#{name}_attributes][#{index}]", "#{name}_attributes][HASMANYINDEX]")
         html.gsub!("#{name}_attributes_#{index}_", "#{name}_attributes_HASMANYINDEX_")
 
@@ -167,7 +196,10 @@ module Effective
       end
 
       def build_resource
-        @build_resource ||= object.send(name).build().tap { |resource| object.send(name).delete(resource) }
+        # Using .new() here seems like it should work but it doesn't. It changes the index
+        @build_resource ||= object.send(name).build().tap do |resource|
+          object.send(name).delete(resource)
+        end
       end
 
     end

@@ -392,10 +392,14 @@ If `:books` can be destroyed, a hidden field `_destroy` will automatically be ad
 
 If the `Book` model has an integer `position` attribute, a hidden field `position` will automatically be added to each set of fields and a Reorder button will be displayed to drag&drop reorder items.
 
+If the has_many collection is blank?, `.build()` will be automatically called, unless `build: false` is passed.
+
+Any errors on the has_many name will be displayed unless `errors: false` is passed.
+
 You can customize this behaviour by passing the following:
 
 ```haml
-= f.has_many :books, add: true, remove: true, reorder: true do |fb|
+= f.has_many :books, add: true, remove: true, reorder: true, build: true, errors: true do |fb|
   = fb.text_field :title
 ```
 
