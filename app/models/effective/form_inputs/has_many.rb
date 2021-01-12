@@ -21,14 +21,19 @@ module Effective
         Array(options[:input][:collection] || object.send(name))
       end
 
-      # :rows, :cards
-      def layout_as
-        @layout_as ||= (options[:input].delete(:as) || :rows)
+      # cards: true
+      def display
+        @display ||= (options[:input].delete(:cards) ? :cards : :rows)
       end
 
-      def sortable?
-        #object.send(name).new.respond_to?(:position)
-        true
+      # reorder: true
+      def reorder?
+        return @reorder unless @reorder.nil?
+
+        @reorder ||= begin
+          reorder = options[:input].delete(:reorder)
+          reorder.nil? ? object.send(name).new.respond_to?(:position) : reorder
+        end
       end
 
       private
@@ -39,35 +44,33 @@ module Effective
 
       def has_many_links_for(block)
         content_tag(:div, class: 'has-many-links text-center mt-2') do
-          [link_to_add(block), (link_to_reorder(block) if sortable?)].compact.join(' ').html_safe
+          [link_to_add(block), (link_to_reorder(block) if reorder?)].compact.join(' ').html_safe
         end
       end
 
       def render_resource(resource, block)
-        destroy = BLANK
+        remove = link_to_remove(resource)
 
-        fields = @builder.fields_for(name, resource) do |form|
-          destroy = form.super_hidden_field(:_destroy) if resource.persisted?
+        content = @builder.fields_for(name, resource) do |form|
+          remove = (form.super_hidden_field(:_destroy) + remove) if resource.persisted?
           block.call(form)
         end
 
-        remove = destroy + link_to_remove(resource)
-
-        content_tag(:div, render_fields(fields, remove), class: 'has-many-fields')
+        content_tag(:div, render_fields(content, remove), class: 'has-many-fields')
       end
 
-      def render_fields(fields, remove)
-        case layout_as
+      def render_fields(content, remove)
+        case display
         when :rows
           content_tag(:div, class: 'form-row') do
-            (sortable? ? content_tag(:div, has_many_move, class: 'col-auto') : BLANK) +
-            content_tag(:div, fields, class: 'col mr-auto') +
+            (reorder? ? content_tag(:div, has_many_move, class: 'col-auto') : BLANK) +
+            content_tag(:div, content, class: 'col mr-auto') +
             content_tag(:div, remove, class: 'col-auto')
           end
         when :cards
           raise('unsupported')
         else
-          fields + remove
+          content + remove
         end
       end
 

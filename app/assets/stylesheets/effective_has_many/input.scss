@@ -1,40 +1,42 @@
 body.dragging,
 body.dragging * {
   cursor: move !important;
-  .has-many-move { opacity: 0.25; }
 }
 
-.dragged {
-  position: absolute;
-  opacity: 0.5;
-  z-index: 2000;
-
-  .has-many-move { display: none; }
-}
-
-.form-has-many div.has-many-placeholder {
-  position: relative;
-  height: 2rem;
-
-  &:before {
-    position: absolute;
-    content: '';
-    background-image: asset-data-url('icons/arrow-right-circle.svg');
-    background-repeat: no-repeat;
-    height: 2rem;
-    width: 2rem;
-  }
-}
-
-.form-has-many .has-many-move svg {
-  margin-top: 6px;
-}
-
-// Specific Styles
 .form-has-many {
+  .has-many-placeholder {
+    position: relative;
+    height: 2rem;
+
+    &:before {
+      position: absolute;
+      content: '';
+      background-image: asset-data-url('icons/arrow-right-circle.svg');
+      background-repeat: no-repeat;
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+
+  .has-many-fields.dragged {
+    position: absolute;
+    opacity: 0;
+    z-index: 2000;
+    .has-many-move { display: none; }
+  }
+
+  .has-many-move svg { margin-top: 6px; }
   .has-many-move { display: none; }
+
+  .has-many-remove { margin-top: 1.5rem; }
+  .has-many-move { margin-top: 1.5rem; }
 }
 
 .form-has-many.reordering {
   .has-many-move { display: inline-block; }
+}
+
+.form-has-many.tight {
+  .has-many-remove { margin-top: 0; }
+  .has-many-move { margin-top: 0; }
 }
