@@ -50,18 +50,29 @@ module Effective
       end
 
       def build_label
-        return BLANK if options[:label] == false
+        return BLANK if options[:label] == false && !actions?
         return BLANK if name.kind_of?(NilClass)
 
-        text = (options[:label].delete(:text) || (object.class.human_attribute_name(name) if object) || BLANK).html_safe
+        text = begin
+          if options[:label] == false
+            nil
+          elsif options[:label].key?(:text)
+            options[:label].delete(:text)
+          elsif object.present?
+            object.class.human_attribute_name(name)
+          end || BLANK
+        end.html_safe
 
-        content_tag(:label, options[:label]) do
-          text + content_tag(:div, class: 'effective-checks-actions text-muted') do
-            unless disabled? || !actions?
-              link_to('Select All', '#', 'data-effective-checks-all': true) + ' - ' + link_to('Select None', '#', 'data-effective-checks-none': true)
-            end
+        actions = if !disabled? && actions?
+          content_tag(:div, class: 'effective-checks-actions text-muted') do
+            link_to('Select All', '#', 'data-effective-checks-all': true) + ' - ' + link_to('Select None', '#', 'data-effective-checks-none': true)
           end
         end
+
+        content_tag(:label, options[:label]) do
+          [text, actions].compact.join.html_safe
+        end
+
       end
 
       def build_item(builder)
@@ -91,7 +102,7 @@ module Effective
 
       def actions? # default true
         return @actions unless @actions.nil?
-        @actions = (options.delete(:actions) != false)
+        @actions = (options[:input].delete(:actions) != false)
       end
 
     end
