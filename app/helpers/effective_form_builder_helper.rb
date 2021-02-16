@@ -1,8 +1,8 @@
 module EffectiveFormBuilderHelper
   def effective_form_with(**options, &block)
     # Compute the default ID
-    subject = Array(options[:scope] || options[:model]).last
-    class_name = subject.class.name.parameterize.underscore
+    subject = Array(options[:model] || options[:scope]).last
+    class_name = (options[:scope] || subject.class.name.parameterize.underscore)
     unique_id = options.except(:model).hash.abs
 
     html_id = if subject.kind_of?(Symbol)
