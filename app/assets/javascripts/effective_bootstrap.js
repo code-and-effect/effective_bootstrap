@@ -18,6 +18,7 @@
 //= require ./effective_has_many/input
 //= require ./effective_integer/input
 //= require ./effective_number_text/input
+//= require ./effective_password/input
 //= require ./effective_percent/input
 //= require ./effective_phone/input
 //= require ./effective_price/input
