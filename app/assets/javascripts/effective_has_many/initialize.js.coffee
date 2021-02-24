@@ -48,6 +48,8 @@ $(document).on 'click', '[data-effective-form-has-many-remove]', (event) ->
   event.preventDefault()
 
   $obj = $(event.currentTarget)
+  return unless $obj.data('confirmed') if $obj.data('confirm')
+
   $hasMany = $obj.closest('.form-has-many')
   return unless $hasMany.length > 0
 
