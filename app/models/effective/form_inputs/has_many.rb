@@ -117,7 +117,7 @@ module Effective
           fields
         end
 
-        remove += link_to_remove(resource) if remove?
+        remove += link_to_remove(resource) if (remove? || resource.new_record?)
 
         content_tag(:div, render_fields(content, remove), class: 'has-many-fields')
       end
