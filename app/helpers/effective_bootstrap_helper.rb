@@ -18,6 +18,36 @@ module EffectiveBootstrapHelper
     content
   end
 
+  # https://getbootstrap.com/docs/4.0/components/card/
+  # = card('title do')
+  #   %p Stuff
+  # = card('Stuff', header: 'header title')
+  def card(value = nil, opts = {}, &block)
+    raise('expected a block') unless block_given?
+
+    if value.kind_of?(Hash)
+      opts = value; value = nil
+    end
+
+    header = opts.delete(:header)
+    title = opts.delete(:title) || value
+
+    content_tag(:div, merge_class_key(opts, 'card mb-4')) do
+      header = content_tag(:div, header, class: 'card-header') if header.present?
+
+      body = content_tag(:div, class: 'card-body') do
+        if title.present?
+          content_tag(:h5, title, class: 'card-title') + capture(&block)
+        else
+          capture(&block)
+        end
+      end
+
+      header ? (header + body) : body
+    end
+  end
+
+
   # https://getbootstrap.com/docs/4.0/components/collapse/
 
   # = collapse('toggle visibility') do
