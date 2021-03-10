@@ -75,6 +75,8 @@ module Effective
 
       def build_table_attachment(attachment)
         url = (@template.url_for(attachment) rescue false)
+        url ||= (Rails.application.routes.url_helpers.rails_blob_path(attachment, only_path: true) rescue false)
+
         return unless url
 
         image_tag = content_tag(:img, '', class: '', src: url, alt: attachment.filename.to_s) if attachment.image?
@@ -98,6 +100,8 @@ module Effective
 
       def build_card_attachment(attachment)
         url = (@template.url_for(attachment) rescue false)
+        url ||= (Rails.application.routes.url_helpers.rails_blob_path(attachment, only_path: true) rescue false)
+
         return unless url
 
         content_tag(:div, class: 'col') do
