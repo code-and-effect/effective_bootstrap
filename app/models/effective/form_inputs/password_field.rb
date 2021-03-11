@@ -11,12 +11,12 @@ module Effective
       end
 
       def eyes
-        content_tag(:button, icon('eye'),
+        content_tag(:span, icon('eye'),
           class: 'btn input-group-text',
           title: 'Show password',
           'data-effective-password': 'text'
         ) +
-        content_tag(:button, icon('eye-off'),
+        content_tag(:span, icon('eye-off'),
           class: 'btn input-group-text',
           title: 'Hide password',
           style: 'display: none;',
