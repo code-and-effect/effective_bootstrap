@@ -3,7 +3,7 @@ assignPositions = (target) ->
   return unless $hasMany.length > 0
 
   $fields = $hasMany.children('.has-many-fields:not(.marked-for-destruction)')
-  positions = $fields.find("input[name$='[position]']").map(-> this.value).get()
+  positions = $fields.find("input[name$='[position]'][type=hidden]").map(-> this.value).get()
 
   if positions.length > 0
     index = Math.min.apply(Math, positions) || 0
@@ -35,7 +35,7 @@ $(document).on 'click', '[data-effective-form-has-many-add]', (event) ->
   return unless $hasMany.length > 0
 
   uid = (new Date).valueOf()
-  template = $obj.data('effective-form-has-many-template').replace(/HASMANYINDEX/g, uid)
+  template = atob($obj.data('effective-form-has-many-template')).replace(/HASMANYINDEX/g, uid)
 
   $fields = $(template).hide().fadeIn('fast')
   EffectiveBootstrap.initialize($fields)

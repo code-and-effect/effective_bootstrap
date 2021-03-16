@@ -150,7 +150,7 @@ module Effective
         html.gsub!("#{name}_attributes][#{index}]", "#{name}_attributes][HASMANYINDEX]")
         html.gsub!("#{name}_attributes_#{index}_", "#{name}_attributes_HASMANYINDEX_")
 
-        html.html_safe
+        Base64.encode64(html)
       end
 
       def link_to_add(block)
