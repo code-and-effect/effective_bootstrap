@@ -411,7 +411,9 @@ module EffectiveBootstrapHelper
 
     @_tab_active = nil if @_tab_active == :first
 
-    if @_tab_mode == :tablist # Inserting the label into the tablist top
+    if @_tab_mode == :tablist_vertical
+      content_tag(:a, label, id: ('tab-' + controls), class: ['nav-link', ('active' if active)].compact.join(' '), href: '#' + controls, 'aria-controls': controls, 'aria-selected': active.to_s, 'data-toggle': 'tab', role: 'tab')
+    elsif @_tab_mode == :tablist # Inserting the label into the tablist top
       content_tag(:li, class: 'nav-item') do
         content_tag(:a, label, id: ('tab-' + controls), class: ['nav-link', ('active' if active)].compact.join(' '), href: '#' + controls, 'aria-controls': controls, 'aria-selected': active.to_s, 'data-toggle': 'tab', role: 'tab')
       end
@@ -419,6 +421,29 @@ module EffectiveBootstrapHelper
       classes = ['tab-pane', 'fade', ('show active' if active), options[:class].presence].compact.join(' ')
       content_tag(:div, id: controls, class: classes, role: 'tabpanel', 'aria-labelledby': ('tab-' + controls)) do
         yield
+      end
+    end
+  end
+
+  def vertical_tabs(active: nil, unique: false, list: {}, content: {}, &block)
+    raise 'expected a block' unless block_given?
+
+    @_tab_mode = :tablist_vertical
+    @_tab_active = (active || :first)
+    @_tab_unique = ''.object_id if unique
+
+    content_tag(:div, class: 'row border') do
+      content_tag(:div, class: 'col-3 border-right') do
+        content_tag(:div, {class: 'nav flex-column nav-pills my-2', role: 'tablist', 'aria-orientation': :vertical}.merge(list)) do
+          yield # Yield to tab the first time
+        end
+      end +
+      content_tag(:div, class: 'col-9') do
+        content_tag(:div, {class: 'tab-content my-2'}.merge(content)) do
+          @_tab_mode = :content
+          @_tab_active = (active || :first)
+          yield # Yield to tab the second time
+        end
       end
     end
   end
