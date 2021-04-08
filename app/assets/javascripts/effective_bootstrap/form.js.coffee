@@ -75,11 +75,7 @@ this.EffectiveForm ||= new class
     $form = ''
 
     if @remote_form_redirect.length > 0
-      if window.Turbolinks
-        window.Turbolinks.visit(@remote_form_redirect)
-      else
-        window.location.href = @remote_form_redirect
-
+      window.location.href = @remote_form_redirect
       @remote_form_redirect = ''
       return
 
