@@ -76,7 +76,7 @@ this.EffectiveForm ||= new class
 
     if @remote_form_redirect.length > 0
       if window.Turbolinks
-        window.Turbolinks.visit(@remote_form_redirect, {action: 'replace'})
+        window.Turbolinks.visit(@remote_form_redirect)
       else
         window.location.href = @remote_form_redirect
 
@@ -170,7 +170,7 @@ this.EffectiveForm ||= new class
 # This displays the spinner here, and directs any flash messages before and after loadRemoteForm
 $(document).on 'click', '.form-actions a[data-remote],.form-actions button[type=submit]', (event) ->
   EffectiveForm.setCurrentSubmit($(@).parent())
-  EffectiveForm.spin()
+  EffectiveForm.spin() unless $(@).attr('data-confirm')
 
 # This actually attached the handlers to a remote ajax form when it or an action inside it triggers a remote thing.
 $(document).on 'ajax:beforeSend', 'form[data-remote]', (event) ->
