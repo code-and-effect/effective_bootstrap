@@ -4,6 +4,7 @@ this.EffectiveForm ||= new class
   remote_form_commit: ''              # String containing the last params[:commit]
   remote_form_payload: ''             # String containing html from server side render of this form
   remote_form_flash: ''               # Array of Arrays
+  remote_form_redirect: ''            # String containing the redirect path (optional)
 
   validate: (form) ->
     valid = form.checkValidity()
@@ -72,6 +73,15 @@ this.EffectiveForm ||= new class
   loadFromAjax: ($target, was_delete) ->
     $target = $target.closest('form') unless $target.is('form')
     $form = ''
+
+    if @remote_form_redirect.length > 0
+      if window.Turbolinks
+        window.Turbolinks.visit(@remote_form_redirect, {action: 'replace'})
+      else
+        window.location.href = @remote_form_redirect
+
+      @remote_form_redirect = ''
+      return
 
     if @remote_form_payload.length > 0
       $payload = $("<div>#{@remote_form_payload}</div>")
