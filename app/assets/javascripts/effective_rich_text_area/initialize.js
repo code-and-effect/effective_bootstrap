@@ -4,8 +4,6 @@ if(window.Trix) {
   config.blockAttributes.heading1.tagName = 'h3';
   config.blockAttributes.default.tagName = 'p';
   config.blockAttributes.default.breakOnReturn = true;
-  config.attachments.preview.caption.name = false;
-  config.attachments.preview.caption.size = false;
 
   window.Trix.Block.prototype.breaksOnReturn = function() {
     const attr = this.getLastAttribute();
