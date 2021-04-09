@@ -1,1 +1,2 @@
 //= require ./initialize
+//= require ./extensions

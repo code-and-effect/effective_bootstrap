@@ -11,5 +11,11 @@ module EffectiveBootstrap
       app.config.assets.precompile += ['effective_bootstrap_manifest.js', 'icons/*']
     end
 
+    initializer 'effective_bootstrap.action_text' do |app|
+      if defined?(ActionText)
+        ActionText::ContentHelper.allowed_attributes << 'style'
+      end
+    end
+
   end
 end

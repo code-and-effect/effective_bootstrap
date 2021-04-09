@@ -1,0 +1,90 @@
+trix-toolbar {
+  // http://www.asiteaboutnothing.net/c_decode-url.html
+  // background-image: url("data:image/svg+xml,***encoded data***");
+
+  .trix-button--icon-horizontal-rule::before { background-image: url("data:image/svg+xml,%3Csvg%20enable-background%3D%22new%200%200%2024%2024%22%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22%23000%22%3E%3Cpath%20d%3D%22m0%2013h24v-2h-24z%22%2F%3E%3Cpath%20d%3D%22m5%208.5h14v-3h-14z%22%2F%3E%3Cpath%20d%3D%22m5%2018.5h14v-3h-14z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); }
+  .trix-button--icon-color::before { background-image: url("data:image/svg+xml,%3Csvg%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m16.56%2011.94-8.94-8.94-1.41%201.41%202.38%202.38-5.15%205.15c-.59.59-.59%201.54%200%202.12l5.5%205.5c.29.29.68.44%201.06.44s.77-.15%201.06-.44l5.5-5.5c.59-.58.59-1.53%200-2.12zm-11.35%201.06%204.79-4.79%204.79%204.79zm13.79%202.5s-2%202.17-2%203.5c0%201.1.9%202%202%202s2-.9%202-2c0-1.33-2-3.5-2-3.5z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E%0A"); }
+
+  .trix-dialog--heading { max-width: 160px; }
+
+  .trix-dialog--color {
+    max-width: 265px;
+
+    .trix-dialog__link-fields { flex-direction: column; }
+
+    .trix-button-group {
+      margin: 1px;
+
+      button {
+        width: 28px;
+        &:after { content: "Ab"; }
+        &.trix-active::after { content: "✓"; }
+      }
+
+      [data-trix-attribute=fgColor1] { color: rgb(136, 118, 38) }
+      [data-trix-attribute=fgColor2] { color: rgb(136, 118, 38) }
+      [data-trix-attribute=fgColor3] { color: rgb(207, 0, 0) }
+      [data-trix-attribute=fgColor4] { color: rgb(216, 28, 170) }
+      [data-trix-attribute=fgColor5] { color: rgb(144, 19, 254) }
+      [data-trix-attribute=fgColor6] { color: rgb(5, 98, 185) }
+      [data-trix-attribute=fgColor7] { color: rgb(17, 138, 15) }
+      [data-trix-attribute=fgColor8] { color: rgb(148, 82, 22) }
+      [data-trix-attribute=fgColor9] { color: rgb(102, 102, 102) }
+
+      [data-trix-attribute=bgColor1] { background-color: rgb(250, 247, 133) }
+      [data-trix-attribute=bgColor2] { background-color: rgb(255, 240, 219) }
+      [data-trix-attribute=bgColor3] { background-color: rgb(255, 229, 229) }
+      [data-trix-attribute=bgColor4] { background-color: rgb(255, 228, 247) }
+      [data-trix-attribute=bgColor5] { background-color: rgb(242, 237, 255) }
+      [data-trix-attribute=bgColor6] { background-color: rgb(225, 239, 252) }
+      [data-trix-attribute=bgColor7] { background-color: rgb(228, 248, 226) }
+      [data-trix-attribute=bgColor8] { background-color: rgb(238, 226, 215) }
+      [data-trix-attribute=bgColor9] { background-color: rgb(242, 242, 242) }
+    }
+  }
+
+  .trix-dialog {
+    padding: 5px;
+
+    .trix-dialog-hidden__input {
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+    }
+  }
+}
+
+trix-editor {
+  [data-trix-mutable].attachment[data-trix-content-type~="vnd.rubyonrails.horizontal-rule.html"] {
+    box-shadow: 0 0 0 2px highlight;
+  }
+}
+
+.trix-content {
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  h1 { font-size: 36px; }
+  h2 { font-size: 26px; }
+  h3 { font-size: 18px; }
+  h4 { font-size: 18px; }
+  h5 { font-size: 14px; }
+  h6 { font-size: 12px; }
+
+  .attachment { width: 100%; }
+
+  .attachment--content.attachment--horizontal-rule,
+  .attachment--content[data-trix-content-type~='vnd.rubyonrails.horizontal-rule.html'] {
+    padding: 1.5em 0 0.5em !important;
+    margin-bottom: 0.5em
+  }
+
+  .attachment--content.attachment--horizontal-rule hr,
+  .attachment--content[data-trix-content-type~='vnd.rubyonrails.horizontal-rule.html'] hr {
+    margin: 0;
+    width: 20%;
+    border-color: currentColor
+  }
+}

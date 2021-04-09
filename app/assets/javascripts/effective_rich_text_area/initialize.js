@@ -1,9 +1,7 @@
 if(window.Trix) {
-  const config = window.Trix.config;
 
-  config.blockAttributes.heading1.tagName = 'h3';
-  config.blockAttributes.default.tagName = 'p';
-  config.blockAttributes.default.breakOnReturn = true;
+  window.Trix.config.blockAttributes.default.tagName = 'p';
+  window.Trix.config.blockAttributes.default.breakOnReturn = true;
 
   window.Trix.Block.prototype.breaksOnReturn = function() {
     const attr = this.getLastAttribute();
@@ -18,4 +16,5 @@ if(window.Trix) {
       return !this.shouldBreakFormattedBlock() ? this.breaksOnReturn : false;
     }
   };
+
 }

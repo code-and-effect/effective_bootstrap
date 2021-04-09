@@ -1,0 +1,30 @@
+.effective_rich_text_area {
+  height: 100%;
+  border-color: #ccc;
+
+  &:hover,
+  &:active,
+  &:focus, {
+    border-color: #ccc;
+    outline: 0px !important;
+    -webkit-appearance: none;
+    box-shadow: none !important;
+  }
+}
+
+// Trix image caption
+.trix-content {
+  figcaption.attachment__caption { display: none; }
+}
+
+// Bootstrap 4 Feedback client side
+.was-validated .form-control:invalid ~ .trix-content, { border-color: #dc3545 !important; }
+.was-validated .form-control:valid ~ .trix-content { border-color: #28a745 !important; }
+.was-validated .form-control:invalid ~ trix-toolbar, { border-color: #dc3545 !important; }
+.was-validated .form-control:valid ~ trix-toolbar { border-color: #28a745 !important; }
+
+// Bootstrap 4 Server side feedback
+.form-control.is-invalid ~ .trix-content { border-color: #dc3545 !important; }
+.form-control.is-invalid ~ trix-toolbar { border-color: #dc3545 !important; }
+.form-control.is-valid ~ .trix-content { border-color: #28a745 !important; }
+.form-control.is-valid ~ trix-toolbar { border-color: #28a745 !important; }
