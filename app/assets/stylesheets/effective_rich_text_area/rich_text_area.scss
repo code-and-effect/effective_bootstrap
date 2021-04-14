@@ -12,11 +12,6 @@
   }
 }
 
-// Trix image caption
-.trix-content {
-  figcaption.attachment__caption { display: none; }
-}
-
 // Bootstrap 4 Feedback client side
 .was-validated .form-control:invalid ~ .trix-content, { border-color: #dc3545 !important; }
 .was-validated .form-control:valid ~ .trix-content { border-color: #28a745 !important; }
