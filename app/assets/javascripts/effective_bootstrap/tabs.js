@@ -12,3 +12,10 @@ $(document).ready(function() {
     }
   }
 });
+
+$(document).on('click', '[data-click-tab]', function(event) {
+  event.preventDefault();
+
+  var href = $(event.currentTarget).attr('href');
+  $('.nav.nav-tabs').find("a[href^='" + href + "']").tab('show');
+});
