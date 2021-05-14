@@ -192,7 +192,7 @@ module Effective
       end
 
       def has_many_move
-        @has_many_move ||= content_tag(:span, icon('move'), class: 'has-many-move')
+        @has_many_move ||= content_tag(:span, icon('grip-lines'), class: 'has-many-move')
       end
 
       def build_resource

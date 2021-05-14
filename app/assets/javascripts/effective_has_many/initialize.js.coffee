@@ -17,15 +17,13 @@ assignPositions = (target) ->
 
 (this.EffectiveBootstrap || {}).effective_has_many = ($element, options) ->
   if options.sortable
-    $element.sortable(
-      containerSelector: '.form-has-many',
-      itemSelector: '.has-many-fields',
-      handle: '.has-many-move'
-      placeholder: "<div class='has-many-placeholder' />",
-      onDrop: ($item, container, _super) =>
-        assignPositions(container.target)
-        _super($item, container)
-    )
+    # https://github.com/SortableJS/Sortable
+    $element.sortable({
+      animation: 150,
+      draggable: '.has-many-fields',
+      handle: '.has-many-move',
+      onEnd: (event) => assignPositions(event.to)
+    })
 
 $(document).on 'click', '[data-effective-form-has-many-add]', (event) ->
   event.preventDefault()
