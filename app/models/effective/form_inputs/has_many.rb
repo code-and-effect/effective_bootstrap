@@ -114,19 +114,20 @@ module Effective
       def render_resource(resource, block)
         remove = BLANK
         reorder = BLANK
-
-        can_remove = remove? && (can_remove_method.blank? || !!resource.send(can_remove_method))
+        can_remove = (can_remove_method.blank? || !!resource.send(can_remove_method))
 
         content = @builder.fields_for(name, resource) do |form|
           fields = block.call(form)
 
-          remove += form.super_hidden_field(:_destroy) if can_remove && resource.persisted?
+          remove += form.super_hidden_field(:_destroy) if remove? && can_remove && resource.persisted?
           reorder += form.super_hidden_field(:position) if reorder? && !fields.include?('][position]')
 
           fields
         end
 
-        remove += link_to_remove(resource) if (can_remove || resource.new_record?)
+        if remove?
+          remove += (can_remove || resource.new_record?) ? link_to_remove(resource) : disabled_link_to_remove(resource)
+        end
 
         content_tag(:div, render_fields(content, (remove + reorder)), class: 'has-many-fields')
       end
@@ -196,6 +197,18 @@ module Effective
           data: {
             'confirm': "Remove #{resource}?",
             'effective-form-has-many-remove': true,
+          }
+        )
+      end
+
+      def disabled_link_to_remove(resource)
+        content_tag(
+          :button,
+          icon('trash-2'),
+          class: 'has-many-remove-disabled btn btn-danger',
+          title: 'Remove',
+          data: {
+            'effective-form-has-many-remove-disabled': true,
           }
         )
       end

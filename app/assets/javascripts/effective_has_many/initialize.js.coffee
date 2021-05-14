@@ -42,6 +42,9 @@ $(document).on 'click', '[data-effective-form-has-many-add]', (event) ->
   assignPositions($hasMany)
   true
 
+$(document).on 'click', '[data-effective-form-has-many-remove-disabled]', (event) ->
+  event.preventDefault()
+
 $(document).on 'click', '[data-effective-form-has-many-remove]', (event) ->
   event.preventDefault()
 
