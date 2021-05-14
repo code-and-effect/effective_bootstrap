@@ -7,8 +7,9 @@ module Effective
         object.send(name).build() if build? && collection.blank?
 
         errors = (@builder.error(name) if errors?) || BLANK
+        can_remove_method
 
-        errors + content_tag(:div, options[:input]) do
+        errors + content_tag(:div, options[:input].except(:collection)) do
           has_many_fields_for(block) + has_many_links_for(block)
         end
       end
@@ -76,6 +77,11 @@ module Effective
         end
       end
 
+      def can_remove_method
+        return @can_remove_method unless @can_remove_method.nil?
+        @can_remove_method = (options[:input].delete(:can_remove_method) || false)
+      end
+
       # reorder: true
       def reorder?
         return @reorder unless @reorder.nil?
@@ -107,19 +113,22 @@ module Effective
 
       def render_resource(resource, block)
         remove = BLANK
+        reorder = BLANK
+
+        can_remove = remove? && (can_remove_method.blank? || !!resource.send(can_remove_method))
 
         content = @builder.fields_for(name, resource) do |form|
           fields = block.call(form)
 
-          remove += form.super_hidden_field(:_destroy) if remove? && resource.persisted?
-          remove += form.super_hidden_field(:position) if reorder? && !fields.include?('][position]')
+          remove += form.super_hidden_field(:_destroy) if can_remove && resource.persisted?
+          reorder += form.super_hidden_field(:position) if reorder? && !fields.include?('][position]')
 
           fields
         end
 
-        remove += link_to_remove(resource) if (remove? || resource.new_record?)
+        remove += link_to_remove(resource) if (can_remove || resource.new_record?)
 
-        content_tag(:div, render_fields(content, remove), class: 'has-many-fields')
+        content_tag(:div, render_fields(content, (remove + reorder)), class: 'has-many-fields')
       end
 
       def render_fields(content, remove)
@@ -181,7 +190,7 @@ module Effective
       def link_to_remove(resource)
         content_tag(
           :button,
-          icon('trash-2') + 'Remove',
+          icon('trash-2'),
           class: 'has-many-remove btn btn-danger',
           title: 'Remove',
           data: {
