@@ -179,7 +179,7 @@ module Effective
       def link_to_reorder(block)
         content_tag(
           :button,
-          icon('list') + 'Reorder',
+          icon('reorder') + 'Reorder',
           class: 'has-many-reorder btn btn-secondary',
           title: 'Reorder',
           data: {
