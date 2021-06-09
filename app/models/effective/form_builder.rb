@@ -22,6 +22,10 @@ module Effective
     alias_method :super_text_area, :text_area
     alias_method :super_hidden_field, :hidden_field
 
+    def article_editor(name, options = {}, &block)
+      Effective::FormInputs::ArticleEditor.new(name, options, builder: self).to_html(&block)
+    end
+
     def clear(name = 'Clear', options = {})
       (options = name; name = 'Clear') if name.kind_of?(Hash)
       Effective::FormInputs::Clear.new(name, options, builder: self).to_html

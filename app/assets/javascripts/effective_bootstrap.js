@@ -10,6 +10,7 @@
 //= require ./effective_time/input
 //= require ./effective_time_zone_select/input
 
+//= require ./effective_article_editor/input
 //= require ./effective_clear/input
 //= require ./effective_checks/input
 //= require ./effective_ck_editor/input
