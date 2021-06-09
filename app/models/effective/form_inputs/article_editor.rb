@@ -18,7 +18,8 @@ module Effective
             css: ['/assets/application.css', '/assets/effective_bootstrap_article_editor.css']
           },
           classes: {
-            body: 'article-editor-body'
+            body: 'article-editor-body',
+            table: 'table'
           },
           grid: {
             classname: 'row',
@@ -46,7 +47,7 @@ module Effective
               '12': 'col-sm-12'
             }
           },
-          plugins: ['blockcode', 'inlineformat', 'removeformat', 'reorder'],
+          plugins: ['blockcode', 'imageposition', 'imageresize', 'inlineformat', 'removeformat', 'reorder', 'style'],
           quote: {
             template: '<blockquote><p></p></blockquote>'
           }
