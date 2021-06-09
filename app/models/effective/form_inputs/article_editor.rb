@@ -50,6 +50,14 @@ module Effective
           plugins: ['blockcode', 'imageposition', 'imageresize', 'inlineformat', 'removeformat', 'reorder', 'style'],
           quote: {
             template: '<blockquote><p></p></blockquote>'
+          },
+          styles: {
+            table: {
+              'bordered': { title: 'Bordered', classname: 'table-bordered' },
+              'responsive': { title: 'Responsive', classname: 'table-responsive' },
+              'small': { title: 'Small', classname: 'table-sm' },
+              'striped': { title: 'Striped', classname: 'table-striped' },
+            }
           }
         }
       end
