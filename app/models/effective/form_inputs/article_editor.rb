@@ -13,7 +13,7 @@ module Effective
       def input_js_options
         {
           active_storage: active_storage,
-          css: '/assets/effective_article_editor/',
+          css: '/assets/article_editor/',
           custom: {
             css: ['/assets/application.css', '/assets/effective_bootstrap_article_editor.css']
           },
