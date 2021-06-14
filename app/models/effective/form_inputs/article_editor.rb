@@ -2,17 +2,10 @@ module Effective
   module FormInputs
     class ArticleEditor < Effective::FormInput
 
-      def build_input(&block)
-        @builder.super_text_area(name, options[:input])
-      end
-
-      def input_html_options
-        { class: 'effective_article_editor form-control', id: unique_id, autocomplete: 'off' }
-      end
-
-      def input_js_options
+      # https://imperavi.com/article/docs/settings/
+      def self.defaults
         {
-          active_storage: active_storage,
+          active_storage: nil,
           css: '/assets/article_editor/',
           custom: {
             css: ['/assets/application.css', '/assets/effective_bootstrap_article_editor.css']
@@ -60,6 +53,18 @@ module Effective
             }
           }
         }
+      end
+
+      def build_input(&block)
+        @builder.super_text_area(name, options[:input])
+      end
+
+      def input_html_options
+        { class: 'effective_article_editor form-control', id: unique_id, autocomplete: 'off' }
+      end
+
+      def input_js_options
+        self.class.defaults.merge(active_storage: active_storage)
       end
 
       def active_storage
