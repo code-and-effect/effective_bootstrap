@@ -128,9 +128,9 @@ module Effective
     def build_input_group(&block) # Includes input and feedback
       content_tag(:div, '', options[:input_group][:input_group]) do # Twice here, kind of weird.
         [
-          (content_tag(:div, options[:input_group][:prepend], class: 'input-group-prepend') if options[:input_group][:prepend]),
+          (options[:input_group][:prepend] if options[:input_group][:prepend]),
           build_input(&block),
-          (content_tag(:div, options[:input_group][:append], class: 'input-group-append') if options[:input_group][:append]),
+          (options[:input_group][:append] if options[:input_group][:append]),
           build_feedback
         ].compact.join.html_safe
       end

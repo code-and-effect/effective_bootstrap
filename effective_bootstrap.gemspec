@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*'] + ['MIT-LICENSE', 'README.md']
 
   s.add_dependency 'rails', '>= 4.0.0'
-  s.add_dependency 'bootstrap', '< 5'
+  s.add_dependency 'bootstrap'
   s.add_dependency 'effective_resources'
   s.add_dependency 'inline_svg'
   s.add_dependency 'jquery-rails'

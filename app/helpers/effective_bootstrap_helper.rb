@@ -111,7 +111,7 @@ module EffectiveBootstrapHelper
     show = (opts.delete(:show) == true)
 
     # Figure out all the button / link options
-    link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
+    link_opts = { 'data-bs-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
 
     # Two link labels
     label_expand = opts.delete(:expand) || label.to_s.tap do |label|
@@ -156,8 +156,8 @@ module EffectiveBootstrapHelper
   # variations can be :dropup, :dropleft, :dropright
   # split can be true, false
   # right is to right align things
-  DROPDOWN_SPLIT_OPTS = {class: "btn dropdown-toggle dropdown-toggle-split btn-sm btn-outline-primary", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false}
-  DROPDOWN_UNSPLIT_OPTS= {class: "btn dropdown-toggle btn-sm btn-outline-primary", type: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false}
+  DROPDOWN_SPLIT_OPTS = {class: "btn dropdown-toggle dropdown-toggle-split btn-sm btn-outline-primary", type: 'button', 'data-bs-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false}
+  DROPDOWN_UNSPLIT_OPTS= {class: "btn dropdown-toggle btn-sm btn-outline-primary", type: 'button', 'data-bs-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false}
 
   DROPDOWN_DROPLEFT_GROUP_OPTS = {class: 'btn-group'}
   DROPDOWN_DROPLEFT_OPTS = {class: 'btn-group dropleft', role: 'group'}
@@ -224,7 +224,7 @@ module EffectiveBootstrapHelper
     (options ||= {})[:class] = "dropdown dropdown-dots #{options.delete(:class)}".strip
 
     content_tag(:div, options) do
-      content_tag(:button, class: "btn btn-dots dropdown-toggle #{options.delete(:button_class)}", 'aria-expanded': true, 'aria-haspopup': true, 'data-toggle': 'dropdown', type: 'button') do
+      content_tag(:button, class: "btn btn-dots dropdown-toggle #{options.delete(:button_class)}", 'aria-expanded': true, 'aria-haspopup': true, 'data-bs-toggle': 'dropdown', type: 'button') do
       end + content_tag(:div, capture(&block), class: 'dropdown-menu')
     end
   end
@@ -314,7 +314,7 @@ module EffectiveBootstrapHelper
     id = "dropdown-#{effective_bootstrap_unique_id}"
 
     content_tag(:li, class: 'nav-item dropdown') do
-      content_tag(:a, class: 'nav-link dropdown-toggle', href: '#', id: id, role: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
+      content_tag(:a, class: 'nav-link dropdown-toggle', href: '#', id: id, role: 'button', 'data-bs-toggle': 'dropdown', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
         label.html_safe
       end + content_tag(:div, class: (right ? 'dropdown-menu dropdown-menu-right' : 'dropdown-menu'), 'aria-labelledby': id) do
         @_nav_mode = :dropdown; yield; @_nav_mode = nil
@@ -518,7 +518,7 @@ module EffectiveBootstrapHelper
       content_tag(:a, label, id: ('tab-' + controls), class: ['nav-link', ('active' if active)].compact.join(' '), href: '#' + controls, 'aria-controls': controls, 'aria-selected': active.to_s, 'data-toggle': 'tab', role: 'tab')
     elsif @_tab_mode == :tablist # Inserting the label into the tablist top
       content_tag(:li, class: 'nav-item') do
-        content_tag(:a, label, id: ('tab-' + controls), class: ['nav-link', ('active' if active)].compact.join(' '), href: '#' + controls, 'aria-controls': controls, 'aria-selected': active.to_s, 'data-toggle': 'tab', role: 'tab')
+        content_tag(:a, label, id: ('tab-' + controls), class: ['nav-link', ('active' if active)].compact.join(' '), href: '#' + controls, 'aria-controls': controls, 'aria-selected': active.to_s, 'data-bs-toggle': 'tab', role: 'tab')
       end
     else # Inserting the content into the tab itself
       classes = ['tab-pane', 'fade', ('show active' if active), options[:class].presence].compact.join(' ')

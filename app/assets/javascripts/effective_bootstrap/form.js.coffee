@@ -141,8 +141,7 @@ this.EffectiveForm ||= new class
     $("
       <div class='effective-form-flash alert alert-dismissable alert-#{status} fade show' role='alert'>
         #{message}
-        <button class='close' type='button' aria-label='Close' data-dismiss='alert'>
-          <span aria-hidden='true'>&times;</span>
+        <button class='btn-close' type='button' aria-label='Close' data-bs-dismiss='alert'>
         </button>
       </div>
     ")
