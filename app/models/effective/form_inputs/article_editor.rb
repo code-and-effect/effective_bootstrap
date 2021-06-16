@@ -40,7 +40,7 @@ module Effective
               '12': 'col-sm-12'
             }
           },
-          plugins: ['blockcode', 'imageposition', 'imageresize', 'inlineformat', 'removeformat', 'reorder', 'style'],
+          plugins: ['blockcode', 'cellcolor', 'imageposition', 'imageresize', 'inlineformat', 'removeformat', 'reorder', 'style'],
           quote: {
             template: '<blockquote><p></p></blockquote>'
           },
@@ -51,6 +51,17 @@ module Effective
               'small': { title: 'Small', classname: 'table-sm' },
               'striped': { title: 'Striped', classname: 'table-striped' },
             }
+          },
+          cellcolors: {
+            'primary': { title: 'Primary', classname: 'table-primary' },
+            'secondary': { title: 'Secondary', classname: 'table-secondary' },
+            'active': { title: 'Active', classname: 'table-active' },
+            'success': { title: 'Success', classname: 'table-success' },
+            'danger': { title: 'Danger', classname: 'table-danger' },
+            'warning': { title: 'Warning', classname: 'table-warning' },
+            'info': { title: 'Info', classname: 'table-info' },
+            'light': { title: 'Light', classname: 'table-light' },
+            'dark': { title: 'Dark', classname: 'table-dark' }
           }
         }
       end
