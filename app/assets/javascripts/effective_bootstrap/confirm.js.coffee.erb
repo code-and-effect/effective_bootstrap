@@ -18,8 +18,13 @@ if <%= !!EffectiveBootstrap.use_custom_data_confirm %> && (window.Rails || $.rai
         , 4000)
       false # don't show the confirmation dialog
 
-  (window.Rails || $.rails).confirm = (message) -> true
-  (window.Rails || $.rails).effective_bootstrap_custom_data_confirm = true
+  if window.Rails
+    window.Rails.confirm = (message) -> true
+    window.Rails.effective_bootstrap_custom_data_confirm = true
+
+  if $.rails
+    $.rails.confirm = (message) -> true
+    $.rails.effective_bootstrap_custom_data_confirm = true
 
   $(document).on 'confirm:complete', (event) -> $(event.target).data('confirmed')
 
