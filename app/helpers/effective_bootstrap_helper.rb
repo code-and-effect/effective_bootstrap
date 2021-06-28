@@ -274,6 +274,52 @@ module EffectiveBootstrapHelper
     content_tag(:div, '', class: 'dropdown-divider')
   end
 
+  # Breadcrumb
+  #
+  # https://getbootstrap.com/docs/4.0/components/breadcrumb/
+  # Builds a breadcrumb based on the controller namespace, action and @page_title instance variable
+  #
+  def bootstrap_breadcrumb(root_title: nil, root_path: nil, index_title: nil, index_path: nil, page_title: nil)
+    effective_resource = (@_effective_resource || Effective::Resource.new(controller_path))
+    resource = instance_variable_get('@' + effective_resource.name) if effective_resource.name
+
+    root_title ||= 'Home'
+    root_path ||= '/'
+
+    index_title ||= controller.class.name.split('::').last.sub('Controller', '').titleize
+    index_path ||= effective_resource.action_path(:index) || request.path.split('/')[0...-1].join('/')
+
+    page_title ||= (@page_title || resource&.to_s || controller.action_name.titleize)
+
+    # Build items
+    # An array of arrays [[title, url]]
+    items = []
+
+    # Namespaces
+    Array(effective_resource.namespace).each do |namespace|
+      items << [namespace.titleize, '/' + namespace]
+    end
+
+    # Home
+    items << [root_title, '/'] unless items.present?
+
+    # Controller index action
+    items << [index_title, index_path] unless controller.action_name == 'index'
+
+    # Always
+    items << [page_title, nil]
+
+    # Now take items and turn them into breadcrumbs
+    content_tag(:ol, class: 'breadcrumb') do
+      (items[0...-1].map do |title, path|
+        content_tag(:li, link_to(title, path, title: title), class: 'breadcrumb-item')
+      end + items[-1..-1].map do |title, path|
+        content_tag(:li, title, class: 'breadcrumb-item active', 'aria-current': 'page')
+      end).join.html_safe
+    end
+  end
+
+
   # Pagination
   #
   # https://getbootstrap.com/docs/4.0/components/pagination/
