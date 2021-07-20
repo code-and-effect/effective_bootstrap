@@ -6,9 +6,9 @@ module Effective
       def self.defaults
         {
           active_storage: nil,
-          css: '/assets/article_editor/',
+          css: ['/assets/article_editor/arx-frame.min.css'],
           custom: {
-            css: ['/assets/application.css', '/assets/effective_bootstrap_article_editor.css']
+            css: ['/assets/effective_bootstrap_article_editor.css']
           },
           classes: {
             body: 'article-editor-body',
@@ -40,7 +40,7 @@ module Effective
               '12': 'col-sm-12'
             }
           },
-          plugins: ['blockcode', 'cellcolor', 'imageposition', 'imageresize', 'inlineformat', 'removeformat', 'reorder', 'style'],
+          plugins: ['blockcode', 'cellcolor', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style'],
           quote: {
             template: '<blockquote><p></p></blockquote>'
           },
@@ -75,7 +75,15 @@ module Effective
       end
 
       def input_js_options
-        self.class.defaults.merge(active_storage: active_storage)
+        self.class.defaults.merge(active_storage: active_storage, custom: { css: custom_css })
+      end
+
+      def custom_css
+        [
+          (@template.asset_pack_path('application.css') if @template.respond_to?(:asset_pack_path)),
+          (@template.asset_path('application.css') if @template.respond_to?(:asset_path)),
+          ('/assets/effective_bootstrap_article_editor.css')
+        ]
       end
 
       def active_storage
