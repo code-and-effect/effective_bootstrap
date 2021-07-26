@@ -10,7 +10,7 @@ module EffectiveBootstrapHelper
   def accordion(options = nil, &block)
     (options ||= {})[:class] = "accordion #{options.delete(:class)}".strip
 
-    id = "accordion-#{''.object_id}"
+    id = "accordion-#{String.new.object_id}"
 
     @_accordion_active = id
     content = content_tag(:div, capture(&block), options.merge(id: id))
@@ -259,7 +259,7 @@ module EffectiveBootstrapHelper
   def nav_dropdown(label, right: false, link_class: [], list_class: [], &block)
     raise 'expected a block' unless block_given?
 
-    id = "dropdown-#{''.object_id}"
+    id = "dropdown-#{String.new.object_id}"
 
     content_tag(:li, class: 'nav-item dropdown') do
       content_tag(:a, class: 'nav-link dropdown-toggle', href: '#', id: id, role: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
@@ -436,7 +436,7 @@ module EffectiveBootstrapHelper
 
     @_tab_mode = :tablist
     @_tab_active = (active || :first)
-    @_tab_unique = ''.object_id if unique
+    @_tab_unique = String.new.object_id if unique
 
     content_tag(:ul, {class: 'nav nav-tabs', role: 'tablist'}.merge(list)) do
       yield # Yield to tab the first time
@@ -476,7 +476,7 @@ module EffectiveBootstrapHelper
 
     @_tab_mode = :tablist_vertical
     @_tab_active = (active || :first)
-    @_tab_unique = ''.object_id if unique
+    @_tab_unique = String.new.object_id if unique
 
     content_tag(:div, class: 'row border') do
       content_tag(:div, class: 'col-3 border-right') do
