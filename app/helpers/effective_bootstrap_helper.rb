@@ -10,7 +10,7 @@ module EffectiveBootstrapHelper
   def accordion(options = nil, &block)
     (options ||= {})[:class] = "accordion #{options.delete(:class)}".strip
 
-    id = "accordion-#{String.new.object_id}"
+    id = "accordion-#{effective_bootstrap_unique_id}"
 
     @_accordion_active = id
     content = content_tag(:div, capture(&block), options.merge(id: id))
@@ -62,7 +62,7 @@ module EffectiveBootstrapHelper
   def collapse(label, opts = {}, &block)
     raise 'expected a block' unless block_given?
 
-    id = "collapse-#{String.new.object_id}"
+    id = "collapse-#{effective_bootstrap_unique_id}"
     show = (opts.delete(:show) == true)
 
     link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
@@ -259,7 +259,7 @@ module EffectiveBootstrapHelper
   def nav_dropdown(label, right: false, link_class: [], list_class: [], &block)
     raise 'expected a block' unless block_given?
 
-    id = "dropdown-#{String.new.object_id}"
+    id = "dropdown-#{effective_bootstrap_unique_id}"
 
     content_tag(:li, class: 'nav-item dropdown') do
       content_tag(:a, class: 'nav-link dropdown-toggle', href: '#', id: id, role: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
@@ -436,7 +436,7 @@ module EffectiveBootstrapHelper
 
     @_tab_mode = :tablist
     @_tab_active = (active || :first)
-    @_tab_unique = String.new.object_id if unique
+    @_tab_unique = effective_bootstrap_unique_id if unique
 
     content_tag(:ul, {class: 'nav nav-tabs', role: 'tablist'}.merge(list)) do
       yield # Yield to tab the first time
@@ -476,7 +476,7 @@ module EffectiveBootstrapHelper
 
     @_tab_mode = :tablist_vertical
     @_tab_active = (active || :first)
-    @_tab_unique = String.new.object_id if unique
+    @_tab_unique = effective_bootstrap_unique_id if unique
 
     content_tag(:div, class: 'row border') do
       content_tag(:div, class: 'col-3 border-right') do
@@ -502,6 +502,17 @@ module EffectiveBootstrapHelper
     else
       hash.merge!(:class => value)
     end
+  end
+
+  def effective_bootstrap_unique_id
+    # Set the first unique value
+    @_effective_bootstrap_unique_id ||= Time.zone.now.to_i
+
+    # Everytime we access this function make a new one
+    @_effective_bootstrap_unique_id = @_effective_bootstrap_unique_id + 1
+
+    # Return the updated value
+    @_effective_bootstrap_unique_id
   end
 
 end
