@@ -42,6 +42,26 @@ $(document).on 'click', '[data-effective-form-has-many-add]', (event) ->
   assignPositions($hasMany)
   true
 
+$(document).on 'click', '[data-effective-form-has-many-insert]', (event) ->
+  event.preventDefault()
+
+  $obj = $(event.currentTarget)
+  $hasMany = $obj.closest('.form-has-many')
+  return unless $hasMany.length > 0
+
+  $add = $hasMany.children('.has-many-links').find('[data-effective-form-has-many-template]')
+
+  uid = (new Date).valueOf()
+  template = atob($add.data('effective-form-has-many-template')).replace(/HASMANYINDEX/g, uid)
+
+  $fields = $(template).hide().fadeIn('fast')
+  EffectiveBootstrap.initialize($fields)
+  $obj.closest('.has-many-fields').after($fields)
+
+  assignPositions($hasMany)
+  true
+
+
 $(document).on 'click', '[data-effective-form-has-many-remove-disabled]', (event) ->
   event.preventDefault()
 

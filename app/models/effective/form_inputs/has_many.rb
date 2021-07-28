@@ -51,6 +51,16 @@ module Effective
         end
       end
 
+      # insert: false
+      def insert?
+        return @insert unless @insert.nil?
+
+        @insert ||= begin
+          insert = options[:input].delete(:insert)
+          insert.nil? ? false : insert
+        end
+      end
+
       # errors: true
       def errors?
         return @errors unless @errors.nil?
@@ -114,6 +124,7 @@ module Effective
       def render_resource(resource, block)
         remove = BLANK
         reorder = BLANK
+        insert = BLANK
         can_remove = (can_remove_method.blank? || !!resource.send(can_remove_method))
 
         content = @builder.fields_for(name, resource) do |form|
@@ -129,7 +140,11 @@ module Effective
           remove += (can_remove || resource.new_record?) ? link_to_remove(resource) : disabled_link_to_remove(resource)
         end
 
-        content_tag(:div, render_fields(content, (remove + reorder)), class: 'has-many-fields')
+        if insert?
+          insert = render_insert() if add? && reorder?
+        end
+
+        content_tag(:div, render_fields(content, remove + reorder) + insert, class: 'has-many-fields')
       end
 
       def render_fields(content, remove)
@@ -141,10 +156,23 @@ module Effective
             content_tag(:div, remove, class: 'col-auto')
           end
         when :cards
-          raise('unsupported')
+          content_tag(:div, class: 'form-row mb-3') do
+            (reorder? ? content_tag(:div, has_many_move, class: 'col-auto') : BLANK) +
+            content_tag(:div, content, class: 'col mr-auto') do
+              content_tag(:div, class: 'card') do
+                content_tag(:div, class: 'card-body') do
+                  content_tag(:div, remove, class: 'float-right') + content
+                end
+              end
+            end
+          end
         else
           content + remove
         end
+      end
+
+      def render_insert()
+        content_tag(:div, link_to_insert(), class: 'has-many-actions')
       end
 
       def render_template(block)
@@ -172,6 +200,18 @@ module Effective
           data: {
             'effective-form-has-many-add': true,
             'effective-form-has-many-template': render_template(block)
+          }
+        )
+      end
+
+      def link_to_insert
+        content_tag(
+          :button,
+          icon('plus-circle') + 'Insert Another',
+          class: 'has-many-insert btn btn-secondary btn-sm',
+          title: 'Insert Another',
+          data: {
+            'effective-form-has-many-insert': true,
           }
         )
       end

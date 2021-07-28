@@ -3,11 +3,13 @@
   .has-many-move { display: none; }
   .has-many-remove-disabled { opacity: 0; cursor: default !important; }
 
+  .has-many-actions { margin-top: 1.5rem; margin-bottom: 1.5rem; }
   .has-many-remove { margin-top: 1rem; }
   .has-many-move { margin-top: 1.5rem; }
 }
 
 .form-has-many.reordering {
+  .has-many-actions { display: none; }
   .has-many-move { display: inline-block; cursor: grab; }
 }
 
