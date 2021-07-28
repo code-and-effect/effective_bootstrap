@@ -56,11 +56,10 @@ $(document).on 'click', '[data-effective-form-has-many-insert]', (event) ->
 
   $fields = $(template).hide().fadeIn('fast')
   EffectiveBootstrap.initialize($fields)
-  $obj.closest('.has-many-fields').after($fields)
+  $obj.closest('.has-many-fields').before($fields)
 
   assignPositions($hasMany)
   true
-
 
 $(document).on 'click', '[data-effective-form-has-many-remove-disabled]', (event) ->
   event.preventDefault()

@@ -52,13 +52,17 @@ module Effective
       end
 
       # insert: false
-      def insert?
+      def insert
         return @insert unless @insert.nil?
 
         @insert ||= begin
           insert = options[:input].delete(:insert)
           insert.nil? ? false : insert
         end
+      end
+
+      def insert?
+        !!insert
       end
 
       # errors: true
@@ -72,7 +76,7 @@ module Effective
       end
 
       # remove: true
-      def remove?
+      def remove
         return @remove unless @remove.nil?
 
         @remove ||= begin
@@ -85,6 +89,10 @@ module Effective
             opts[:update_only] != true && opts[:allow_destroy] != false
           end
         end
+      end
+
+      def remove?
+        !!remove
       end
 
       def can_remove_method
@@ -144,7 +152,7 @@ module Effective
           insert = render_insert() if add? && reorder?
         end
 
-        content_tag(:div, render_fields(content, remove + reorder) + insert, class: 'has-many-fields')
+        content_tag(:div, insert + render_fields(content, remove + reorder), class: 'has-many-fields')
       end
 
       def render_fields(content, remove)
@@ -204,12 +212,21 @@ module Effective
         )
       end
 
+      # f.has_many :things, insert: { label: (icon('plus-circle') + 'Insert Article') }
+      # f.has_many :things, insert: (icon('plus-circle') + 'Insert Article')
       def link_to_insert
+        tag = (insert[:tag] if insert.kind_of?(Hash))
+        title = (insert[:title] || insert[:label] if insert.kind_of?(Hash))
+        html_class = (insert[:class] if insert.kind_of?(Hash))
+
+        label = (insert[:label] if insert.kind_of?(Hash))
+        label = insert if insert.kind_of?(String)
+
         content_tag(
-          :button,
-          icon('plus-circle') + 'Insert Another',
-          class: 'has-many-insert btn btn-secondary btn-sm',
-          title: 'Insert Another',
+          (tag || :button),
+          (label || (icon('plus-circle') + 'Insert Another')),
+          class: 'has-many-insert ' + (html_class || 'btn btn-secondary'),
+          title: (title || 'Insert Another'),
           data: {
             'effective-form-has-many-insert': true,
           }
@@ -229,11 +246,18 @@ module Effective
       end
 
       def link_to_remove(resource)
+        tag = (remove[:tag] if remove.kind_of?(Hash))
+        title = (remove[:title] || remove[:label] if remove.kind_of?(Hash))
+        html_class = (remove[:class] if remove.kind_of?(Hash))
+
+        label = (remove[:label] if remove.kind_of?(Hash))
+        label = remove if remove.kind_of?(String)
+
         content_tag(
-          :button,
-          icon('trash-2'),
-          class: 'has-many-remove btn btn-danger',
-          title: 'Remove',
+          (tag || :button),
+          (label || icon('trash-2')),
+          class: 'has-many-remove ' + (html_class || 'btn btn-danger'),
+          title: (title || 'Remove'),
           data: {
             'confirm': "Remove #{resource}?",
             'effective-form-has-many-remove': true,
