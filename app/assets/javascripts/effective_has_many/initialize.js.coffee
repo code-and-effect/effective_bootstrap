@@ -36,8 +36,8 @@ $(document).on 'click', '[data-effective-form-has-many-add]', (event) ->
   template = atob($obj.data('effective-form-has-many-template')).replace(/HASMANYINDEX/g, uid)
 
   $fields = $(template).hide().fadeIn('fast')
-  EffectiveBootstrap.initialize($fields)
   $obj.closest('.has-many-links').before($fields)
+  EffectiveBootstrap.initialize($fields)
 
   assignPositions($hasMany)
   true
@@ -55,8 +55,8 @@ $(document).on 'click', '[data-effective-form-has-many-insert]', (event) ->
   template = atob($add.data('effective-form-has-many-template')).replace(/HASMANYINDEX/g, uid)
 
   $fields = $(template).hide().fadeIn('fast')
-  EffectiveBootstrap.initialize($fields)
   $obj.closest('.has-many-fields').before($fields)
+  EffectiveBootstrap.initialize($fields)
 
   assignPositions($hasMany)
   true
