@@ -124,7 +124,7 @@ module EffectiveBootstrapHelper
 
     # The link html classes
     link_opts[:class] = opts.delete(:link_class) || 'btn btn-link'
-    link_opts[:class] += ' effective-collapse-actions'
+    link_opts[:class] += ' effective-collapse-actions hidden-print'
     link_opts[:class] += ' collapsed' unless show
 
     # The div and the card now
