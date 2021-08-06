@@ -1,0 +1,7 @@
+.effective-collapse-actions {
+  .collapse-label-expand { display: none; }
+  .collapse-label-collapse { display: inline-block; }
+
+  &.collapsed .collapse-label-expand { display: inline-block; }
+  &.collapsed .collapse-label-collapse { display: none; }
+}

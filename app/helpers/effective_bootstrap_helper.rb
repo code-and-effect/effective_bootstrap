@@ -18,6 +18,31 @@ module EffectiveBootstrapHelper
     content
   end
 
+  def accordion_collapse(label, opts = {}, &block)
+    raise 'expected a block' unless block_given?
+
+    id = "collapse-#{effective_bootstrap_unique_id}"
+    show = (opts.delete(:show) == true)
+
+    link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
+
+    link_opts[:class] = opts.delete(:link_class) || 'btn btn-link'
+    div_class = opts.delete(:div_class)
+    card_class = opts.delete(:card_class) || 'card card-body my-2'
+
+    # Accordion collapse
+    content_tag(:div, class: "card mb-0") do
+      content_tag(:div, class: "card-header") do
+        content_tag(:h2, class: "mb-0") do
+          content_tag(:button, label, link_opts.merge(class: "btn btn-link"))
+        end
+      end +
+      content_tag(:div, id: id, class: ['collapse', div_class, ('show' if show)].compact.join(' '), "data-parent": "##{@_accordion_active}") do
+        content_tag(:div, capture(&block), class: "card-body")
+      end
+    end
+  end
+
   # https://getbootstrap.com/docs/4.0/components/card/
   # = card('title do')
   #   %p Stuff
@@ -56,40 +81,67 @@ module EffectiveBootstrapHelper
   # = collapse('already expanded', show: true) do
   #   %p Something Expanded
 
+  # the word 'show' will automatically be replaced with hide and an icon added
+  # = collapse('show items') do
+  #   %p Something Expanded
+
+  # Override the expand and collapse labels directly
+  # = collapse('show items', expand: "Show items" + icon('ok'), collapse: "Hide items" + icon('x')) do
+  #   %p Something Expanded
+
   # collapse(items.length, class: 'btn btn-primary', class: 'mt-2') do
   #   items.map { |item| content_tag(:div, item.to_s) }.join.html_safe
   # end
+
+  COLLAPSE_SUBSTITUTIONS = {
+    'Show ' => 'Hide ',
+    'show ' => 'hide ',
+    'Expand ' => 'Collapse ',
+    'expand ' => 'collapse ',
+    ' More' => ' Less',
+    ' more' => ' less'
+  }
+
   def collapse(label, opts = {}, &block)
     raise 'expected a block' unless block_given?
+
+    return accordian_collapse(label, opts, &block) if @_accordion_active
 
     id = "collapse-#{effective_bootstrap_unique_id}"
     show = (opts.delete(:show) == true)
 
+    # Figure out all the button / link options
     link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
 
+    # Two link labels
+    label_expand = opts.delete(:expand) || label.to_s.tap do |label|
+      COLLAPSE_SUBSTITUTIONS.each { |show, hide| label.sub!(hide, show) }
+    end + icon('chevron-down')
+
+    label_collapse = opts.delete(:collapse) || label.to_s.tap do |label|
+      COLLAPSE_SUBSTITUTIONS.each { |show, hide| label.sub!(show, hide) }
+    end + icon('chevron-up')
+
+    # The link html classes
     link_opts[:class] = opts.delete(:link_class) || 'btn btn-link'
+    link_opts[:class] += ' effective-collapse-actions'
+    link_opts[:class] += ' collapsed' unless show
+
+    # The div and the card now
     div_class = opts.delete(:div_class)
     card_class = opts.delete(:card_class) || 'card card-body my-2'
 
-    if @_accordion_active
-      # Accordion collapse
-      content_tag(:div, class: "card mb-0") do
-        content_tag(:div, class: "card-header") do
-          content_tag(:h2, class: "mb-0") do
-            content_tag(:button, label, link_opts.merge(class: "btn btn-link"))
-          end
-        end +
-        content_tag(:div, id: id, class: ['collapse', div_class, ('show' if show)].compact.join(' '), "data-parent": "##{@_accordion_active}") do
-          content_tag(:div, capture(&block), class: "card-body")
-        end
-      end
-    else
-      # Normal collapse
-      content_tag(:a, label, link_opts) +
-      content_tag(:div, id: id, class: ['collapse', div_class, ('show' if show)].compact.join(' ')) do
-        content_tag(:div, capture(&block), class: card_class)
-      end
+    # Normal collapse
+    link_tag = content_tag(:a, link_opts) do
+      content_tag(:div, label_expand.html_safe, class: 'collapse-label-expand') +
+      content_tag(:div, label_collapse.html_safe, class: 'collapse-label-collapse')
     end
+
+    div_tag = content_tag(:div, id: id, class: ['effective-collapse collapse', div_class, ('show' if show)].compact.join(' ')) do
+      content_tag(:div, capture(&block), class: card_class)
+    end
+
+    link_tag + div_tag
   end
 
   # Button Dropdowns
