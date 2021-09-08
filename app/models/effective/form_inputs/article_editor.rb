@@ -14,6 +14,7 @@ module Effective
             body: 'article-editor-body',
             table: 'table'
           },
+          filelink: nil,
           grid: {
             classname: 'row',
             columns: 12,
@@ -40,7 +41,7 @@ module Effective
               '12': 'col-sm-12'
             }
           },
-          plugins: ['blockcode', 'cellcolor', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style'],
+          plugins: ['blockcode', 'cellcolor', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style', 'filelink'],
           quote: {
             template: '<blockquote><p></p></blockquote>'
           },
