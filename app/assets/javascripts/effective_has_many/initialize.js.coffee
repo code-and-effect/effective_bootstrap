@@ -68,7 +68,9 @@ $(document).on 'click', '[data-effective-form-has-many-remove]', (event) ->
   event.preventDefault()
 
   $obj = $(event.currentTarget)
-  return unless $obj.data('confirmed') if $obj.data('confirm')
+
+  if (window.Rails && window.Rails.effective_bootstrap_custom_data_confirm) || ($.rails && $.rails.effective_bootstrap_custom_data_confirm)
+    return unless $obj.data('confirmed') if $obj.data('confirm')
 
   $hasMany = $obj.closest('.form-has-many')
   return unless $hasMany.length > 0
