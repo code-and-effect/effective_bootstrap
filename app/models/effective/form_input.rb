@@ -371,7 +371,22 @@ module Effective
       when String
         defaults.merge(text: obj)
       when Hash
-        obj.reverse_merge!(defaults); obj
+        html_classes = ((obj[:class] || '').split(' ') + (defaults[:class] || '').split(' ')).uniq
+
+        # Try to smart merge bootstrap classes
+        if (exclusive = html_classes.select { |c| c.include?('-') }).length > 1
+          EXCLUSIVE_CLASS_PREFIXES.each do |prefix|
+            prefixed = exclusive.select { |c| c.start_with?(prefix) }
+            prefixed[1..-1].each { |c| html_classes.delete(c) } if prefixed.length > 1
+          end
+
+          suffixed = exclusive.select { |c| EXCLUSIVE_CLASS_SUFFIXES.any? { |suffix| c.end_with?(suffix) } }
+          suffixed[1..-1].each { |c| html_classes.delete(c) } if suffixed.length > 1
+        end
+
+        obj[:class] = html_classes.join(' ') if html_classes.present?
+        obj.reverse_merge!(defaults)
+        obj
       else
         defaults.merge(text: obj.to_s)
       end
