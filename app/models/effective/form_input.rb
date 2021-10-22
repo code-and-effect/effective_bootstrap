@@ -8,7 +8,7 @@ module Effective
     EMPTY_HASH = {}
 
     EXCLUSIVE_CLASS_PREFIXES = [] # None
-    EXCLUSIVE_CLASS_SUFFIXES = ['-primary', '-secondary', '-success', '-danger', '-warning', '-info', '-light', '-dark']
+    EXCLUSIVE_CLASS_SUFFIXES = ['-primary', '-secondary', '-success', '-danger', '-warning', '-info', '-light', '-dark', '-link']
 
     DEFAULT_INPUT_GROUP_OPTIONS = { input_group: { class: 'input-group' }, prepend: false, append: false }
 
