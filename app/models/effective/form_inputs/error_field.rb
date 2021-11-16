@@ -32,7 +32,7 @@ module Effective
           end
         )
 
-        content_tag(:div, content, options[:input])
+        content_tag(:div, content.html_safe, options[:input])
       end
 
       private
