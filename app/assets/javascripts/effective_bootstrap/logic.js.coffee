@@ -11,14 +11,14 @@
 
     if matches
       $element.hide()
-      $element.find('input,textarea,select').prop('disabled', true)
+      $element.find('input,textarea,select,button').prop('disabled', true)
     else
       $element.fadeIn()
-      $element.find('input,textarea,select').removeAttr('disabled')
+      $element.find('input,textarea,select,button').removeAttr('disabled')
 
   # Maybe disable it now
   if options.needDisable
-    $element.find('input,textarea,select').prop('disabled', true)
+    $element.find('input,textarea,select,button').prop('disabled', true)
 
 
 (this.EffectiveBootstrap || {}).effective_show_if = ($element, options) ->
@@ -34,14 +34,14 @@
 
     if matches
       $element.fadeIn()
-      $element.find('input,textarea,select').removeAttr('disabled')
+      $element.find('input,textarea,select,button').removeAttr('disabled')
     else
       $element.hide()
-      $element.find('input,textarea,select').prop('disabled', true)
+      $element.find('input,textarea,select,button').prop('disabled', true)
 
   # Maybe disable it now
   if options.needDisable
-    $element.find('input,textarea,select').prop('disabled', true)
+    $element.find('input,textarea,select,button').prop('disabled', true)
 
 (this.EffectiveBootstrap || {}).effective_show_if_any = ($element, options) ->
   $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
@@ -53,12 +53,11 @@
 
     if found
       $element.fadeIn()
-      $element.find('input,textarea,select').removeAttr('disabled')
+      $element.find('input,textarea,select,button').removeAttr('disabled')
     else
       $element.hide()
-      $element.find('input,textarea,select').prop('disabled', true)
+      $element.find('input,textarea,select,button').prop('disabled', true)
 
   # Maybe disable it now
   if options.needDisable
-    $element.find('input,textarea,select').prop('disabled', true)
-
+    $element.find('input,textarea,select,button').prop('disabled', true)
