@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 module Effective
   module FormInputs
     class Submit < Effective::FormInput
 
       def to_html(&block)
-        return super unless (form_readonly? || form_disabled?)
+        return nil if form_readonly?
+        super()
       end
 
       def build_input(&block)
