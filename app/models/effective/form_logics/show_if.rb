@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Effective
   module FormLogics
     class ShowIf < Effective::FormLogic

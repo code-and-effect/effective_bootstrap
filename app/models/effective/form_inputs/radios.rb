@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # http://api.rubyonrails.org/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-select
 
 # buttons: true
