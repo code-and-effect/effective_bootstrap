@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EffectiveEditorHelper
 
   def effective_editor_tag(content, options = {})

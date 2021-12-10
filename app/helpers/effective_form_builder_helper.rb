@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EffectiveFormBuilderHelper
   def effective_form_with(**options, &block)
     # Compute the default ID

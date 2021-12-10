@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Effective
   class FormLogic
     attr_accessor :args, :options

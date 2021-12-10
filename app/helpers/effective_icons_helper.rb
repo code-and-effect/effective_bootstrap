@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EffectiveIconsHelper
 
   # icon('check', class: 'big-4')
