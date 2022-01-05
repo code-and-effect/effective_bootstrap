@@ -145,10 +145,6 @@ module Effective
       Effective::FormInputs::Save.new(name, options, builder: self).to_html { super(name, options) }
     end
 
-    def scale_field(name, options = {})
-      Effective::FormInputs::ScaleField.new(name, options, builder: self).to_html
-    end
-
     def select(name, choices = nil, *args)
       options = args.extract_options!.merge!(collection: choices)
       Effective::FormInputs::Select.new(name, options, builder: self).to_html
