@@ -129,6 +129,7 @@ module Effective
       content_tag(:div, '', options[:input_group][:input_group]) do # Twice here, kind of weird.
         [
           (content_tag(:div, options[:input_group][:prepend], class: 'input-group-prepend') if options[:input_group][:prepend]),
+          (content_tag(:div, options[:input_group][:append], class: 'input-group-append') if options[:input_group][:append]),
           build_input(&block)
         ].compact.join.html_safe
       end
