@@ -121,7 +121,7 @@ module Effective
       if layout == :horizontal
         build_input_group { build_input(&block) } + build_hint
       else
-        build_label + build_input_group { build_input(&block) } + build_hint
+        build_label + build_input_group { build_input(&block) } + build_feedback + build_hint
       end
     end
 
@@ -129,9 +129,8 @@ module Effective
       content_tag(:div, '', options[:input_group][:input_group]) do # Twice here, kind of weird.
         [
           (content_tag(:div, options[:input_group][:prepend], class: 'input-group-prepend') if options[:input_group][:prepend]),
-          build_input(&block),
           (content_tag(:div, options[:input_group][:append], class: 'input-group-append') if options[:input_group][:append]),
-          build_feedback
+          build_input(&block)
         ].compact.join.html_safe
       end
     end
@@ -180,13 +179,10 @@ module Effective
 
       invalid = object.errors[name].to_sentence.presence if object.respond_to?(:errors)
       invalid ||= options[:feedback][:invalid].delete(:text).presence
-      invalid ||= [("can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].tap(&:compact!).join(' and ').presence
-      invalid ||= "can't be blank or is invalid"
+      invalid ||= [("Can't be blank" if options[:input][:required]), ('must be valid' if validated?(name))].tap(&:compact!).join(' and ').presence
+      invalid ||= "Can't be blank or is invalid"
 
-      valid = options[:feedback][:valid].delete(:text) || 'Looks good!'
-
-      content_tag(:div, invalid.html_safe, options[:feedback][:invalid]) +
-      content_tag(:div, valid.html_safe, options[:feedback][:valid])
+      content_tag(:div, invalid.html_safe, options[:feedback][:invalid])
     end
 
     def has_error?(name = nil)
