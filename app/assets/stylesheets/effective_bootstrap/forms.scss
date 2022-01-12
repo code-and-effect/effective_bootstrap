@@ -63,3 +63,5 @@ div.form-group > label + .btn-group { display: block; }
 
 .effective-checks.is-invalid .invalid-feedback { display: block; }
 .effective-checks.is-valid .valid-feedback { display: block; }
+
+.invalid-feedback, .valid-feedback { text-transform: capitalize; }
