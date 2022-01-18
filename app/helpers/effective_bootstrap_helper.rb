@@ -277,9 +277,9 @@ module EffectiveBootstrapHelper
   def list_group_link_to(label, path, opts = {})
     # Regular link item
     opts[:class] = if request.fullpath.include?(path)
-      [opts[:class], 'list-group-item active'].compact.join(' ')
+      [opts[:class], 'list-group-item list-group-item-action active'].compact.join(' ')
     else
-      [opts[:class], 'list-group-item'].compact.join(' ')
+      [opts[:class], 'list-group-item list-group-item-action'].compact.join(' ')
     end
 
     link_to(label.to_s, path, opts)
