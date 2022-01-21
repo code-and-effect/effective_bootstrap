@@ -470,6 +470,11 @@ module EffectiveBootstrapHelper
   # Let Kaminari override this method.
   alias_method(:paginate, :bootstrap_paginate) unless (respond_to?(:paginate) || defined?(Kaminari))
 
+  def reveal_mail_to(email)
+    raise('expected an email') unless email.kind_of?(String) && email.include?('@')
+    link_to 'Click to reveal email', '#', 'data-mailto-rot13' => email.tr('A-Za-z', 'N-ZA-Mn-za-m')
+  end
+
   # Tabs DSL
   # Inserts both the tablist and the tabpanel
 
