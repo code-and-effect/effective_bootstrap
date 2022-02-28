@@ -105,7 +105,7 @@ module EffectiveBootstrapHelper
   def collapse(label, opts = {}, &block)
     raise 'expected a block' unless block_given?
 
-    return accordian_collapse(label, opts, &block) if @_accordion_active
+    return accordion_collapse(label, opts, &block) if @_accordion_active
 
     id = "collapse-#{effective_bootstrap_unique_id}"
     show = (opts.delete(:show) == true)
@@ -492,7 +492,7 @@ module EffectiveBootstrapHelper
     raise 'expected a block' unless block_given?
 
     @_tab_mode = :tablist
-    @_tab_active = (active || :first)
+    @_tab_active = :first if active.nil?
     @_tab_unique = effective_bootstrap_unique_id if unique
 
     content_tag(:ul, {class: 'nav nav-tabs', role: 'tablist'}.merge(list)) do
