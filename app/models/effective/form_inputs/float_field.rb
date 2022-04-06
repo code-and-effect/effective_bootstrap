@@ -12,7 +12,7 @@ module Effective
         {
           class: 'form-control effective_float',
           autocomplete: 'off',
-          step: '0.01',
+          step: '0.001',
           id: tag_id
         }
       end
