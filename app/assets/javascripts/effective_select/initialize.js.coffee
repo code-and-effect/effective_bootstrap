@@ -16,7 +16,29 @@ matchWithHtml = (params, data) ->
   return data if $.trim(params.term) == ''
   return null unless data.element?
 
-  if $(data.element.getAttribute('data-html')).text().toLowerCase().indexOf(params.term.toLowerCase()) > -1 then data else null
+  # Single item mode
+  term = params.term.toLowerCase()
+  text = $(data.element.getAttribute('data-html')).text()
+
+  if(text.length > 0)
+    if text.toLowerCase().indexOf(term) > -1 then return(data) else return(null)
+
+  return null unless data.children?
+
+  # OptGroup mode
+  filteredChildren = []
+
+  $.each(data.children, (idx, child) ->
+    text = $(child.element.getAttribute('data-html')).text()
+    filteredChildren.push(child) if text.toLowerCase().indexOf(term) > -1
+  )
+
+  return null if filteredChildren.length == 0
+
+  modifiedData = $.extend({}, data, true)
+  modifiedData.children = filteredChildren
+
+  return modifiedData
 
 (this.EffectiveBootstrap || {}).effective_select = ($element, options) ->
   switch options['template']
