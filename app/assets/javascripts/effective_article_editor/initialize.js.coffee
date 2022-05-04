@@ -1,12 +1,35 @@
 # https://imperavi.com/article/
 
 uploadActiveStorage = (editor, data) ->
+  rails_url = '/rails/active_storage/blobs/redirect/'
+
   for file in data.files
     upload = new ActiveStorage.DirectUpload(file, '/rails/active_storage/direct_uploads')
 
     upload.create (error, blob) =>
-      url = '/rails/active_storage/blobs/redirect/' + blob.signed_id + '/' + blob.filename
+      url = rails_url + blob.signed_id + '/' + blob.filename
       editor.complete({ file: { url: url, name: blob.filename, content_type: blob.content_type }}, data.e)
+
+      # We append this nested attachment html
+      attachment = $('<action-text-attachment>')
+        .attr('sgid', blob.attachable_sgid)
+        .attr('class', 'effective-article-editor-attachment')
+
+      attachment = $('<div>').append(attachment).html()
+
+      doc = editor.app.editor.getLayout()
+
+      doc
+        .find("img[src^='#{rails_url}']:not(.effective-article-editor-attachment)")
+        .after(attachment)
+        .addClass('effective-article-editor-attachment')
+
+      doc
+        .find("a[data-file][data-name='#{file.name}']:not(.action-text-attachment)")
+        .after(attachment)
+        .addClass('effective-article-editor-attachment')
+        .removeAttr('data-file')
+        .removeAttr('data-name')
 
 insertUploadByDrop = (response, e) ->
   if @app.block.is()

@@ -69,8 +69,16 @@ module Effective
         }
       end
 
+      def content
+        if defined?(ActionText::RichText) && value.kind_of?(ActionText::RichText)
+          return value.body.to_html
+        end
+
+        value
+      end
+
       def build_input(&block)
-        @builder.super_text_area(name, options[:input])
+        @builder.super_text_area(name, options[:input].merge(value: content))
       end
 
       def input_html_options
@@ -86,7 +94,7 @@ module Effective
           (@template.asset_pack_path('application.css') if @template.respond_to?(:asset_pack_path)),
           (@template.asset_path('application.css') if @template.respond_to?(:asset_path)),
           ('/assets/effective_bootstrap_article_editor.css')
-        ]
+        ].compact
       end
 
       def active_storage
