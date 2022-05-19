@@ -488,24 +488,43 @@ module EffectiveBootstrapHelper
   # If you pass active 'label' it will make that tab active. Otherwise first.
   # Unique will make sure the tab html IDs are unique
   # $('#tab-demographics').tab('show')
-  def tabs(active: nil, unique: false, list: {}, content: {}, &block)
+  def tabs(active: nil, unique: false, ignore_save_tab: false, list: {}, content: {}, &block)
     raise 'expected a block' unless block_given?
 
-    @_tab_mode = :tablist
-    @_tab_active = :first if active.nil?
+    # The Active Tab might be set from a previous form submission, or passed into helper
+    tab_active = session[:_tabs].try(:pop) unless ignore_save_tab
+    tab_active ||= active
+
+    # If an active tab is passed, we validate we have a tab with that label, or fallback to first
+    if tab_active.present?
+      @_tab_mode = :validate
+      @_tab_labels = []
+      yield
+
+      tab_active = nil unless @_tab_labels.include?(tab_active)
+    end
+
+    tab_active ||= :first
     @_tab_unique = effective_bootstrap_unique_id if unique
 
+    # Generate the html in two passes
     content_tag(:ul, {class: 'nav nav-tabs', role: 'tablist'}.merge(list)) do
+      @_tab_mode = :tablist
+      @_tab_active = tab_active
+
       yield # Yield to tab the first time
     end +
     content_tag(:div, {class: 'tab-content'}.merge(content)) do
       @_tab_mode = :content
-      @_tab_active = (active || :first)
+      @_tab_active = tab_active
+
       yield # Yield to tab the second time
     end
   end
 
   def tab(label, options = {}, &block)
+    (@_tab_labels.push(label) and return) if @_tab_mode == :validate
+
     controls = options.delete(:controls) || label.to_s.parameterize.gsub('_', '-')
     controls = controls[1..-1] if controls[0] == '#'
     controls = "#{controls}-#{@_tab_unique}" if @_tab_unique
@@ -522,7 +541,7 @@ module EffectiveBootstrapHelper
       end
     else # Inserting the content into the tab itself
       classes = ['tab-pane', 'fade', ('show active' if active), options[:class].presence].compact.join(' ')
-      content_tag(:div, id: controls, class: classes, role: 'tabpanel', 'aria-labelledby': ('tab-' + controls)) do
+      content_tag(:div, id: controls, class: classes, role: 'tabpanel', 'aria-labelledby': ('tab-' + controls), 'data-tab-label': label) do
         yield
       end
     end

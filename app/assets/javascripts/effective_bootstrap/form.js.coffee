@@ -19,6 +19,8 @@ this.EffectiveForm ||= new class
   submitting: ($form) ->
     $form.addClass('form-is-valid').removeClass('form-is-invalid')
     @spin()
+    @saveTabs($form)
+
     setTimeout((-> EffectiveForm.disable($form)), 0)
 
     if ($form.attr('method') || '').toLowerCase() == 'get' || (@current_submit.length > 0 && @current_submit.hasClass('form-actions-reset'))
@@ -58,6 +60,16 @@ this.EffectiveForm ||= new class
     $form.find('input[type=checkbox],input[type=radio]').prop('checked', false).trigger('change')
 
   spin: -> @current_submit.addClass('form-current-submit') if @current_submit.length > 0
+
+  saveTabs: ($form) ->
+    $tabs = $form.parents('div.tab-pane[data-tab-label]')
+    $tabs = @current_submit.parents('div.tab-pane[data-tab-label]') if $tabs.length == 0
+
+    $form.find("input[name='_tabs[]']").remove()
+
+    $tabs.each (i, element) ->
+      label = $(element).data('tab-label')
+      $form.append("<input type='hidden' name='_tabs[]' value='#{label}'>")
 
   beforeAjax: ($form) ->
     return unless $form.data('remote')
