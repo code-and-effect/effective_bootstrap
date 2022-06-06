@@ -63,7 +63,9 @@ this.EffectiveForm ||= new class
 
   saveTabs: ($form) ->
     $tabs = $form.parents('div.tab-pane[data-tab-label]')
-    $tabs = @current_submit.parents('div.tab-pane[data-tab-label]') if $tabs.length == 0
+
+    if $tabs.length == 0 && @current_submit.length > 0
+      $tabs = @current_submit.parents('div.tab-pane[data-tab-label]')
 
     $form.find("input[name='_tabs[]']").remove()
 
