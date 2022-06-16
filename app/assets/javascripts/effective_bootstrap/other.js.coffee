@@ -7,6 +7,8 @@ $(document).on 'cocoon:before-remove', (event, $obj) ->
 
   if confirm && !confirmed
     event.preventDefault()
+  else if $button.data('skip-fadeout')
+    # Nothing to do
   else
     $(event.target).data('remove-timeout', 1000)
     $obj.fadeOut('slow')
