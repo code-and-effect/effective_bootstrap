@@ -1,24 +1,24 @@
 # https://select2.github.io/examples.html
 
-formatWithGlyphicon = (data, container) ->
-  if data.element && data.element.className
-    $("<span><i class='glyphicon #{data.element.className}'></i> #{data.text}</span>")
-  else
-    data.text
-
-formatWithHtml = (data, container) ->
+effectiveFormat = (data, container) ->
   if data.element && data.element.getAttribute('data-html')
     $(data.element.getAttribute('data-html'))
+  else if data.text.startsWith("<") && data.text.endsWith(">")
+    $(data.text)
   else
     data.text
 
-matchWithHtml = (params, data) ->
+effectiveMatch = (params, data) ->
   return data if $.trim(params.term) == ''
   return null unless data.element?
 
   # Single item mode
   term = params.term.toLowerCase()
+
+  # The text value
   text = $(data.element.getAttribute('data-html')).text()
+  text = $(data.text).text() if text.length == 0
+  text = data.text if text.length == 0
 
   if(text.length > 0)
     if text.toLowerCase().indexOf(term) > -1 then return(data) else return(null)
@@ -29,7 +29,11 @@ matchWithHtml = (params, data) ->
   filteredChildren = []
 
   $.each(data.children, (idx, child) ->
+    # Text value
     text = $(child.element.getAttribute('data-html')).text()
+    text = $(data.text).text() if text.length == 0
+    text = data.text if text.length == 0
+
     filteredChildren.push(child) if text.toLowerCase().indexOf(term) > -1
   )
 
@@ -41,14 +45,9 @@ matchWithHtml = (params, data) ->
   return modifiedData
 
 (this.EffectiveBootstrap || {}).effective_select = ($element, options) ->
-  switch options['template']
-    when 'glyphicon'
-      options['templateResult'] = formatWithGlyphicon
-      options['templateSelection'] = formatWithGlyphicon
-    when 'html'
-      options['templateResult'] = formatWithHtml
-      options['templateSelection'] = formatWithHtml
-      options['matcher'] = matchWithHtml
+  options['templateResult'] = effectiveFormat
+  options['templateSelection'] = effectiveFormat
+  options['matcher'] = effectiveMatch
 
   if options['noResults']
     noResults = options['noResults']
