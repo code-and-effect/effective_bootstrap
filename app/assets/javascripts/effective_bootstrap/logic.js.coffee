@@ -15,6 +15,7 @@
     else
       $element.fadeIn()
       $element.find('input,textarea,select,button').removeAttr('disabled')
+      $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
 
   # Maybe disable it now
   if options.needDisable
@@ -35,6 +36,7 @@
     if matches
       $element.fadeIn()
       $element.find('input,textarea,select,button').removeAttr('disabled')
+      $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
     else
       $element.hide()
       $element.find('input,textarea,select,button').prop('disabled', true)
@@ -54,6 +56,8 @@
     if found
       $element.fadeIn()
       $element.find('input,textarea,select,button').removeAttr('disabled')
+      $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
+
     else
       $element.hide()
       $element.find('input,textarea,select,button').prop('disabled', true)
