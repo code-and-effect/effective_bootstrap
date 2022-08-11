@@ -60,5 +60,9 @@ insertUploadByDrop = (response, e) ->
       upload: (editor, data) -> uploadActiveStorage(editor, data)
     }
 
+    options['carousel'] = {
+      upload: (editor, data) -> uploadActiveStorage(editor, data)
+    }
+
   editor = ArticleEditor($element, options)
   editor.app.image.insertByDrop = insertUploadByDrop

@@ -43,7 +43,7 @@ module Effective
               '12': 'col-sm-12'
             }
           },
-          plugins: ['blockcode', 'cellcolor', 'collapse', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style', 'filelink'],
+          plugins: ['blockcode', 'carousel', 'cellcolor', 'collapse', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style', 'filelink'],
           quote: {
             template: '<blockquote><p></p></blockquote>'
           },
