@@ -35,12 +35,14 @@ module Effective
       end
 
       def build_existing_attachments
-        return ''.html_safe unless multiple?
-
-        attachments = object.send(name)
+        attachments = Array(object.send(name))
 
         attachments.map.with_index do |attachment, index|
-          @builder.hidden_field(name, multiple: true, id: (tag_id + "_#{index}"), value: attachment.signed_id)
+          if multiple?
+            @builder.hidden_field(name, multiple: true, id: (tag_id + "_#{index}"), value: attachment.signed_id)
+          else
+            @builder.hidden_field(name, id: tag_id, value: attachment.signed_id)
+          end
         end.join.html_safe
       end
 
