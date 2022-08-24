@@ -4,7 +4,6 @@
   .has-many-remove-disabled { opacity: 0; cursor: default !important; }
 
   .has-many-actions { margin-bottom: 0.75rem; }
-  .has-many-remove { margin-top: 1rem; }
   .has-many-move { margin-top: 1.5rem; }
 }
 
@@ -18,4 +17,14 @@
 .form-has-many.tight {
   .has-many-remove { margin-top: 0; }
   .has-many-move { margin-top: 0.5rem; }
+}
+
+.form-has-many .has-many-remove {
+  margin-top: 0;
+  .eb-icon { height: $font-size-sm; width: $font-size-sm; margin-bottom: 2px; }
+}
+
+.form-has-many .has-many-add {
+  margin-top: 0;
+  .eb-icon { height: $font-size-sm; width: $font-size-sm; margin-bottom: 2px; }
 }
