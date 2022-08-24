@@ -126,7 +126,7 @@ module Effective
       def has_many_links_for(block)
         return BLANK unless add? || reorder?
 
-        content_tag(:div, class: 'has-many-links text-center mt-2') do
+        content_tag(:div, class: 'has-many-links mt-2') do
           [*(link_to_add(block) if add?), *(link_to_reorder(block) if reorder?)].join(' ').html_safe
         end
       end
@@ -171,7 +171,7 @@ module Effective
             content_tag(:div, content, class: 'col mr-auto') do
               content_tag(:div, class: 'card') do
                 content_tag(:div, class: 'card-body') do
-                  content_tag(:div, remove, class: 'float-right') + content
+                  content_tag(:div, remove, class: 'd-flex justify-content-end') + content
                 end
               end
             end
@@ -205,7 +205,7 @@ module Effective
         content_tag(
           :button,
           icon('plus-circle') + 'Add Another',
-          class: 'has-many-add btn btn-secondary',
+          class: 'has-many-add btn btn-sm btn-secondary',
           title: 'Add Another',
           data: {
             'effective-form-has-many-add': true,
@@ -227,7 +227,7 @@ module Effective
         content_tag(
           (tag || :button),
           (label || (icon('plus-circle') + 'Insert Another')),
-          class: 'has-many-insert ' + (html_class || 'btn btn-secondary'),
+          class: 'has-many-insert ' + (html_class || 'btn btn-sm btn-secondary'),
           title: (title || 'Insert Another'),
           data: {
             'effective-form-has-many-insert': true,
@@ -257,8 +257,8 @@ module Effective
 
         content_tag(
           (tag || :button),
-          (label || icon('trash-2')),
-          class: 'has-many-remove ' + (html_class || 'btn btn-danger'),
+          (label || (icon('trash-2') + 'Remove')),
+          class: 'has-many-remove ' + (html_class || 'btn btn-sm btn-danger'),
           title: (title || 'Remove'),
           data: {
             'confirm': "Remove #{resource}?",
@@ -271,7 +271,7 @@ module Effective
         content_tag(
           :button,
           icon('trash-2'),
-          class: 'has-many-remove-disabled btn btn-danger',
+          class: 'has-many-remove-disabled btn btn-sm btn-danger',
           title: 'Remove',
           data: {
             'effective-form-has-many-remove-disabled': true,
