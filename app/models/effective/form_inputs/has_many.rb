@@ -257,7 +257,6 @@ module Effective
 
         content_tag(
           (tag || :button),
-          # (label || ('Remove' + (icon('trash-2')),
           (label || (icon('trash-2') + 'Remove')),
           class: 'has-many-remove ' + (html_class || 'btn btn-sm btn-danger'),
           title: (title || 'Remove'),
