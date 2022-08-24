@@ -3,7 +3,7 @@
 module EffectiveArticleEditorHelper
 
   def render_article_editor_action_text_content(content)
-    raise('expected content to be an content') unless content.kind_of?(ActionText::Content)
+    raise('expected content to be an ActionText content') unless content.kind_of?(ActionText::Content)
 
     rendered = render_action_text_content(content)
 

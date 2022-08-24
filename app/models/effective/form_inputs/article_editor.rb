@@ -71,7 +71,7 @@ module Effective
 
       def content
         if defined?(ActionText::RichText) && value.kind_of?(ActionText::RichText)
-          return value.body.to_html
+          return value.body&.to_html
         end
 
         value

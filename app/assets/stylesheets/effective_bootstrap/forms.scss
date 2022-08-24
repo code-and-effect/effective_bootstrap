@@ -33,7 +33,8 @@ form[data-remote="true"].hide-flash-danger {
 
 .form-actions-bordered {
   border-top: solid 1px #eee;
-  margin-top: 1em;
+  margin: 0;
+  padding: 0;
 
   > * { margin-top: 1em; }
 }
@@ -67,3 +68,11 @@ div.form-group > label + .btn-group { display: block; }
 .invalid-feedback { text-transform: capitalize; }
 .valid-feedback { display: none; }
 
+// File Control
+.form-control-file { border: none !important; }
+
+// Has Many
+.form-has-many .has-many-remove {
+  margin-top: 0;
+  .eb-icon { height: 1.5rem; width: 1.5rem; }
+}
