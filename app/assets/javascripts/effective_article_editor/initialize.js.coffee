@@ -1,19 +1,45 @@
 # https://imperavi.com/article/
 
+sendMarkPublicRequest = (editor, blob, authenticity_token) ->
+  editor.ajax.post(
+    url: "/storage/#{blob.signed_id}/mark_public",
+    data: {
+      id: blob.signed_id,
+      authenticity_token: authenticity_token
+    }
+  )
+
 uploadActiveStorage = (editor, data) ->
   rails_url = '/rails/active_storage/blobs/redirect/'
+
+  # The editor is actually the popup form
+  $form = editor.$element.closest('form')
+
+  if $form.length == 0
+    $form = editor.$element.closest('.arx-popup')
+
+  permission_public = $form.find("input[name=public_permission]").val() || false
+
+  # This is an effective_form with the article editor in it
+  $parentForm = editor.app.$element.closest('form')
+  authenticity_token = $parentForm.find("input[name=authenticity_token]").val() || 'missing authenticity token'
+
+  # Attachment classes
+  classes = (if permission_public then 'effective-article-editor-attachment effective-article-editor-attachment-permission-public' else 'effective-article-editor-attachment')
 
   for file in data.files
     upload = new ActiveStorage.DirectUpload(file, '/rails/active_storage/direct_uploads')
 
     upload.create (error, blob) =>
+      sendMarkPublicRequest(editor, blob, authenticity_token) if permission_public
+
       url = rails_url + blob.signed_id + '/' + blob.filename
       editor.complete({ file: { url: url, name: blob.filename, content_type: blob.content_type }}, data.e)
 
       # We append this nested attachment html
       attachment = $('<action-text-attachment>')
         .attr('sgid', blob.attachable_sgid)
-        .attr('class', 'effective-article-editor-attachment')
+        .attr('class', classes)
 
       attachment = $('<div>').append(attachment).html()
 
@@ -22,12 +48,12 @@ uploadActiveStorage = (editor, data) ->
       doc
         .find("img[src^='#{rails_url}']:not(.effective-article-editor-attachment)")
         .after(attachment)
-        .addClass('effective-article-editor-attachment')
+        .addClass(classes)
 
       doc
         .find("a[data-file][data-name='#{file.name}']:not(.action-text-attachment)")
         .after(attachment)
-        .addClass('effective-article-editor-attachment')
+        .addClass(classes)
         .removeAttr('data-file')
         .removeAttr('data-name')
 
