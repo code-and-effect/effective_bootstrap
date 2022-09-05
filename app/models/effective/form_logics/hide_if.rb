@@ -29,11 +29,12 @@ module Effective
       end
 
       def validate!(args)
+        return if args.third.kind_of?(Hash) && args.third[:validate] == false
         raise "expected object to respond to #{args.first}" unless object.respond_to?(args.first)
       end
 
       def hide?
-        (object.send(args.first) == args.second) || (object.send(args.first).to_s == args.second.to_s)
+        (object.try(args.first) == args.second) || (object.try(args.first).to_s == args.second.to_s)
       end
 
     end

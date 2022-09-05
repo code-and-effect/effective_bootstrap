@@ -29,12 +29,13 @@ module Effective
       end
 
       def validate!(args)
+        return if args.third.kind_of?(Hash) && args.third[:validate] == false
         raise "expected object to respond to #{args.first}" unless object.respond_to?(args.first)
       end
 
       def show?
         Array(args.second).any? do |value|
-          selected = object.send(args.first)
+          selected = object.try(args.first)
           selected == value || selected.to_s == value.to_s
         end
       end
