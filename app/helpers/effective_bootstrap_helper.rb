@@ -43,6 +43,23 @@ module EffectiveBootstrapHelper
     end
   end
 
+  # https://getbootstrap.com/docs/4.0/components/badge/
+  # = badge('Warning', :secondary)
+  # Can pass class or a context
+  def badge(value = nil, opts = {})
+    value = Array(value) - [nil, '']
+    return if value.blank?
+
+    badge_opts = opts
+    badge_opts = {context: opts} unless badge_opts.kind_of?(Hash)
+
+    context = badge_opts[:context].to_s.sub('badge-', '').presence || 'secondary'
+    badge_opts[:class] ||= "badge badge-#{context}"
+
+    value.map { |value| content_tag(:span, value, badge_opts) }.join(' ').html_safe
+  end
+  alias_method :badges, :badge
+
   # https://getbootstrap.com/docs/4.0/components/card/
   # = card('title do')
   #   %p Stuff
