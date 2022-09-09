@@ -539,10 +539,13 @@ module EffectiveBootstrapHelper
     end
   end
 
+  NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
   def tab(label, options = {}, &block)
     (@_tab_labels.push(label) and return) if @_tab_mode == :validate
 
     controls = options.delete(:controls) || label.to_s.parameterize.gsub('_', '-')
+    controls = "item-#{controls}" if NUMBERS.include?(controls[0]) # Can't start with a number
     controls = controls[1..-1] if controls[0] == '#'
     controls = "#{controls}-#{@_tab_unique}" if @_tab_unique
 
