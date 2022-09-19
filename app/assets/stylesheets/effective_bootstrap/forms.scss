@@ -70,10 +70,3 @@ div.form-group > label + .btn-group { display: block; }
 
 // File Control
 .form-control-file { border: none !important; }
-
-// Has Many
-.form-has-many .has-many-remove {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  .eb-icon { height: 1.5rem; width: 1.5rem; }
-}
