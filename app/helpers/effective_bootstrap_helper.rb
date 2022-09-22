@@ -521,7 +521,7 @@ module EffectiveBootstrapHelper
       tab_active = nil unless @_tab_labels.include?(tab_active)
     end
 
-    tab_active ||= :first
+    tab_active ||= :first if tab_active.nil?
     @_tab_unique = effective_bootstrap_unique_id if unique
 
     # Generate the html in two passes
