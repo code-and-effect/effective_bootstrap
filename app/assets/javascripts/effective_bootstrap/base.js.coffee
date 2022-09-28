@@ -20,3 +20,7 @@ $ -> EffectiveBootstrap.initialize()
 $(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()
 $(document).on 'cocoon:after-insert', -> EffectiveBootstrap.initialize()
 $(document).on 'effective-bootstrap:initialize', (event) -> EffectiveBootstrap.initialize(event.currentTarget)
+
+$(document).on 'effective-bootstrap:reinitialize', (event) ->
+  $(event.currentTarget).find('[data-input-js-options].initialized').removeClass('initialized')
+  EffectiveBootstrap.initialize(event.currentTarget)
