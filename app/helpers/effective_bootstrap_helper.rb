@@ -325,16 +325,38 @@ module EffectiveBootstrapHelper
     end
   end
 
-  def nav_dropdown(label, right: false, link_class: [], list_class: [], &block)
+  def nav_dropdown(label, right: false, groups: false, link_class: [], list_class: [], &block)
     raise 'expected a block' unless block_given?
 
     id = "dropdown-#{effective_bootstrap_unique_id}"
+    div_class = ['dropdown-menu', *('dropdown-menu-right' if right), *('dropdown-groups' if groups)].join(' ')
 
     content_tag(:li, class: 'nav-item dropdown') do
       content_tag(:a, class: 'nav-link dropdown-toggle', href: '#', id: id, role: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
         label.html_safe
-      end + content_tag(:div, class: (right ? 'dropdown-menu dropdown-menu-right' : 'dropdown-menu'), 'aria-labelledby': id) do
+      end + content_tag(:div, class: div_class, 'aria-labelledby': id) do
         @_nav_mode = :dropdown; yield; @_nav_mode = nil
+      end
+    end
+  end
+
+  def nav_dropdown_group(label, unique: false, header: true, header_class: nil, &block)
+    raise 'expected a block' unless block_given?
+
+    div_class = [
+      'dropdown-group',
+      ("dropdown-group-#{effective_bootstrap_unique_id}" if unique),
+      ("dropdown-group-first" if label.blank?),
+      ("dropdown-group-#{label.to_s.parameterize}" if label.present?)
+    ].compact.join(' ')
+
+    header_class ||= 'dropdown-header'
+
+    content_tag(:div, class: div_class) do
+      if label.present? && header
+        content_tag(:h6, label, class: header_class) + capture(&block)
+      else
+        capture(&block)
       end
     end
   end
