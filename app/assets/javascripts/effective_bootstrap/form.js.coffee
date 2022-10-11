@@ -105,7 +105,7 @@ this.EffectiveForm ||= new class
 
     # Process remote form
     if $form.length > 0
-      EffectiveBootstrap.initialize($form)
+      try EffectiveBootstrap.initialize($form)
       $target.replaceWith($form)
     else
       $form = @reset($target) # There is no remote form. So we assume success and reset the submitted one.
