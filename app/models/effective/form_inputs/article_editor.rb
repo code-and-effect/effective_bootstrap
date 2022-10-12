@@ -12,11 +12,48 @@ module Effective
           custom: {
             css: ['/assets/effective_bootstrap_article_editor.css']
           },
+          align: {
+            'left': 'text-left',
+            'center': 'text-center',
+            'right': 'text-right',
+            'justify': false
+          },
+          makebutton: {
+            items: {
+              primary: {
+                title: 'Primary',
+                params: { classname: 'btn btn-primary' }
+              },
+              secondary: {
+                title: 'Secondary',
+                params: { classname: 'btn btn-secondary' }
+              },
+              danger: {
+                title: 'Danger',
+                params: { classname: 'btn btn-danger' }
+              },
+              primary_large: {
+                title: 'Primary (large)',
+                params: { classname: 'btn btn-lg btn-primary' }
+              },
+              secondary_large: {
+                title: 'Secondary (large)',
+                params: { classname: 'btn btn-lg btn-secondary' }
+              },
+              danger_large: {
+                title: 'Danger (large)',
+                params: { classname: 'btn btn-lg btn-danger' }
+              }
+            }
+          },
           classes: {
-            body: 'article-editor-body',
             table: 'table'
           },
+          embed: {
+            script: false # do not strip out script tag from embeds
+          },
           filelink: nil,
+          format: ['p', 'h2', 'h3', 'h4', 'h5', 'ul', 'ol'],
           grid: {
             classname: 'row',
             columns: 12,
@@ -26,26 +63,29 @@ module Effective
               right: '15px',
             },
             patterns: {
-              '6|6': 'col-sm-6|col-sm-6',
-              '4|4|4': 'col-sm-4|col-sm-4|col-sm-4',
-              '3|3|3|3': 'col-sm-3|col-sm-3|col-sm-3|col-sm-3',
-              '2|2|2|2|2|2': 'col-sm-2|col-sm-2|col-sm-2|col-sm-2|col-sm-2|col-sm-2',
-              '3|6|3': 'col-sm-3|col-sm-6|col-sm-3',
-              '2|8|2': 'col-sm-2|col-sm-8|col-sm-2',
-              '5|7': 'col-sm-5|col-sm-7',
-              '7|5': 'col-sm-7|col-sm-5',
-              '4|8': 'col-sm-4|col-sm-8',
-              '8|4': 'col-sm-8|col-sm-4',
-              '3|9': 'col-sm-3|col-sm-9',
-              '9|3': 'col-sm-9|col-sm-3',
-              '2|10': 'col-sm-2|col-sm-10',
-              '10|2': 'col-sm-10|col-sm-2',
-              '12': 'col-sm-12'
+              '6|6': 'col-md-6|col-md-6',
+              '4|4|4': 'col-md-4|col-md-4|col-md-4',
+              '3|3|3|3': 'col-md-3|col-md-3|col-md-3|col-md-3',
+              '2|2|2|2|2|2': 'col-md-2|col-md-2|col-md-2|col-md-2|col-md-2|col-md-2',
+              '3|6|3': 'col-md-3|col-md-6|col-md-3',
+              '2|8|2': 'col-md-2|col-md-8|col-md-2',
+              '5|7': 'col-md-5|col-md-7',
+              '7|5': 'col-md-7|col-md-5',
+              '4|8': 'col-md-4|col-md-8',
+              '8|4': 'col-md-8|col-md-4',
+              '3|9': 'col-md-3|col-md-9',
+              '9|3': 'col-md-9|col-md-3',
+              '2|10': 'col-md-2|col-md-10',
+              '10|2': 'col-md-10|col-md-2',
+              '12': 'col-md-12'
             }
           },
-          plugins: ['blockcode', 'carousel', 'cellcolor', 'collapse', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style', 'filelink'],
+          layer: false, # the layer button is confusing for the layperson
+          link: { size: 500 }, # truncate after this length
+          outset: false, # tricky to design around
+          plugins: ['blockcode', 'carousel', 'cellcolor', 'collapse', 'filelink', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'makebutton', 'removeformat', 'reorder', 'style'],
           quote: {
-            template: '<blockquote><p></p></blockquote>'
+            template: '<blockquote class="blockquote text-center"><p class="mb-0"><strong>A well-known quote, contained in a blockquote element.</strong></p></blockquote>'
           },
           styles: {
             table: {
