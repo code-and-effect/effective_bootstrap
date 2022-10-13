@@ -7,11 +7,21 @@ module Effective
       # https://imperavi.com/article/docs/settings/
       def self.defaults
         {
+           # This is overridden by the active_storage() method below
           active_storage: nil,
+
+          # This is overridden by the css() method below
           css: ['/assets/article_editor/arx-frame.min.css'],
+
+          # This is overridden by the custom_css() method below
           custom: {
-            css: ['/assets/effective_bootstrap_article_editor.css']
+            css: [
+              'application.css',
+              '/assets/effective_bootstrap_article_editor.css'
+            ]
           },
+
+          # The rest of these are just normal Hash options
           align: {
             'left': 'text-left',
             'center': 'text-center',
@@ -126,15 +136,36 @@ module Effective
       end
 
       def input_js_options
-        self.class.defaults.merge(active_storage: active_storage, custom: { css: custom_css })
+        self.class.defaults.merge(active_storage: active_storage, css: css, custom: { css: custom_css })
+      end
+
+      def css
+        if @template.respond_to?(:asset_pack_path)
+          [@template.asset_pack_path('article_editor/arx-frame.min.css')]
+        elsif @template.respond_to?(:asset_path)
+          [@template.asset_path('article_editor/arx-frame.min.css')]
+        else
+          ['/assets/article_editor/arx-frame.min.css']
+        end
       end
 
       def custom_css
-        [
-          (@template.asset_pack_path('application.css') if @template.respond_to?(:asset_pack_path)),
-          (@template.asset_path('application.css') if @template.respond_to?(:asset_path)),
-          ('/assets/effective_bootstrap_article_editor.css')
-        ].compact
+        if @template.respond_to?(:asset_pack_path)
+          [
+            @template.asset_pack_path('application.css'),
+            @template.asset_pack_path('effective_bootstrap_article_editor.css')
+          ]
+        elsif @template.respond_to?(:asset_path)
+          [
+            @template.asset_path('application.css'),
+            @template.asset_path('effective_bootstrap_article_editor.css')
+          ]
+        else
+          [
+            '/assets/application.css',
+            '/assets/effective_bootstrap_article_editor.css'
+          ]
+        end
       end
 
       def active_storage
