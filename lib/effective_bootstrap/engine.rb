@@ -30,5 +30,11 @@ module EffectiveBootstrap
       end
     end
 
+    initializer 'effective_bootstrap.action_mailer' do |app|
+      app.config.to_prepare do
+        ActionMailer::Base.send(:helper, EffectiveArticleEditorHelper)
+      end
+    end
+
   end
 end
