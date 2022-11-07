@@ -15,10 +15,7 @@ module Effective
 
           # This is overridden by the custom_css() method below
           custom: {
-            css: [
-              'application.css',
-              '/assets/effective_bootstrap_article_editor.css'
-            ]
+            css: ['application.css', '/assets/effective_bootstrap_article_editor.css']
           },
 
           # The rest of these are just normal Hash options
@@ -28,40 +25,23 @@ module Effective
             'right': 'text-right',
             'justify': false
           },
-          makebutton: {
-            items: {
-              primary: {
-                title: 'Primary',
-                params: { classname: 'btn btn-primary' }
-              },
-              secondary: {
-                title: 'Secondary',
-                params: { classname: 'btn btn-secondary' }
-              },
-              danger: {
-                title: 'Danger',
-                params: { classname: 'btn btn-danger' }
-              },
-              primary_large: {
-                title: 'Primary (large)',
-                params: { classname: 'btn btn-lg btn-primary' }
-              },
-              secondary_large: {
-                title: 'Secondary (large)',
-                params: { classname: 'btn btn-lg btn-secondary' }
-              },
-              danger_large: {
-                title: 'Danger (large)',
-                params: { classname: 'btn btn-lg btn-danger' }
-              }
-            }
+          cellcolors: {
+            'primary': { title: 'Primary', classname: 'table-primary' },
+            'secondary': { title: 'Secondary', classname: 'table-secondary' },
+            'active': { title: 'Active', classname: 'table-active' },
+            'success': { title: 'Success', classname: 'table-success' },
+            'danger': { title: 'Danger', classname: 'table-danger' },
+            'warning': { title: 'Warning', classname: 'table-warning' },
+            'info': { title: 'Info', classname: 'table-info' },
+            'light': { title: 'Light', classname: 'table-light' },
+            'dark': { title: 'Dark', classname: 'table-dark' }
           },
-          classes: {
-            table: 'table'
+          classes: { table: 'table' },
+          editor: {
+            csscache: true,  # Do not add ?=timestamp to css requests
+            https: true      # Embed links use https
           },
-          embed: {
-            script: false # do not strip out script tag from embeds
-          },
+          embed: { script: false }, # do not strip out script tag from embeds
           filelink: nil,
           format: ['p', 'h2', 'h3', 'h4', 'h5', 'ul', 'ol'],
           grid: {
@@ -92,6 +72,34 @@ module Effective
           },
           layer: false, # the layer button is confusing for the layperson
           link: { size: 500 }, # truncate after this length
+          makebutton: {
+            items: {
+              primary: {
+                title: 'Primary',
+                params: { classname: 'btn btn-primary' }
+              },
+              secondary: {
+                title: 'Secondary',
+                params: { classname: 'btn btn-secondary' }
+              },
+              danger: {
+                title: 'Danger',
+                params: { classname: 'btn btn-danger' }
+              },
+              primary_large: {
+                title: 'Primary (large)',
+                params: { classname: 'btn btn-lg btn-primary' }
+              },
+              secondary_large: {
+                title: 'Secondary (large)',
+                params: { classname: 'btn btn-lg btn-secondary' }
+              },
+              danger_large: {
+                title: 'Danger (large)',
+                params: { classname: 'btn btn-lg btn-danger' }
+              }
+            }
+          },
           outset: false, # tricky to design around
           plugins: ['blockcode', 'carousel', 'cellcolor', 'collapse', 'filelink', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'makebutton', 'removeformat', 'reorder', 'style'],
           quote: {
@@ -104,17 +112,6 @@ module Effective
               'small': { title: 'Small', classname: 'table-sm' },
               'striped': { title: 'Striped', classname: 'table-striped' },
             }
-          },
-          cellcolors: {
-            'primary': { title: 'Primary', classname: 'table-primary' },
-            'secondary': { title: 'Secondary', classname: 'table-secondary' },
-            'active': { title: 'Active', classname: 'table-active' },
-            'success': { title: 'Success', classname: 'table-success' },
-            'danger': { title: 'Danger', classname: 'table-danger' },
-            'warning': { title: 'Warning', classname: 'table-warning' },
-            'info': { title: 'Info', classname: 'table-info' },
-            'light': { title: 'Light', classname: 'table-light' },
-            'dark': { title: 'Dark', classname: 'table-dark' }
           }
         }
       end
