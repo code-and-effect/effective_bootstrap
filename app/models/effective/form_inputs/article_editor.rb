@@ -15,10 +15,7 @@ module Effective
 
           # This is overridden by the custom_css() method below
           custom: {
-            css: [
-              'application.css',
-              '/assets/effective_bootstrap_article_editor.css'
-            ]
+            css: ['application.css', '/assets/effective_bootstrap_article_editor.css']
           },
 
           # The rest of these are just normal Hash options
@@ -28,40 +25,23 @@ module Effective
             'right': 'text-right',
             'justify': false
           },
-          makebutton: {
-            items: {
-              primary: {
-                title: 'Primary',
-                params: { classname: 'btn btn-primary' }
-              },
-              secondary: {
-                title: 'Secondary',
-                params: { classname: 'btn btn-secondary' }
-              },
-              danger: {
-                title: 'Danger',
-                params: { classname: 'btn btn-danger' }
-              },
-              primary_large: {
-                title: 'Primary (large)',
-                params: { classname: 'btn btn-lg btn-primary' }
-              },
-              secondary_large: {
-                title: 'Secondary (large)',
-                params: { classname: 'btn btn-lg btn-secondary' }
-              },
-              danger_large: {
-                title: 'Danger (large)',
-                params: { classname: 'btn btn-lg btn-danger' }
-              }
-            }
+          cellcolors: {
+            'primary': { title: 'Primary', classname: 'table-primary' },
+            'secondary': { title: 'Secondary', classname: 'table-secondary' },
+            'active': { title: 'Active', classname: 'table-active' },
+            'success': { title: 'Success', classname: 'table-success' },
+            'danger': { title: 'Danger', classname: 'table-danger' },
+            'warning': { title: 'Warning', classname: 'table-warning' },
+            'info': { title: 'Info', classname: 'table-info' },
+            'light': { title: 'Light', classname: 'table-light' },
+            'dark': { title: 'Dark', classname: 'table-dark' }
           },
-          classes: {
-            table: 'table'
+          classes: { table: 'table' },
+          editor: {
+            csscache: true,  # Do not add ?=timestamp to css requests
+            https: true      # Embed links use https
           },
-          embed: {
-            script: false # do not strip out script tag from embeds
-          },
+          embed: { script: false }, # do not strip out script tag from embeds
           filelink: nil,
           format: ['p', 'h2', 'h3', 'h4', 'h5', 'ul', 'ol'],
           grid: {
@@ -92,6 +72,34 @@ module Effective
           },
           layer: false, # the layer button is confusing for the layperson
           link: { size: 500 }, # truncate after this length
+          makebutton: {
+            items: {
+              primary: {
+                title: 'Primary',
+                params: { classname: 'btn btn-primary' }
+              },
+              secondary: {
+                title: 'Secondary',
+                params: { classname: 'btn btn-secondary' }
+              },
+              danger: {
+                title: 'Danger',
+                params: { classname: 'btn btn-danger' }
+              },
+              primary_large: {
+                title: 'Primary (large)',
+                params: { classname: 'btn btn-lg btn-primary' }
+              },
+              secondary_large: {
+                title: 'Secondary (large)',
+                params: { classname: 'btn btn-lg btn-secondary' }
+              },
+              danger_large: {
+                title: 'Danger (large)',
+                params: { classname: 'btn btn-lg btn-danger' }
+              }
+            }
+          },
           outset: false, # tricky to design around
           plugins: ['blockcode', 'carousel', 'cellcolor', 'collapse', 'filelink', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'makebutton', 'removeformat', 'reorder', 'style'],
           quote: {
@@ -104,27 +112,26 @@ module Effective
               'small': { title: 'Small', classname: 'table-sm' },
               'striped': { title: 'Striped', classname: 'table-striped' },
             }
-          },
-          cellcolors: {
-            'primary': { title: 'Primary', classname: 'table-primary' },
-            'secondary': { title: 'Secondary', classname: 'table-secondary' },
-            'active': { title: 'Active', classname: 'table-active' },
-            'success': { title: 'Success', classname: 'table-success' },
-            'danger': { title: 'Danger', classname: 'table-danger' },
-            'warning': { title: 'Warning', classname: 'table-warning' },
-            'info': { title: 'Info', classname: 'table-info' },
-            'light': { title: 'Light', classname: 'table-light' },
-            'dark': { title: 'Dark', classname: 'table-dark' }
           }
         }
       end
 
-      def content
-        if defined?(ActionText::RichText) && value.kind_of?(ActionText::RichText)
-          return value.body&.to_html
-        end
+      def default_mode
+        self.class.defaults
+      end
 
-        value
+      def restricted_mode
+        self.class.defaults.merge(
+          code: false,
+          editor: { csscache: true, https: true, drop: false },
+          embed: false,
+          image: false,
+          plugins: ['blockcode', 'cellcolor', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style']
+        )
+      end
+
+      def content
+        (defined?(ActionText::RichText) && value.kind_of?(ActionText::RichText)) ? value.body&.to_html : value
       end
 
       def build_input(&block)
@@ -136,7 +143,14 @@ module Effective
       end
 
       def input_js_options
-        self.class.defaults.merge(active_storage: active_storage, css: css, custom: { css: custom_css })
+        case mode
+        when :default, :admin
+          default_mode.merge(active_storage: active_storage, css: css, custom: { css: custom_css })
+        when :restricted
+          restricted_mode.merge(active_storage: false, css: css, custom: { css: custom_css })
+        else
+          raise("unexpected mode: #{mode}. Try :default or :restricted")
+        end
       end
 
       def css
@@ -176,6 +190,20 @@ module Effective
         else
           defined?(ActiveStorage).present?
         end
+      end
+
+      def mode
+        return @mode unless @mode.nil?
+
+        @mode = if options.key?(:mode)
+          options.delete(:mode)
+        else
+          select_mode()
+        end
+      end
+
+      def select_mode
+        EffectiveResources.authorized?(@template, :admin, :effective_article_editor) ? :default : :restricted
       end
 
     end
