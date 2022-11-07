@@ -102,6 +102,7 @@ module Effective
           },
           outset: false, # tricky to design around
           plugins: ['blockcode', 'carousel', 'cellcolor', 'collapse', 'filelink', 'imageposition', 'imageresize', 'inlineformat', 'listitem', 'makebutton', 'removeformat', 'reorder', 'style'],
+
           quote: {
             template: '<blockquote class="blockquote text-center"><p class="mb-0"><strong>A well-known quote, contained in a blockquote element.</strong></p></blockquote>'
           },
@@ -112,7 +113,11 @@ module Effective
               'small': { title: 'Small', classname: 'table-sm' },
               'striped': { title: 'Striped', classname: 'table-striped' },
             }
-          }
+          },
+          topbar: {
+            undoredo: true,
+            shortcuts: true
+          },
         }
       end
 
