@@ -116,12 +116,22 @@ module Effective
         }
       end
 
-      def content
-        if defined?(ActionText::RichText) && value.kind_of?(ActionText::RichText)
-          return value.body&.to_html
-        end
+      def default_mode
+        self.class.defaults
+      end
 
-        value
+      def restricted_mode
+        self.class.defaults.merge(
+          code: false,
+          editor: { csscache: true, https: true, drop: false },
+          embed: false,
+          image: false,
+          plugins: ['blockcode', 'cellcolor', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style']
+        )
+      end
+
+      def content
+        (defined?(ActionText::RichText) && value.kind_of?(ActionText::RichText)) ? value.body&.to_html : value
       end
 
       def build_input(&block)
@@ -133,7 +143,14 @@ module Effective
       end
 
       def input_js_options
-        self.class.defaults.merge(active_storage: active_storage, css: css, custom: { css: custom_css })
+        case mode
+        when :default, :admin
+          default_mode.merge(active_storage: active_storage, css: css, custom: { css: custom_css })
+        when :restricted
+          restricted_mode.merge(active_storage: false, css: css, custom: { css: custom_css })
+        else
+          raise("unexpected mode: #{mode}. Try :default or :restricted")
+        end
       end
 
       def css
@@ -173,6 +190,20 @@ module Effective
         else
           defined?(ActiveStorage).present?
         end
+      end
+
+      def mode
+        return @mode unless @mode.nil?
+
+        @mode = if options.key?(:mode)
+          options.delete(:mode)
+        else
+          select_mode()
+        end
+      end
+
+      def select_mode
+        EffectiveResources.authorized?(@template, :admin, :effective_article_editor) ? :default : :restricted
       end
 
     end
