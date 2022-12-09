@@ -16,8 +16,9 @@ effectiveMatch = (params, data) ->
   term = params.term.toLowerCase()
 
   # The text value
-  text = $(data.element.getAttribute('data-html')).text()
-  text = $(data.text).text() if text.length == 0
+  text = ''
+  try text = $(data.element.getAttribute('data-html')).text()
+  try text = $(data.text).text() if text.length == 0
   text = data.text if text.length == 0
 
   if(text.length > 0)
@@ -30,8 +31,9 @@ effectiveMatch = (params, data) ->
 
   $.each(data.children, (idx, child) ->
     # Text value
-    text = $(child.element.getAttribute('data-html')).text()
-    text = $(data.text).text() if text.length == 0
+    text = ''
+    try text = $(child.element.getAttribute('data-html')).text()
+    try text = $(data.text).text() if text.length == 0
     text = data.text if text.length == 0
 
     filteredChildren.push(child) if text.toLowerCase().indexOf(term) > -1
