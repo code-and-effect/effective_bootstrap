@@ -7,7 +7,7 @@ $(document).ready(function() {
 
   } else if (document.location.search.length > 0) {
     var tab = new URLSearchParams(document.location.search).get('tab');
-    if(tab.length == 0) { return false; }
+    if((tab || '').length == 0) { return false; }
 
     $('.nav.nav-tabs').find("a[href^='#" + tab + "']").tab('show');
   }
