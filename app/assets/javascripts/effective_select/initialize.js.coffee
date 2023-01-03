@@ -22,7 +22,7 @@ effectiveMatch = (params, data) ->
   text = data.text if text.length == 0
 
   return(data) if text.length > 0 && text.toLowerCase().indexOf(term) > -1
-  return null unless data.children?
+  return(null) unless data.children?
 
   # OptGroup mode
   filteredChildren = []
