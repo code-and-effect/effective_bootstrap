@@ -21,9 +21,7 @@ effectiveMatch = (params, data) ->
   try text = $(data.text).text() if text.length == 0
   text = data.text if text.length == 0
 
-  if(text.length > 0)
-    if text.toLowerCase().indexOf(term) > -1 then return(data) else return(null)
-
+  return(data) if text.length > 0 && text.toLowerCase().indexOf(term) > -1
   return null unless data.children?
 
   # OptGroup mode
@@ -33,8 +31,8 @@ effectiveMatch = (params, data) ->
     # Text value
     text = ''
     try text = $(child.element.getAttribute('data-html')).text()
-    try text = $(data.text).text() if text.length == 0
-    text = data.text if text.length == 0
+    try text = $(child.text).text() if text.length == 0
+    text = child.text if text.length == 0
 
     filteredChildren.push(child) if text.toLowerCase().indexOf(term) > -1
   )
