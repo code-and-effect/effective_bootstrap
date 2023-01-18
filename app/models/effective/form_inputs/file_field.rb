@@ -27,7 +27,8 @@ module Effective
       end
 
       def multiple?
-        name.to_s.pluralize == name.to_s
+        return @multiple unless @multiple.nil?
+        @multiple = options.key?(:multiple) ? options.delete(:multiple) : (name.to_s.pluralize == name.to_s)
       end
 
       def required_presence?(obj, name)
