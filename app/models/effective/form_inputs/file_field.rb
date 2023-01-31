@@ -171,7 +171,7 @@ module Effective
         return ''.html_safe unless purge?
 
         label = (multiple? ? 'Delete files on save' : 'Delete file on save')
-        @builder.check_box('_purge_attached', multiple: true, label: label, id: "#{tag_id}_purge_attached", checked_value: name)
+        @builder.check_box('_purge', multiple: true, label: label, id: "#{tag_id}_purge", checked_value: name)
       end
 
       def purge?
