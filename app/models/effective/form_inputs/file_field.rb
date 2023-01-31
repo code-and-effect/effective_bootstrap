@@ -7,9 +7,9 @@ module Effective
       def build_input(&block)
         case attachments_style
         when :card
-          build_existing_attachments + build_attachments + build_uploads + super
+          build_existing_attachments + build_attachments + build_uploads_and_purge(super)
         when :table, :ck_assets
-          super + build_existing_attachments + build_uploads + build_attachments
+          build_existing_attachments + build_uploads_and_purge(super) + build_attachments
         else
           raise('unsupported attachments_style, try :card or :table')
         end
@@ -31,11 +31,27 @@ module Effective
         @multiple = options.key?(:multiple) ? options.delete(:multiple) : (name.to_s.pluralize == name.to_s)
       end
 
-      def required_presence?(obj, name)
-        super(obj, name) && Array(object.public_send(name)).length == 0
+      def append?
+        return @append unless @append.nil?
+        @append = options[:input].key?(:append) ? options[:input].delete(:append) : false
       end
 
+      def required_presence?(obj, name)
+        super(obj, name) && attachments_blank?
+      end
+
+      def attachments_present?
+        Array(object.public_send(name)).length > 0
+      end
+
+      def attachments_blank?
+        Array(object.public_send(name)).length == 0
+      end
+
+      # This has the affect of appending files to the has_many. Which usually isnt what we want
       def build_existing_attachments
+        return ''.html_safe unless append?
+
         attachments = Array(object.send(name))
 
         attachments.map.with_index do |attachment, index|
@@ -127,7 +143,17 @@ module Effective
             end.html_safe
           end
         end
+      end
 
+      def build_uploads_and_purge(super_file_field)
+        if purge? && attachments_present?
+          content_tag(:div, class: 'd-flex align-items-center') do
+            content_tag(:div, (build_uploads + super_file_field), class: 'flex-grow-1 mr-3') +
+            content_tag(:div, build_purge)
+          end
+        else
+          build_uploads + super_file_field
+        end
       end
 
       def build_uploads
@@ -139,6 +165,23 @@ module Effective
           content_tag(:div, '', class: 'direct-upload__progress', style: 'width: 0%') +
           content_tag(:span, '$FILENAME$', class: 'direct-upload__filename')
         end
+      end
+
+      def build_purge
+        return ''.html_safe unless purge?
+
+        label = (multiple? ? 'Delete files on save' : 'Delete file on save')
+        @builder.check_box('_purge_attached', multiple: true, label: label, id: "#{tag_id}_purge_attached", checked_value: name)
+      end
+
+      def purge?
+        return @purge unless @purge.nil?
+        @purge = options[:input].key?(:purge) ? (options[:input].delete(:purge) && purgable?) : purgable?
+      end
+
+      def purgable?
+        return false unless object.class.try(:has_many_purgable?)
+        object.has_many_purgable_names.include?(name.to_sym)
       end
 
       def click_submit?
