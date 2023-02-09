@@ -316,7 +316,7 @@ module EffectiveBootstrapHelper
   def nav_link_to(resource, path, opts = {})
     return if resource.kind_of?(Class) && !EffectiveResources.authorized?(self, :index, resource)
 
-    label = effective_bootstrap_human_name(resource, plural: true)
+    label = effective_bootstrap_human_name(resource, plural: true, prefer_model_name: true)
 
     if @_nav_mode == :dropdown  # We insert dropdown-items
       return link_to(label, path, merge_class_key(opts, 'dropdown-item'))
@@ -570,7 +570,7 @@ module EffectiveBootstrapHelper
   NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
   def tab(label, options = {}, &block)
-    label = effective_bootstrap_human_name(label)
+    label = effective_bootstrap_human_name(label, prefer_model_name: true)
 
     (@_tab_labels.push(label) and return) if @_tab_mode == :validate
 
@@ -630,12 +630,12 @@ module EffectiveBootstrapHelper
     end
   end
 
-  def effective_bootstrap_human_name(resource, plural: false)
+  def effective_bootstrap_human_name(resource, plural: false, prefer_model_name: false)
     return resource.to_s unless resource.respond_to?(:model_name)
 
     if resource.kind_of?(ActiveRecord::Relation) || plural
       ets(resource)
-    elsif resource.kind_of?(Class)
+    elsif resource.kind_of?(Class) || prefer_model_name
       et(resource)
     else
       resource.to_s
