@@ -72,7 +72,7 @@ module EffectiveBootstrapHelper
     end
 
     header = opts.delete(:header)
-    title = opts.delete(:title) || value
+    title = opts.delete(:title) || effective_bootstrap_human_name(value)
 
     content_tag(:div, merge_class_key(opts, 'card mb-4')) do
       header = content_tag(:div, header, class: 'card-header') if header.present?
@@ -570,7 +570,7 @@ module EffectiveBootstrapHelper
   NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
   def tab(label, options = {}, &block)
-    label = effective_bootstrap_human_name(label, model_name_only: true)
+    label = effective_bootstrap_human_name(label)
 
     (@_tab_labels.push(label) and return) if @_tab_mode == :validate
 
@@ -630,11 +630,13 @@ module EffectiveBootstrapHelper
     end
   end
 
-  def effective_bootstrap_human_name(resource, plural: false, model_name_only: false)
+  def effective_bootstrap_human_name(resource, plural: false)
     return resource.to_s unless resource.respond_to?(:model_name)
 
-    if (resource.kind_of?(Class) || model_name_only)
-      (plural ? resource.model_name.human.pluralize : resource.model_name.human)
+    if resource.kind_of?(ActiveRecord::Relation) || plural
+      ets(resource)
+    elsif resource.kind_of?(Class)
+      et(resource)
     else
       resource.to_s
     end
