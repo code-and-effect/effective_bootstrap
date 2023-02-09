@@ -72,7 +72,7 @@ module EffectiveBootstrapHelper
     end
 
     header = opts.delete(:header)
-    title = opts.delete(:title) || value
+    title = opts.delete(:title) || effective_bootstrap_human_name(value)
 
     content_tag(:div, merge_class_key(opts, 'card mb-4')) do
       header = content_tag(:div, header, class: 'card-header') if header.present?
@@ -311,7 +311,13 @@ module EffectiveBootstrapHelper
   #     = nav_link_to 'Account Settings', user_settings_path
   #     = nav_divider
   #     = nav_link_to 'Sign In', new_user_session_path, method: :delete
-  def nav_link_to(label, path, opts = {})
+  #
+  # If you pass a class, it will authorize and display that class if you have :index access
+  def nav_link_to(resource, path, opts = {})
+    return if resource.kind_of?(Class) && !EffectiveResources.authorized?(self, :index, resource)
+
+    label = effective_bootstrap_human_name(resource, plural: true, prefer_model_name: true)
+
     if @_nav_mode == :dropdown  # We insert dropdown-items
       return link_to(label, path, merge_class_key(opts, 'dropdown-item'))
     end
@@ -564,6 +570,8 @@ module EffectiveBootstrapHelper
   NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
   def tab(label, options = {}, &block)
+    label = effective_bootstrap_human_name(label, prefer_model_name: true)
+
     (@_tab_labels.push(label) and return) if @_tab_mode == :validate
 
     controls = options.delete(:controls) || label.to_s.parameterize.gsub('_', '-')
@@ -619,6 +627,18 @@ module EffectiveBootstrapHelper
       hash.merge!(:class => "#{hash[:class]} #{value}")
     else
       hash.merge!(:class => value)
+    end
+  end
+
+  def effective_bootstrap_human_name(resource, plural: false, prefer_model_name: false)
+    return resource.to_s unless resource.respond_to?(:model_name)
+
+    if resource.kind_of?(ActiveRecord::Relation) || plural
+      ets(resource)
+    elsif resource.kind_of?(Class) || prefer_model_name
+      et(resource)
+    else
+      resource.to_s
     end
   end
 
