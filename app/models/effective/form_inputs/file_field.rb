@@ -31,11 +31,6 @@ module Effective
         @multiple = options.key?(:multiple) ? options.delete(:multiple) : (name.to_s.pluralize == name.to_s)
       end
 
-      def append?
-        return @append unless @append.nil?
-        @append = options[:input].key?(:append) ? options[:input].delete(:append) : false
-      end
-
       def required_presence?(obj, name)
         super(obj, name) && attachments_blank?
       end
@@ -50,8 +45,6 @@ module Effective
 
       # This has the affect of appending files to the has_many. Which usually isnt what we want
       def build_existing_attachments
-        return ''.html_safe unless append?
-
         attachments = Array(object.send(name))
 
         attachments.map.with_index do |attachment, index|
