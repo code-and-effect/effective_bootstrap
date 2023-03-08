@@ -1,5 +1,5 @@
 (this.EffectiveBootstrap || {}).effective_hide_if = ($element, options) ->
-  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}']")
 
   $affects.on 'change', (event) ->
     $target = $(event.target)
@@ -23,7 +23,7 @@
 
 
 (this.EffectiveBootstrap || {}).effective_show_if = ($element, options) ->
-  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}']")
 
   $affects.on 'change', (event) ->
     $target = $(event.target)
@@ -46,7 +46,7 @@
     $element.find('input,textarea,select,button').prop('disabled', true)
 
 (this.EffectiveBootstrap || {}).effective_show_if_any = ($element, options) ->
-  $affects = $element.closest('form').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}']")
   values = JSON.parse(options.value)
 
   $affects.on 'change', (event) ->
