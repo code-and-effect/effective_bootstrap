@@ -316,7 +316,7 @@ module EffectiveBootstrapHelper
   def nav_link_to(resource, path, opts = {})
     return if resource.kind_of?(Class) && !EffectiveResources.authorized?(self, :index, resource)
 
-    label = effective_bootstrap_human_name(resource, plural: true, prefer_model_name: true)
+    label = opts.delete(:label) || effective_bootstrap_human_name(resource, plural: true, prefer_model_name: true)
 
     if @_nav_mode == :dropdown  # We insert dropdown-items
       return link_to(label, path, merge_class_key(opts, 'dropdown-item'))
@@ -330,6 +330,7 @@ module EffectiveBootstrapHelper
       link_to(label, path, merge_class_key(opts, 'nav-link'))
     end
   end
+
 
   def nav_dropdown(label, right: false, groups: false, link_class: [], list_class: [], &block)
     raise 'expected a block' unless block_given?
@@ -369,6 +370,25 @@ module EffectiveBootstrapHelper
 
   def nav_divider
     content_tag(:div, '', class: 'dropdown-divider')
+  end
+
+  # These two are used for advanced menus. When using content_for to capture inside nav dropdowns
+  def nav_content_for(name, &block)
+    raise('expected a block') unless block_given?
+    content_for(name) { yield }
+  end
+
+  def nav_dropdown_content_for(name, &block)
+    raise('expected a block') unless block_given?
+
+    original = @_nav_mode
+
+    begin
+      @_nav_mode = :dropdown
+      content_for(name) { yield }
+    ensure
+      @_nav_mode = original
+    end
   end
 
   # Breadcrumb
@@ -631,9 +651,13 @@ module EffectiveBootstrapHelper
   end
 
   def effective_bootstrap_human_name(resource, plural: false, prefer_model_name: false)
-    return resource.to_s unless resource.respond_to?(:model_name)
-
-    if resource.kind_of?(ActiveRecord::Relation) || plural
+    if resource.kind_of?(String)
+      resource
+    elsif resource.respond_to?(:datatable_name)
+      et(resource)
+    elsif resource.respond_to?(:model_name) == false
+      resource.to_s
+    elsif resource.kind_of?(ActiveRecord::Relation) || plural
       ets(resource)
     elsif resource.kind_of?(Class) || prefer_model_name
       et(resource)
