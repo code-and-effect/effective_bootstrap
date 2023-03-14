@@ -338,11 +338,18 @@ module EffectiveBootstrapHelper
     id = "dropdown-#{effective_bootstrap_unique_id}"
     div_class = ['dropdown-menu', *('dropdown-menu-right' if right), *('dropdown-groups' if groups)].join(' ')
 
+    # Render content
+    @_nav_mode = :dropdown
+    content = capture(&block)
+    @_nav_mode = nil
+
+    return ''.html_safe if content.blank?
+
     content_tag(:li, class: 'nav-item dropdown') do
       content_tag(:a, class: 'nav-link dropdown-toggle', href: '#', id: id, role: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
         label.html_safe
       end + content_tag(:div, class: div_class, 'aria-labelledby': id) do
-        @_nav_mode = :dropdown; yield; @_nav_mode = nil
+        content
       end
     end
   end
