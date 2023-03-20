@@ -5,7 +5,13 @@ module Effective
     class UrlField < Effective::FormInput
 
       def input_html_options
-        { class: 'form-control', placeholder: 'https://www.example.com', id: tag_id }
+        {
+          class: 'form-control',
+          placeholder: 'https://www.example.com',
+          id: tag_id,
+          pattern: '(http:\/|https:\/)?\/[^\/+].+',
+          type: 'text'
+        }
       end
 
       def input_group_options
