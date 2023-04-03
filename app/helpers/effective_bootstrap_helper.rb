@@ -64,15 +64,17 @@ module EffectiveBootstrapHelper
   # = card('title do')
   #   %p Stuff
   # = card('Stuff', header: 'header title')
-  def card(value = nil, opts = {}, &block)
+  def card(resource = nil, opts = {}, &block)
     raise('expected a block') unless block_given?
 
-    if value.kind_of?(Hash)
-      opts = value; value = nil
+    if resource.kind_of?(Hash)
+      opts = resource; resource = nil
     end
 
+    return if resource.kind_of?(Class) && !EffectiveResources.authorized?(self, :index, resource)
+
     header = opts.delete(:header)
-    title = opts.delete(:title) || effective_bootstrap_human_name(value)
+    title = opts.delete(:title) || opts.delete(:label) || effective_bootstrap_human_name(resource, plural: (opts.key?(:plural) ? opts.delete(:plural) : true))
 
     content_tag(:div, merge_class_key(opts, 'card mb-4')) do
       header = content_tag(:div, header, class: 'card-header') if header.present?
@@ -316,7 +318,7 @@ module EffectiveBootstrapHelper
   def nav_link_to(resource, path, opts = {})
     return if resource.kind_of?(Class) && !EffectiveResources.authorized?(self, :index, resource)
 
-    label = opts.delete(:label) || effective_bootstrap_human_name(resource, plural: true, prefer_model_name: true)
+    label = opts.delete(:label) || effective_bootstrap_human_name(resource, plural: (opts.key?(:plural) ? opts.delete(:plural) : true), prefer_model_name: true)
 
     if @_nav_mode == :dropdown  # We insert dropdown-items
       return link_to(label, path, merge_class_key(opts, 'dropdown-item'))
@@ -596,12 +598,13 @@ module EffectiveBootstrapHelper
 
   NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-  def tab(label, options = {}, &block)
-    label = effective_bootstrap_human_name(label, prefer_model_name: true)
+  def tab(resource, opts = {}, &block)
+    return if resource.kind_of?(Class) && !EffectiveResources.authorized?(self, :index, resource)
+    label = opts.delete(:label) || effective_bootstrap_human_name(resource, plural: (opts.key?(:plural) ? opts.delete(:plural) : true), prefer_model_name: true)
 
     (@_tab_labels.push(label) and return) if @_tab_mode == :validate
 
-    controls = options.delete(:controls) || label.to_s.parameterize.gsub('_', '-')
+    controls = opts.delete(:controls) || label.to_s.parameterize.gsub('_', '-')
     controls = "item-#{controls}" if NUMBERS.include?(controls[0]) # Can't start with a number
     controls = controls[1..-1] if controls[0] == '#'
     controls = "#{controls}-#{@_tab_unique}" if @_tab_unique
@@ -617,7 +620,7 @@ module EffectiveBootstrapHelper
         content_tag(:a, label, id: ('tab-' + controls), class: ['nav-link', ('active' if active)].compact.join(' '), href: '#' + controls, 'aria-controls': controls, 'aria-selected': active.to_s, 'data-toggle': 'tab', role: 'tab')
       end
     else # Inserting the content into the tab itself
-      classes = ['tab-pane', 'fade', ('show active' if active), options[:class].presence].compact.join(' ')
+      classes = ['tab-pane', 'fade', ('show active' if active), opts[:class].presence].compact.join(' ')
       content_tag(:div, id: controls, class: classes, role: 'tabpanel', 'aria-labelledby': ('tab-' + controls), 'data-tab-label': label) do
         yield
       end
