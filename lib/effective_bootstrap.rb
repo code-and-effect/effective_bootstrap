@@ -11,4 +11,8 @@ module EffectiveBootstrap
 
   include EffectiveGem
 
+  def self.boolean_collection
+    [['Yes', true], ['No', false]]
+  end
+
 end

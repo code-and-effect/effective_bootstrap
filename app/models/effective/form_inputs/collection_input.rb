@@ -96,6 +96,8 @@ module Effective
             collection.inject({}) { |h, (k, group)| h[k] = translate(group).map { |obj| [obj.to_s, "#{obj.class.model_name}_#{obj.id}"] }; h }
           elsif grouped
             collection.inject({}) { |h, (k, group)| h[k] = translate(group).map { |obj| obj }; h }
+          elsif (collection == :boolean || collection == :booleans || collection == :boolean_collection)
+            EffectiveBootstrap.boolean_collection
           else
             translate(collection).map { |obj| obj }
           end
