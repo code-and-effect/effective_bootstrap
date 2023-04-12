@@ -70,3 +70,29 @@ div.form-group > label + .btn-group { display: block; }
 
 // File Control
 .form-control-file { border: none !important; }
+
+// Radios
+form fieldset.effective-radios {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+form fieldset.effective-checks {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+form fieldset.effective-radios legend {
+  font-size: 1rem;
+  font-weight: inherit;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+// Checks
+form fieldset.effective-checks > label {
+  font-size: 1rem;
+  font-weight: inherit;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
