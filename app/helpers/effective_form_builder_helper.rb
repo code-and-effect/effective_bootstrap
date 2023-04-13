@@ -2,6 +2,9 @@
 
 module EffectiveFormBuilderHelper
   def effective_form_with(**options, &block)
+    # This allows us to call effective_form_with inside an effective_table_with and just get the fields
+    return @_effective_table_builder.capture(&block) if @_effective_table_builder
+
     # Compute the default ID
     subject = Array(options[:model] || options[:scope]).last
     class_name = (options[:scope] || subject.class.name.parameterize.underscore)

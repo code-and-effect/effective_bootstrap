@@ -20,9 +20,29 @@ module Effective
 
       @rows = {}
       @content_fors = {}
+    end
 
-      template.capture(self, &block) if block_given?
-      build_resource_rows if @rows.blank?
+    def render(&block)
+      # This runs the form partial over this table builder
+      capture(&block) if block_given?
+
+      # Build from the resource if we didn't do anything in the block
+      build_resource_rows if rows.blank?
+
+      only = Array(options[:only])
+      except = Array(options[:except])
+
+      content = rows.merge(content_fors)
+      content = content.slice(*only) if only.present?
+      content = content.except(*except) if except.present?
+
+      content_tag(:table, class: options.fetch(:class, 'table table-striped table-hover')) do
+        content_tag(:tbody, content.values.join.html_safe)
+      end
+    end
+
+    def capture(&block)
+      template.capture(self, &block)
     end
 
     def build_resource_rows
@@ -47,18 +67,7 @@ module Effective
       object.send(name)
     end
 
-    def render
-      only = Array(options[:only])
-      except = Array(options[:except])
 
-      content = rows.merge(content_fors)
-      content = content.slice(*only) if only.present?
-      content = content.except(*except) if except.present?
-
-      content_tag(:table, class: options.fetch(:class, 'table table-striped table-hover')) do
-        content_tag(:tbody, content.values.join.html_safe)
-      end
-    end
 
     # Call default_row for any form field
     def method_missing(method, *args, **kwargs, &block)
