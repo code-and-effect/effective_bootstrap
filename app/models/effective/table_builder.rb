@@ -67,8 +67,6 @@ module Effective
       object.send(name)
     end
 
-
-
     # Call default_row for any form field
     def method_missing(method, *args, **kwargs, &block)
       default_row(args[0], **kwargs, &block)
@@ -157,7 +155,7 @@ module Effective
       template.capture(self, &block) if Array(options).include?(value(name))
     end
 
-    # # Has Many
+    # Has Many
     def has_many(name, collection = nil, options = {}, &block)
       raise('unsupported')
     end
