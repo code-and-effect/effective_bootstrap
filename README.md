@@ -697,8 +697,74 @@ The `f.save` is purely a input submit button.
   = f.save 'Save 2'
 ```
 
+## Table Builder
 
+Use `effective_table_with(resource)` to intelligently output a table of attributes for a resource.
 
+In your view:
+
+```
+= effective_table_with(user, only: [:first_name, :last_name])
+```
+
+will output the following html:
+
+```
+<table class='table table-striped table-hover>
+  <tbody>
+    <tr>
+      <td>First Name</td>
+      <td>Peter</td>
+    </tr>
+    <tr>
+      <td>Last Name</td>
+      <td>Pan</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+You can pass `only:` and `except:` to specify which attributes to display.
+
+To override the content of just one row:
+
+```
+= effective_table_with(user) do |f|
+  = f.content_for :first_name, label: 'Cool First Name' do
+    %strong= f.object.first_name
+```
+
+will generate the html:
+
+`<tr><td>Cool First Name</td><td><strong>Peter</strong></td></tr>`
+
+### Work with existing forms
+
+The table builder is intended to display based off your existing forms.
+
+Any `effective_form_with` or `_fields` partial will work to define the attributes displayed and the order they are displayed.
+
+A check_box will be rendered as a boolean, text areas use simple_format, f.show_if and f.hide_if logic work.
+
+If you use `f.text_field :first_name, label: 'Cool First Name'` in your form, it will flow through to the table.
+
+To render a table based off an existing `effective_form_with`:
+
+```
+= effective_table_with(user) do |f|
+  = render('users/form', user: user)
+```
+
+or just the fields partial
+
+```
+= effective_table_with(user, only: [:first_name, :last_name]) do |f|
+  = render('users/fields_demographics', f: f)
+```
+
+You can specify `only:` and `except:` and use `f.content_for` to override a row in all these use cases.
+
+All values flow through to i18n and can be overriden, same as the form labels, in the locale .yml file.
 
 ## License
 
