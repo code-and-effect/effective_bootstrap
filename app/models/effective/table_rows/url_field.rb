@@ -2,7 +2,7 @@
 
 module Effective
   module TableRows
-    class PercentField < Effective::TableRow
+    class UrlField < Effective::TableRow
 
       def content
         template.link_to(value) if value.present?
