@@ -147,6 +147,20 @@ module Effective
       template.capture(self, &block) unless value(name) == selected
     end
 
+    def fields_for(name, object, options = {}, &block)
+      builder = TableBuilder.new(object, template, options.merge(prefix: human_attribute_name(name)))
+
+      begin
+        @_effective_table_builder = builder
+        builder.render(&block)
+        builder.rows.each { |child, content| rows["#{name}_#{child}".to_sym] = content }
+      ensure
+        @_effective_table_builder = self
+      end
+
+    end
+    alias_method :effective_fields_for, :fields_for
+
     def show_if(name, selected, &block)
       template.capture(self, &block) if value(name) == selected
     end
