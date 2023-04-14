@@ -2,7 +2,7 @@
 
 module Effective
   module TableRows
-    class PercentField < Effective::TableRow
+    class PriceField < Effective::TableRow
 
       def content
         template.price_to_currency(value) if value.present?
