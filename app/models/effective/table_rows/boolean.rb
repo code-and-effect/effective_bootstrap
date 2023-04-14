@@ -5,7 +5,11 @@ module Effective
     class Boolean < Effective::TableRow
 
       def content
-        value == true ? icon('check') : icon('x')
+        if value
+          template.badge('YES')
+        else
+          template.badge('NO', class: 'badge badge-light')
+        end
       end
 
     end

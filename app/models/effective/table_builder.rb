@@ -2,6 +2,7 @@
 
 module Effective
   class TableBuilder
+    FILTER_PARAMETERS = [:password, :password_confirmation, :created_at, :updated_at]
 
     attr_accessor :object, :template, :options
 
@@ -31,10 +32,12 @@ module Effective
 
       only = Array(options[:only])
       except = Array(options[:except])
+      filtered = filter_parameters
 
       content = rows.merge(content_fors)
       content = content.slice(*only) if only.present?
       content = content.except(*except) if except.present?
+      content = content.except(*filtered) if filtered.present?
 
       content_tag(:table, class: options.fetch(:class, 'table table-striped table-hover')) do
         content_tag(:tbody, content.values.join.html_safe)
@@ -42,17 +45,30 @@ module Effective
     end
 
     def capture(&block)
-      template.capture(self, &block)
+      begin
+        template.instance_variable_set(:@_effective_table_builder, self)
+        template.capture(self, &block)
+      ensure
+        template.instance_variable_set(:@_effective_table_builder, nil)
+      end
     end
 
     def build_resource_rows
-      Effective::Resource.new(object).attributes.each do |name, options|
+      Effective::Resource.new(object).klass_attributes(sort: true).each do |name, options|
         case options.first
-        when :boolean then boolean_row(name)
-        when :text then text_area(name)
+        when :boolean
+          boolean_row(name)
+        when :text
+          text_area(name)
+        when :string
+          (name.to_s.include?('email') && value(name).to_s.include?('@')) ? email_field(name) : text_field(name)
         else default_row(name)
         end
       end
+    end
+
+    def filter_parameters
+      FILTER_PARAMETERS + Array(object.class.try(:filter_parameters)) + Array(Rails.application.config.filter_parameters)
     end
 
     def human_attribute_name(name)
@@ -83,7 +99,11 @@ module Effective
     alias_method :check_box, :boolean_row
 
     def collection_row(name, collection, options = {}, &block)
-      rows[name] = TableRows::Collection.new(name, collection, options, builder: self).to_html
+      rows[name] = if [true, false].include?(value(name))
+        TableRows::Boolean.new(name, options, builder: self).to_html
+      else
+        TableRows::Collection.new(name, collection, options, builder: self).to_html
+      end
     end
     alias_method :select, :collection_row
     alias_method :checks, :collection_row
@@ -112,6 +132,10 @@ module Effective
 
     def password_field(name, options = {})
       # Nothing to do
+    end
+
+    def effective_address(name, options = {})
+      rows[name] = TableRows::EffectiveAddress.new(name, options, builder: self).to_html
     end
 
     def percent_field(name, options = {})
@@ -147,20 +171,6 @@ module Effective
       template.capture(self, &block) unless value(name) == selected
     end
 
-    def fields_for(name, object, options = {}, &block)
-      builder = TableBuilder.new(object, template, options.merge(prefix: human_attribute_name(name)))
-
-      begin
-        @_effective_table_builder = builder
-        builder.render(&block)
-        builder.rows.each { |child, content| rows["#{name}_#{child}".to_sym] = content }
-      ensure
-        @_effective_table_builder = self
-      end
-
-    end
-    alias_method :effective_fields_for, :fields_for
-
     def show_if(name, selected, &block)
       template.capture(self, &block) if value(name) == selected
     end
@@ -173,6 +183,13 @@ module Effective
     def has_many(name, collection = nil, options = {}, &block)
       raise('unsupported')
     end
+
+    def fields_for(name, object, options = {}, &block)
+      builder = TableBuilder.new(object, template, options.merge(prefix: human_attribute_name(name)))
+      builder.render(&block)
+      builder.rows.each { |child, content| rows["#{name}_#{child}".to_sym] = content }
+    end
+    alias_method :effective_fields_for, :fields_for
 
   end
 end
