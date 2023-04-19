@@ -5,7 +5,7 @@ module Effective
     class TextArea < Effective::TableRow
 
       def content
-        template.simple_format(value) if value.present?
+        template.simple_format(value) if value.kind_of?(String)
       end
 
     end

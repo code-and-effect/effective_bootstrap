@@ -16,6 +16,10 @@ module Effective
       @options = options
     end
 
+    def controller_namespace
+      Effective::Resource.new(template.controller.controller_path).namespace
+    end
+
     # Intended for override
     def content
       value

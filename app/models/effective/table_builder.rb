@@ -54,8 +54,12 @@ module Effective
     end
 
     def build_resource_rows
-      Effective::Resource.new(object).klass_attributes(sort: true).each do |name, options|
+      Effective::Resource.new(object).resource_attributes.each do |name, options|
         case options.first
+        when :belongs_to
+          belongs_to(name)
+        when :effective_address
+          effective_address(name)
         when :boolean
           boolean_row(name)
         when :text
@@ -108,6 +112,10 @@ module Effective
     alias_method :select, :collection_row
     alias_method :checks, :collection_row
     alias_method :radios, :collection_row
+
+    def belongs_to(name, options = {})
+      rows[name] = TableRows::BelongsTo.new(name, options, builder: self).to_html
+    end
 
     def email_field(name, options = {})
       rows[name] = TableRows::EmailField.new(name, options, builder: self).to_html
