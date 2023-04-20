@@ -2,7 +2,7 @@
 
 module Effective
   class TableBuilder
-    FILTER_PARAMETERS = [:password, :password_confirmation, :created_at, :updated_at]
+    FILTER_PARAMETERS = [:password, :password_confirmation, :status_steps, :wizard_steps, :token, :created_at, :updated_at]
 
     attr_accessor :object, :template, :options
 
@@ -62,10 +62,12 @@ module Effective
           effective_address(name)
         when :boolean
           boolean_row(name)
+        when :integer
+          name.to_s.end_with?('price') ? price_field(name) : text_field(name)
+        when :string
+          name.to_s.include?('email') ? email_field(name) : text_field(name)
         when :text
           text_area(name)
-        when :string
-          (name.to_s.include?('email') && value(name).to_s.include?('@')) ? email_field(name) : text_field(name)
         else default_row(name)
         end
       end
