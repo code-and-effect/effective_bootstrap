@@ -28,8 +28,13 @@ module Effective
     # Render method
     def to_html(&block)
       content_tag(:tr) do
-        content_tag(:td, label) + content_tag(:td, content.presence || '-')
+        content_tag(:td, label_content) + content_tag(:td, content.presence || '-')
       end
+    end
+
+    def label_content
+      hint = self.hint
+      (hint.present? ? "#{label}#{hint}" : label).html_safe
     end
 
     # Humanized label or the label from form
@@ -38,6 +43,15 @@ module Effective
       prefix = builder.options[:prefix]
 
       [*prefix, text].join(': ')
+    end
+
+    def hint
+      text = options[:hint]
+      return if text.blank?
+
+      content_tag(:div) do
+        content_tag(:small, text.html_safe, class: 'text-muted')
+      end
     end
 
     # Value from resource
