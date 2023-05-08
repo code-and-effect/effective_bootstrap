@@ -28,7 +28,7 @@ module Effective
       capture(&block) if block_given?
 
       # Build from the resource if we didn't do anything in the block
-      build_resource_rows if rows.blank?
+      build_resource_rows if rows.blank? && !block_given?
 
       only = Array(options[:only])
       except = Array(options[:except])
@@ -191,7 +191,11 @@ module Effective
 
     # Has Many
     def has_many(name, collection = nil, options = {}, &block)
-      raise('unsupported')
+      value(name).each_with_index do |object, index|
+        builder = TableBuilder.new(object, template, options.merge(prefix: human_attribute_name(name).singularize + " ##{index+1}"))
+        builder.render(&block)
+        builder.rows.each { |child, content| rows["#{name}_#{child}_#{index}".to_sym] = content }
+      end
     end
 
     def fields_for(name, object, options = {}, &block)
