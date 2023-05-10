@@ -164,6 +164,10 @@ module Effective
       # Nothing to do
     end
 
+    def static_field(name, options = {}, &block)
+      rows[name] = (value(name).is_a?(ActiveRecord::Base)) ? belongs_to(name, options) : default_row(name, options)
+    end
+
     def text_area(name, options = {})
       rows[name] = TableRows::TextArea.new(name, options, builder: self).to_html
     end
