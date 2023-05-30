@@ -159,32 +159,11 @@ module Effective
       end
 
       def css
-        if @template.respond_to?(:asset_pack_path)
-          [@template.asset_pack_path('article_editor/arx-frame.min.css')]
-        elsif @template.respond_to?(:asset_path)
-          [@template.asset_path('article_editor/arx-frame.min.css')]
-        else
-          ['/assets/article_editor/arx-frame.min.css']
-        end
+        [asset_path('article_editor/arx-frame.min.css')]
       end
 
       def custom_css
-        if @template.respond_to?(:asset_pack_path)
-          [
-            @template.asset_pack_path('application.css'),
-            @template.asset_pack_path('effective_bootstrap_article_editor.css')
-          ]
-        elsif @template.respond_to?(:asset_path)
-          [
-            @template.asset_path('application.css'),
-            @template.asset_path('effective_bootstrap_article_editor.css')
-          ]
-        else
-          [
-            '/assets/application.css',
-            '/assets/effective_bootstrap_article_editor.css'
-          ]
-        end
+        [asset_path('application.css'), asset_path('effective_bootstrap_article_editor.css')]
       end
 
       def active_storage
