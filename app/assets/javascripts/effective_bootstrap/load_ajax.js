@@ -15,7 +15,12 @@ $(document).on('change', "[data-load-ajax-url][data-load-ajax-div]", function(ev
   let value = ($input.val() || '');
   if(value.length == 0) { $container.html(''); return; }
 
-  url = (url + '?' + name + '=' + value);
+  let joiner = (url.indexOf('?') == -1 ? '?' : '&');
+
+  let input = {}
+  input[name] = value;
+
+  url = (url + joiner + $.param(input));
 
   $container.html("<div class='load-ajax-loading'><p>Loading...</p></div>");
 
@@ -27,6 +32,7 @@ $(document).on('change', "[data-load-ajax-url][data-load-ajax-div]", function(ev
     } else {
       $container.replaceWith($content.children(div));
       EffectiveBootstrap.initialize();
+      $(document).trigger('effective-datatables:initialize');
     }
   });
 });
