@@ -6,6 +6,11 @@
 # cards: true
 # custom: false
 
+# For cards, you should pass an html collection like
+# [[card('First Item') {...}, 'first item'], [card('Second Item') {...}, 'second item']]
+# or a collection like
+# [['First Item', 'first'], ['Second Item', 'second']]
+
 module Effective
   module FormInputs
     class Radios < CollectionInput
@@ -54,7 +59,7 @@ module Effective
         [
           'effective-radios',
           ('btn-group btn-group-toggle' if buttons?),
-          ('card-deck' if cards?),
+          ('cards card-deck' if cards?),
           ('no-feedback' unless feedback_options),
           ('is-invalid' if feedback_options && has_error?(name)),
           ('is-valid' if feedback_options && has_error? && !has_error?(name))
@@ -110,21 +115,21 @@ module Effective
           builder.label(opts) { builder.radio_button(id: item_id) + builder.text }
         elsif cards?
           opts = item_label_options.merge(for: item_id)
-          opts[:class] = [opts[:class], ('active border-secondary' if active_item?(builder)), ('first-card' if first_item?) ].compact.join(' ')
+          opts[:class] = [opts[:class], ('active' if active_item?(builder)), ('first-card' if first_item?) ].compact.join(' ')
 
-          if active_item?(builder)
-            builder.label(opts) { builder.radio_button(id: item_id) + builder.text.sub('card-header', 'card-header bg-secondary text-white').html_safe }
-          else
-            builder.label(opts) { builder.radio_button(id: item_id) + builder.text }
-          end
+          builder.label(opts) { builder.radio_button(id: item_id) + build_item_wrap { builder.text } }
         else
           build_item_wrap { builder.radio_button(id: item_id) + builder.label(item_label_options.merge(for: item_id)) }
         end
       end
 
       def build_item_wrap(&block)
-        if cards?
-          content_tag(:div, yield, class: 'card')
+        if cards? && options_collection_includes_cards?
+          yield # Not required.
+        elsif cards?
+          content_tag(:div, class: 'card') do
+            content_tag(:div, yield, class: ('card-body' if card_body?))
+          end
         elsif custom?
           content_tag(:div, yield, class: 'custom-control custom-radio ' + (inline? ? 'custom-control-inline' : 'form-group'))
         else
@@ -136,11 +141,16 @@ module Effective
         options[:input].except(:inline, :custom, :buttons)
       end
 
+      def options_collection_includes_cards?
+        return @options_collection_includes_cards unless @options_collection_includes_cards.nil?
+        @options_collection_includes_cards = options_collection.first(3).any? { |text, _| text.to_s.include?("div class=\"card") }
+      end
+
       def item_label_options
         if buttons?
           { class: 'btn btn-outline-secondary' }
         elsif cards?
-          { class: 'card' }
+          { class: 'form-card-label' }
         elsif custom?
           { class: 'custom-control-label' }
         else
@@ -156,6 +166,12 @@ module Effective
       def cards? # default false
         return @cards unless @cards.nil?
         @cards = (options.delete(:cards) || false)
+      end
+
+      def card_body? # default true
+        return @card_body unless @card_body.nil?
+        value = options.delete(:card_body)
+        @card_body = (value == nil ? true : value)
       end
 
       def button_group_id

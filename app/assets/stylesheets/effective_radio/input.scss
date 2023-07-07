@@ -5,25 +5,34 @@ div.btn-group > .btn.first-button {
 
 .effective-radios.is-valid {
   label { border-color: #28a745; }
+  .card { border-color: #28a745; }
   .valid-feedback { display: block; }
 }
 
 .effective-radios.is-invalid {
   label { border-color: #dc3545; }
+  .card { border-color: #dc3545; }
   .invalid-feedback { display: block; }
 }
 
-.effective-radios.card-deck {
-  .card-header { cursor: pointer; }
+.effective-radios.cards {
+  .card { 
+    cursor: pointer; 
+  }
 
   input[type=radio] { display: none; }
 
-  .visible-when-selected { display: none; }
-  .visible-when-unselected { display: block; }
+  input:checked + .card {
+    box-shadow: 0 0 1px 1px #0b3b61;
+  }
 
-  .active {
-    .visible-when-selected { display: block; }
-    .visible-when-unselected { display: none; }
+  input:checked + .card {
+    .show-if-checked { display: inherit; }
+    .show-if-unchecked { display: none; }
+  }
+
+  input:not(:checked) + .card {
+    .show-if-checked { display: none; }
+    .show-if-unchecked { display: inherit; }
   }
 }
-
