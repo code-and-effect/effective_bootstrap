@@ -77,9 +77,9 @@ module Effective
 
       def input_html_options
         if buttons?
-          { autocomplete: 'off' }
+          { autocomplete: 'off', class: 'effective-radios-input' }
         elsif cards?
-          { autocomplete: 'off' }
+          { autocomplete: 'off', class: 'effective-radios-input' }
         elsif custom?
           { class: 'custom-control-input' }
         else
