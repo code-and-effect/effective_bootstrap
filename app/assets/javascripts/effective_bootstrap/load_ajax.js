@@ -22,6 +22,17 @@ $(document).on('change', "[data-load-ajax-url][data-load-ajax-div]", function(ev
 
   url = (url + joiner + $.param(input));
 
+  // Include all form params?
+  let all = $input.data('load-ajax-all');
+
+  if(all) {
+    let $form = $input.closest('form');
+    let form = $form.serialize().replace(/authenticity_token=[^&]+&?/, "");
+
+    url = url + '&' + form;
+  }
+
+  // Load it
   $container.html("<div class='load-ajax-loading'><p>Loading...</p></div>");
 
   let $content = $('<div></div>');
