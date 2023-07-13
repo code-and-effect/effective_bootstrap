@@ -32,7 +32,8 @@ module EffectiveFormBuilderHelper
       ('form-inline' if options[:layout] == :inline),
       ('with-errors' if subject.respond_to?(:errors) && subject.errors.present?),
       ('show-flash-success' if options[:remote] && options[:flash_success]),
-      ('hide-flash-danger' if options[:remote] && options.key?(:flash_error) && !options[:flash_error])
+      ('hide-flash-danger' if options[:remote] && options.key?(:flash_error) && !options[:flash_error]),
+      ('autosave' if options[:autosave])
     ].compact.join(' ')
 
     if options[:remote] || options[:unique_ids]

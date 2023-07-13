@@ -200,3 +200,13 @@ $(document).on 'clear', 'form', (event) ->
   $form = $(event.currentTarget)
   EffectiveForm.reset($form)
   setTimeout -> EffectiveForm.clear($form)
+
+# Autosave
+# https://stackoverflow.com/questions/12683524/with-rails-ujs-how-to-submit-a-remote-form-from-a-function
+$(document).on 'change', 'form.autosave', (event) ->
+  $form = $(event.currentTarget)
+
+  if(window.Rails)
+    window.Rails.fire($form[0], 'submit')
+  else
+    $form.trigger('submit.rails')
