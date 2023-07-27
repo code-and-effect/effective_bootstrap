@@ -125,6 +125,7 @@ module Effective
 
       def has_many_links_for(block)
         return BLANK unless add? || reorder?
+        return BLANK if disabled?
 
         content_tag(:div, class: 'has-many-links mt-2') do
           [*(link_to_add(block) if add?), *(link_to_reorder(block) if reorder?)].join(' ').html_safe
@@ -138,6 +139,8 @@ module Effective
         can_remove = (can_remove_method.blank? || !!resource.send(can_remove_method))
 
         content = @builder.fields_for(name, resource) do |form|
+          form.disabled = disabled?
+
           fields = block.call(form)
 
           remove += form.super_hidden_field(:_destroy) if remove? && can_remove && resource.persisted?
@@ -146,11 +149,11 @@ module Effective
           fields
         end
 
-        if remove?
+        if remove? && !disabled?
           remove += (can_remove || resource.new_record?) ? link_to_remove(resource) : disabled_link_to_remove(resource)
         end
 
-        if insert?
+        if insert? && !disabled?
           insert = render_insert() if add? && reorder?
         end
 
