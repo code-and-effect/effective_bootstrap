@@ -5,7 +5,7 @@ module Effective
     class UrlField < Effective::TableRow
 
       def content
-        template.link_to(value) if value.present?
+        template.link_to(value, value, target: '_blank') if value.present?
       end
 
     end

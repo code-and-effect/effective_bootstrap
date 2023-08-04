@@ -119,6 +119,14 @@ module Effective
       rows[name] = TableRows::BelongsTo.new(name, options, builder: self).to_html
     end
 
+    def date_field(name, options = {})
+      rows[name] = TableRows::DateField.new(name, options, builder: self).to_html
+    end
+
+    def datetime_field(name, options = {})
+      rows[name] = TableRows::DatetimeField.new(name, options, builder: self).to_html
+    end
+
     def email_field(name, options = {})
       rows[name] = TableRows::EmailField.new(name, options, builder: self).to_html
     end
@@ -150,6 +158,10 @@ module Effective
 
     def percent_field(name, options = {})
       rows[name] = TableRows::PercentField.new(name, options, builder: self).to_html
+    end
+
+    def tel_field(name, options = {})
+      rows[name] = TableRows::PhoneField.new(name, options, builder: self).to_html
     end
 
     def price_field(name, options = {})
