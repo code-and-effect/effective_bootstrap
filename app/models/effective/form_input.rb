@@ -140,20 +140,7 @@ module Effective
       return BLANK if options[:label] == false
       return BLANK if name.kind_of?(NilClass)
 
-      text = options[:label].delete(:text)
-      name_to_s = name.to_s
-
-      text ||= (
-        if object && name_to_s.ends_with?('_id')
-          object.class.human_attribute_name(name_to_s.chomp('_id'))
-        elsif object && name_to_s.ends_with?('_ids')
-          object.class.human_attribute_name(name_to_s.chomp('_ids').pluralize)
-        elsif object
-          object.class.human_attribute_name(name)
-        else
-          BLANK
-        end
-      )
+      text = options[:label].delete(:text) || build_human_label()
 
       if options[:input][:id]
         options[:label][:for] = options[:input][:id]
@@ -162,17 +149,54 @@ module Effective
       @builder.label(name, text.html_safe, options[:label])
     end
 
+    def build_human_label
+      name = self.name.to_s
+
+      label = if object && name.ends_with?('_id')
+        object.class.human_attribute_name(name.chomp('_id'))
+      elsif object && name.ends_with?('_ids')
+        object.class.human_attribute_name(name.chomp('_ids').pluralize)
+      elsif object
+        object.class.human_attribute_name(name)
+      else
+        BLANK
+      end
+
+      label
+    end
+
     def build_input(&block)
       capture(&block)
     end
 
     def build_hint
-      return BLANK unless options[:hint] && options[:hint][:text]
+      return BLANK if options[:label] == false
+      return BLANK if name.kind_of?(NilClass)
 
       tag = options[:hint].delete(:tag)
-      text = options[:hint].delete(:text)
+      text = options[:hint].delete(:text) || build_human_hint()
+      return BLANK unless text.present?
 
       content_tag(tag, text.html_safe, options[:hint])
+    end
+
+    def build_human_hint
+      name = self.name.to_s
+
+      key = if object && name.ends_with?('_id')
+        "activerecord.attributes.#{object.model_name.i18n_key}.#{name.chomp('_id')}_hint"
+      elsif object && name.ends_with?('_ids')
+        "activerecord.attributes.#{object.model_name.i18n_key}.#{name.chomp('_ids').pluralize}_hint"
+      elsif object
+        "activerecord.attributes.#{object.model_name.i18n_key}.#{name}_hint"
+      end
+
+      return nil if key.blank?
+
+      hint = ::I18n.t(key)
+      return nil if hint.include?(key) # missing translation 
+
+      hint
     end
 
     def build_feedback
