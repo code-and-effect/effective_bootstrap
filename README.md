@@ -697,6 +697,21 @@ The `f.save` is purely a input submit button.
   = f.save 'Save 2'
 ```
 
+## Internationalization
+
+The form builder will use labels and hints based on your current localization, if present
+
+To use these, just assign the activemodel attributes values to your strings
+
+en:
+  activerecord:
+    models:
+      thing: 'Thing'
+    attributes:
+      thing:
+        title: 'Good Title'
+        title_hint: 'please make this title really good'
+
 ## Table Builder
 
 Use `effective_table_with(resource)` to intelligently output a table of attributes for a resource.
@@ -765,6 +780,7 @@ or just the fields partial
 You can specify `only:` and `except:` and use `f.content_for` to override a row in all these use cases.
 
 All values flow through to i18n and can be overriden, same as the form labels, in the locale .yml file.
+
 
 ## License
 
