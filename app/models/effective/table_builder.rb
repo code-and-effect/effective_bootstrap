@@ -35,6 +35,7 @@ module Effective
       filtered = filter_parameters
 
       content = rows.merge(content_fors)
+
       content = content.slice(*only) if only.present?
       content = content.except(*except) if except.present?
       content = content.except(*filtered) if filtered.present?
@@ -168,11 +169,11 @@ module Effective
       rows[name] = TableRows::PriceField.new(name, options, builder: self).to_html
     end
 
-    def save(name, options = {})
+    def save(name = nil, options = {})
       # Nothing to do
     end
 
-    def submit(name, options = {}, &block)
+    def submit(name = nil, options = {}, &block)
       # Nothing to do
     end
 
