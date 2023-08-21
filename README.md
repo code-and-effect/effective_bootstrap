@@ -703,6 +703,7 @@ The form builder will use labels and hints based on your current localization, i
 
 To use these, just assign the activemodel attributes values to your strings
 
+```
 en:
   activerecord:
     models:
@@ -711,6 +712,7 @@ en:
       thing:
         title: 'Good Title'
         title_hint: 'please make this title really good'
+```
 
 ## Table Builder
 
