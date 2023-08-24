@@ -20,5 +20,10 @@ $(document).on 'direct-upload:end', (event) ->
   # Rails UJS fix
   $obj.closest('form').find('[type=submit][data-confirm]').data('confirmed', true)
 
+  # Remove any empty [] inputs after upload
+  $obj.closest('.form-group').find('input').each (i, input) ->
+    $input = $(input)
+    $input.remove() unless $input.val()
+
 $(document).on 'change', "input[type='file'][data-click-submit]", (event) ->
   $(event.currentTarget).closest('form').find('button[type=submit],input[type=submit]').first().click()
