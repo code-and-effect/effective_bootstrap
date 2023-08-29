@@ -27,8 +27,8 @@ module Effective
 
     # Render method
     def to_html(&block)
-      content_tag(:tr) do
-        content_tag(:td, label_content) + content_tag(:td, content.presence || '-')
+      content_tag(:tr, class: "effective-table-summary-#{label_content.parameterize}") do
+        content_tag(:th, label_content) + content_tag(:td, content.presence || '-')
       end
     end
 
