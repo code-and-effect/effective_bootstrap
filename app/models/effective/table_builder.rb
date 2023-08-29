@@ -40,7 +40,7 @@ module Effective
       content = content.except(*except) if except.present?
       content = content.except(*filtered) if filtered.present?
 
-      content_tag(:table, class: options.fetch(:class, 'table table-striped table-hover')) do
+      content_tag(:table, class: options.fetch(:class, 'table table-sm table-striped table-hover effective-table-summary')) do
         content_tag(:tbody, content.values.join.html_safe)
       end
     end
