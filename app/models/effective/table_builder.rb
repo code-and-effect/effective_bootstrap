@@ -64,7 +64,7 @@ module Effective
         when :boolean
           boolean_row(name)
         when :integer
-          name.to_s.end_with?('price') ? price_field(name) : text_field(name)
+          ['price', 'discount', '_fee'].any? { |p| name.to_s.include?(p) } ? price_field(name) : text_field(name)
         when :string
           name.to_s.include?('email') ? email_field(name) : text_field(name)
         when :text
