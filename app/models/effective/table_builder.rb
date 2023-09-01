@@ -27,17 +27,25 @@ module Effective
       # This runs the form partial over this table builder
       capture(&block) if block_given?
 
-      # Build from the resource if we didn't do anything in the block
-      build_resource_rows if rows.blank? && !block_given?
-
+      # Consider content
       only = Array(options[:only])
       except = Array(options[:except])
+      additionally = Array(options[:additionally])
       filtered = filter_parameters
 
+      # Rows are created when we use the block syntax and call a f.text_field or other f.form_field
+      # Using = f.content_for does not create a row.
+      # So rows wille be blank when using the default syntax
+      # And rows will be present when we render a form, or any form fields
+      build_resource_rows(only: only, except: except) if rows.blank?
+
+      # This gives us a second run through the rows, if you pass additionally
+      build_resource_rows(only: additionally) if additionally.present?
+
+      # Use f.content_for :name to override the content
       content = rows.merge(content_fors)
 
-      content = content.slice(*only) if only.present?
-      content = content.except(*except) if except.present?
+      # Filter out some hardcoded ones
       content = content.except(*filtered) if filtered.present?
 
       content_tag(:table, class: options.fetch(:class, 'table table-sm table-striped table-hover effective-table-summary')) do
@@ -54,8 +62,11 @@ module Effective
       end
     end
 
-    def build_resource_rows
+    def build_resource_rows(only: nil, except: nil)
       Effective::Resource.new(object).resource_attributes.each do |name, options|
+        next if only.present? && only.exclude?(name)
+        next if except.present? && except.include?(name)
+
         case options.first
         when :belongs_to
           belongs_to(name)
@@ -64,7 +75,13 @@ module Effective
         when :boolean
           boolean_row(name)
         when :integer
-          ['price', 'discount', '_fee'].any? { |p| name.to_s.include?(p) } ? price_field(name) : text_field(name)
+          if ['price', 'discount', '_fee'].any? { |p| name.to_s.include?(p) }
+            price_field(name)
+          elsif ['_percent'].any? { |p| name.to_s.include?(p) }
+            percent_field(name)
+          else
+            text_field(name)
+          end
         when :string
           name.to_s.include?('email') ? email_field(name) : text_field(name)
         when :text

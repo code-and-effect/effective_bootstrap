@@ -5,7 +5,16 @@ module Effective
     class TextArea < Effective::TableRow
 
       def content
-        template.simple_format(value) if value.kind_of?(String)
+        return unless value.present?
+
+        # Might be an Array or Hash. Serialized something.
+        return value.to_s unless value.kind_of?(String)
+
+        if value.start_with?('<') && value.end_with?('>')
+          value.html_safe
+        else
+          template.simple_format(value)
+        end
       end
 
     end
