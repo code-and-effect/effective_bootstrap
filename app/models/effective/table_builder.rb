@@ -117,6 +117,10 @@ module Effective
       rows[name] = TableRow.new(name, options, builder: self).to_html
     end
 
+    def article_editor(name, options = {})
+      rows[name] = TableRows::ArticleEditor.new(name, options, builder: self).to_html
+    end
+
     def boolean_row(name, options = {})
       rows[name] = TableRows::Boolean.new(name, options, builder: self).to_html
     end
