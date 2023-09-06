@@ -13,11 +13,15 @@ module Effective
         values = Array(value) - [nil, '']
 
         if values.length > 1
-          values.map { |v| content_tag(:div, v) }.join.html_safe
+          values.map { |v| content_tag(:div, item_content(v)) }.join.html_safe
         elsif values.length == 1
-          values.first
+          item_content(values.first)
         end
+      end
 
+      def item_content(value)
+        item = @collection.find { |k, v| (k && k == value) || (v && v == value) || k.try(:id) == value }
+        (item || value).to_s
       end
 
     end
