@@ -7,10 +7,12 @@ module Effective
       def content
         return unless value.present?
 
-        if value.start_with?('<') && value.end_with?('>')
-          value.html_safe
+        value_to_s = value.to_s
+
+        if value_to_s.include?('</')
+          value_to_s.html_safe
         else
-          template.simple_format(value)
+          template.simple_format(value_to_s)
         end
       end
 
