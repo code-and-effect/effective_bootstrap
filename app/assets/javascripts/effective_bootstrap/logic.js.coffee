@@ -23,15 +23,19 @@
 
 
 (this.EffectiveBootstrap || {}).effective_show_if = ($element, options) ->
-  $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}'],input[name='#{options.name}[]']")
 
   $affects.on 'change', (event) ->
     $target = $(event.target)
     matches = ($target.val() == options.value)
 
     if $target.is("[type='checkbox']")
-      matches = matches || ($target.is(':checked') && "#{options.value}" == 'true')
-      matches = matches || (!$target.is(':checked') && ("#{options.value}" == 'false' || "#{options.value}" == ''))
+      if $target.attr('name').indexOf('[]') == -1
+        matches = matches || ($target.is(':checked') && "#{options.value}" == 'true')
+        matches = matches || (!$target.is(':checked') && ("#{options.value}" == 'false' || "#{options.value}" == ''))
+      else
+        selected = $target.closest('fieldset').find("[name='#{options.name}[]']:checked").map((i, el) -> $(el).val()).get()
+        matches = selected.find((value) => (value == options.value || "#{value}" == "#{options.value}"))
 
     if matches
       $element.fadeIn()
