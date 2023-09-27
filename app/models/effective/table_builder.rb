@@ -237,10 +237,18 @@ module Effective
     end
 
     def fields_for(name, object, options = {}, &block)
-      value(name).each_with_index do |object, index|
-        builder = TableBuilder.new(object, template, options.reverse_merge(prefix: human_attribute_name(name).singularize + " ##{index+1}"))
+      values = value(name)
+
+      if values.respond_to?(:each_with_index)
+        values.each_with_index do |object, index|
+          builder = TableBuilder.new(object, template, options.reverse_merge(prefix: human_attribute_name(name).singularize + " ##{index+1}"))
+          builder.render(&block)
+          builder.rows.each { |child, content| rows["#{name}_#{child}_#{index}".to_sym] = content }
+        end
+      else
+        builder = TableBuilder.new(object, template, options.merge(prefix: human_attribute_name(name)))
         builder.render(&block)
-        builder.rows.each { |child, content| rows["#{name}_#{child}_#{index}".to_sym] = content }
+        builder.rows.each { |child, content| rows["#{name}_#{child}".to_sym] = content }
       end
     end
     alias_method :effective_fields_for, :fields_for
