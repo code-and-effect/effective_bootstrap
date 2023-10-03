@@ -21,7 +21,7 @@
   left: 0;
   bottom: 0;
   opacity: 0.2;
-  background: #0076ff;
+  background: $success;
   transition: width 120ms ease-out, opacity 60ms 60ms ease-in;
   transform: translate3d(0, 0, 0);
 }
@@ -31,7 +31,7 @@
 }
 
 .direct-upload--error {
-  border-color: red;
+  border-color: $danger;
 }
 
 input[type=file][data-direct-upload-url][disabled] {
