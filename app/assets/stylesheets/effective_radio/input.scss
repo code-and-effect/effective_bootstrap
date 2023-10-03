@@ -4,14 +4,14 @@ div.btn-group > .btn.first-button {
 }
 
 .effective-radios.is-valid {
-  label { border-color: #28a745; }
-  .card { border-color: #28a745; }
+  label { border-color: $success; }
+  .card { border-color: $success; }
   .valid-feedback { display: block; }
 }
 
 .effective-radios.is-invalid {
-  label { border-color: #dc3545; }
-  .card { border-color: #dc3545; }
+  label { border-color: $danger; }
+  .card { border-color: $danger; }
   .invalid-feedback { display: block; }
 }
 

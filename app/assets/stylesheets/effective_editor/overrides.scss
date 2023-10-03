@@ -2,16 +2,16 @@
 textarea.form-control.effective_editor { height: 0; }
 
 // Bootstrap 4 Feedback client side
-.was-validated .form-control:invalid ~ .ql-container, { border-color: #dc3545; }
-.was-validated .form-control:valid ~ .ql-container { border-color: #28a745; }
-.was-validated .form-control:invalid ~ .ql-toolbar, { border-color: #dc3545; }
-.was-validated .form-control:valid ~ .ql-toolbar { border-color: #28a745; }
+.was-validated .form-control:invalid ~ .ql-container, { border-color: $danger; }
+.was-validated .form-control:valid ~ .ql-container { border-color: $success; }
+.was-validated .form-control:invalid ~ .ql-toolbar, { border-color: $danger; }
+.was-validated .form-control:valid ~ .ql-toolbar { border-color: $success; }
 
 // Bootstrap 4 Server side feedback
-.form-control.is-invalid ~ .ql-container { border-color: #dc3545; }
-.form-control.is-invalid ~ .ql-toolbar { border-color: #dc3545; }
-.form-control.is-valid ~ .ql-container { border-color: #28a745; }
-.form-control.is-valid ~ .ql-toolbar { border-color: #28a745; }
+.form-control.is-invalid ~ .ql-container { border-color: $danger; }
+.form-control.is-invalid ~ .ql-toolbar { border-color: $danger; }
+.form-control.is-valid ~ .ql-container { border-color: $success; }
+.form-control.is-valid ~ .ql-toolbar { border-color: $success; }
 
 // Now for the editor itself
 .effective_editor_content.ql-container {
