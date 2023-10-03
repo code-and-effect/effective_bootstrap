@@ -485,13 +485,13 @@ module EffectiveBootstrapHelper
     # Pagination Tags
     prev_tag = content_tag(:li, class: ['page-item', ('disabled' if page <= 1)].compact.join(' ')) do
       link_to(content_tag(:span, 'Previous'.html_safe), (page <= 1 ? '#' : url + params.merge('page' => page - 1).to_query),
-        class: 'page-link', 'aria-label': 'Previous', title: 'Previous', 'aria-disabled': ('true' if page <= 1), 'tabindex': ('-1' if page <= 1)
+        class: 'page-link', 'aria-label': 'Previous', title: 'Previous', 'aria-disabled': ('true' if page <= 1), 'tabindex': ('-1' if page <= 1), 'rel': ('prev' unless page <= 1)
       )
     end
 
     next_tag = content_tag(:li, class: ['page-item', ('disabled' if page >= last)].compact.join(' ')) do
       link_to(content_tag(:span, 'Next'.html_safe), (page >= last ? '#' : url + params.merge('page' => page + 1).to_query),
-        class: 'page-link', 'aria-label': 'Next', title: 'Next', 'aria-disabled': ('true' if page >= last), 'tabindex': ('-1' if page >= last)
+        class: 'page-link', 'aria-label': 'Next', title: 'Next', 'aria-disabled': ('true' if page >= last), 'tabindex': ('-1' if page >= last), 'rel': ('next' unless page >= last)
       )
     end
 
