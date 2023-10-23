@@ -17,7 +17,10 @@ module Effective
       end
 
       def input_group_options
-        { input_group: { class: 'input-group effective_date_time_picker_input_group' }, prepend: content_tag(:span, icon('calendar'), class: 'input-group-text') }
+        { 
+          input_group: { class: 'input-group effective_date_time_picker_input_group' }, 
+          prepend: (content_tag(:span, icon('calendar'), class: 'input-group-text') unless disabled?)
+        }
       end
 
       def datetime_to_s # ruby
