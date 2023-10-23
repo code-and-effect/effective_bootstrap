@@ -161,7 +161,7 @@ module Effective
       end
 
       def build_purge
-        return ''.html_safe unless purge?
+        return ''.html_safe unless purge? && !disabled?
 
         label = (multiple? ? 'Delete existing files on save' : 'Delete existing file on save')
         @builder.check_box('_purge', multiple: true, label: label, id: "#{tag_id}_purge", checked_value: name)
