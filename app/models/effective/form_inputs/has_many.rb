@@ -125,21 +125,21 @@ module Effective
 
       def has_many_links_for(block)
         return BLANK unless add? || reorder?
-        return BLANK if disabled?
+        # We can't return BLANK when disabled? here or it breaks f.show_if
 
         content_tag(:div, class: 'has-many-links mt-2') do
           [*(link_to_add(block) if add?), *(link_to_reorder(block) if reorder?)].join(' ').html_safe
         end
       end
 
-      def render_resource(resource, block)
+      def render_resource(resource, block, skip_disabled: nil)
         remove = BLANK
         reorder = BLANK
         insert = BLANK
         can_remove = (can_remove_method.blank? || !!resource.send(can_remove_method))
 
         content = @builder.fields_for(name, resource) do |form|
-          form.disabled = disabled?
+          form.disabled = disabled? unless skip_disabled
 
           fields = block.call(form)
 
@@ -149,11 +149,11 @@ module Effective
           fields
         end
 
-        if remove? && !disabled?
+        if remove?
           remove += (can_remove || resource.new_record?) ? link_to_remove(resource) : disabled_link_to_remove(resource)
         end
 
-        if insert? && !disabled?
+        if insert?
           insert = render_insert() if add? && reorder?
         end
 
@@ -188,14 +188,18 @@ module Effective
         content_tag(:div, link_to_insert(), class: 'has-many-actions')
       end
 
-      def render_template(block)
+      def render_template(block, skip_disabled: nil)
         resource = build_resource()
-        index = collection.length
+        length = collection.length
 
-        html = render_resource(resource, block)
+        html = render_resource(resource, block, skip_disabled: skip_disabled)
 
-        unless html.include?("#{name}_attributes][#{index}]")
-          raise('unexpected index. unable to render resource template.')
+        # Guess the index
+        index = length if html.include?("#{name}_attributes][#{length}]")
+        index ||= html.match(/#{name}_attributes\]\[(\d+)\]/).try(:[], 1).try(:to_i)
+
+        if index.blank?
+          raise('unknown index. unable to render resource template.')
         end
 
         html.gsub!("#{name}_attributes][#{index}]", "#{name}_attributes][HASMANYINDEX]")
@@ -212,7 +216,7 @@ module Effective
           title: 'Add Another',
           data: {
             'effective-form-has-many-add': true,
-            'effective-form-has-many-template': render_template(block)
+            'effective-form-has-many-template': render_template(block, skip_disabled: true)
           }
         )
       end

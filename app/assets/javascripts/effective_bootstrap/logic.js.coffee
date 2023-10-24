@@ -1,3 +1,5 @@
+elementSelector = 'input,textarea,select,button,div.form-has-many'
+
 (this.EffectiveBootstrap || {}).effective_hide_if = ($element, options) ->
   $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}']")
 
@@ -11,16 +13,15 @@
 
     if matches
       $element.hide()
-      $element.find('input,textarea,select,button').prop('disabled', true)
+      $element.find(elementSelector).prop('disabled', true)
     else
       $element.fadeIn()
-      $element.find('input,textarea,select,button').removeAttr('disabled')
+      $element.find(elementSelector).removeAttr('disabled')
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
 
   # Maybe disable it now
   if options.needDisable
-    $element.find('input,textarea,select,button').prop('disabled', true)
-
+    $element.find(elementSelector).prop('disabled', true)
 
 (this.EffectiveBootstrap || {}).effective_show_if = ($element, options) ->
   $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}'],input[name='#{options.name}[]']")
@@ -39,15 +40,15 @@
 
     if matches
       $element.fadeIn()
-      $element.find('input,textarea,select,button').removeAttr('disabled')
+      $element.find(elementSelector).removeAttr('disabled')
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
     else
       $element.hide()
-      $element.find('input,textarea,select,button').prop('disabled', true)
+      $element.find(elementSelector).prop('disabled', true)
 
   # Maybe disable it now
   if options.needDisable
-    $element.find('input,textarea,select,button').prop('disabled', true)
+    $element.find(elementSelector).prop('disabled', true)
 
 (this.EffectiveBootstrap || {}).effective_show_if_any = ($element, options) ->
   $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}']")
@@ -59,13 +60,13 @@
 
     if found
       $element.fadeIn()
-      $element.find('input,textarea,select,button').removeAttr('disabled')
+      $element.find(elementSelector).removeAttr('disabled')
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
 
     else
       $element.hide()
-      $element.find('input,textarea,select,button').prop('disabled', true)
+      $element.find(elementSelector).prop('disabled', true)
 
   # Maybe disable it now
   if options.needDisable
-    $element.find('input,textarea,select,button').prop('disabled', true)
+    $element.find(elementSelector).prop('disabled', true)

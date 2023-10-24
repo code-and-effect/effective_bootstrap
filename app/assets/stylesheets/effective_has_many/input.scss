@@ -34,3 +34,8 @@
   margin-top: 0;
   .eb-icon { height: 1.0rem; width: 1.0rem; margin-bottom: 2px; }
 }
+
+.form-has-many[disabled] {
+  .has-many-links { display: none; }
+  .has-many-remove { display: none; }
+}
