@@ -129,8 +129,9 @@ module EffectiveBootstrapHelper
     id = "collapse-#{effective_bootstrap_unique_id}"
     show = (opts.delete(:show) == true)
 
-    # Figure out all the button / link options
-    link_opts = { 'data-toggle': 'collapse', role: 'button', href: "##{id}", 'aria-controls': "##{id}", 'aria-expanded': show }
+    # The div and the card now
+    div_class = opts.delete(:div_class)
+    card_class = opts.delete(:card_class) || 'card card-body my-2'
 
     # Two link labels
     label_expand = opts.delete(:expand) || label.to_s.tap do |label|
@@ -142,13 +143,19 @@ module EffectiveBootstrapHelper
     end + icon('chevron-up')
 
     # The link html classes
-    link_opts[:class] = opts.delete(:link_class) || 'btn btn-link'
-    link_opts[:class] += ' effective-collapse-actions hidden-print'
-    link_opts[:class] += ' collapsed' unless show
+    link_class = opts.delete(:link_class) || 'btn btn-link'
+    link_class += ' effective-collapse-actions hidden-print'
+    link_class += ' collapsed' unless show
 
-    # The div and the card now
-    div_class = opts.delete(:div_class)
-    card_class = opts.delete(:card_class) || 'card card-body my-2'
+    # Figure out all the button / link options
+    link_opts = { 
+      'data-toggle': 'collapse', 
+      role: 'button', 
+      href: "##{id}", 
+      'aria-controls': "##{id}", 
+      'aria-expanded': show, 
+      class: link_class 
+    }.merge(opts)
 
     # Normal collapse
     link_tag = content_tag(:a, link_opts) do
