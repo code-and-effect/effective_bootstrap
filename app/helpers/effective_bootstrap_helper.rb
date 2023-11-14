@@ -607,11 +607,11 @@ module EffectiveBootstrapHelper
 
   def tab(resource, opts = {}, &block)
     return if resource.kind_of?(Class) && !EffectiveResources.authorized?(self, :index, resource)
-    label = opts.delete(:label) || effective_bootstrap_human_name(resource, plural: (opts.key?(:plural) ? opts.delete(:plural) : true), prefer_model_name: true)
+    label = opts[:label] || effective_bootstrap_human_name(resource, plural: opts.fetch(:plural, true), prefer_model_name: true)
 
     (@_tab_labels.push(label) and return) if @_tab_mode == :validate
 
-    controls = opts.delete(:controls) || label.to_s.parameterize.gsub('_', '-')
+    controls = opts[:controls] || label.to_s.parameterize.gsub('_', '-')
     controls = "item-#{controls}" if NUMBERS.include?(controls[0]) # Can't start with a number
     controls = controls[1..-1] if controls[0] == '#'
     controls = "#{controls}-#{@_tab_unique}" if @_tab_unique
