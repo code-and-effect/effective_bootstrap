@@ -6,4 +6,7 @@ EffectiveBootstrap.setup do |config|
   # Adds a before_action to ApplicationController
   # To save and restore the active bootstrap tabs
   config.save_tabs = true
+
+  # Adds benchmark stats to each of the = tab helpers
+  config.benchmarks = false
 end

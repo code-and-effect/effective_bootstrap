@@ -569,7 +569,7 @@ module EffectiveBootstrapHelper
   # If you pass active 'label' it will make that tab active. Otherwise first.
   # Unique will make sure the tab html IDs are unique
   # $('#tab-demographics').tab('show')
-  def tabs(active: nil, unique: false, ignore_save_tab: false, list: {}, content: {}, &block)
+  def tabs(active: nil, unique: false, ignore_save_tab: false, benchmarks: EffectiveBootstrap.benchmarks, list: {}, content: {}, &block)
     raise 'expected a block' unless block_given?
 
     # The Active Tab might be set from a previous form submission, or passed into helper
@@ -587,20 +587,45 @@ module EffectiveBootstrapHelper
 
     tab_active ||= :first if tab_active.nil?
     @_tab_unique = effective_bootstrap_unique_id if unique
+    @_tab_benchmarks = {} if benchmarks # Enables benchmarks
 
     # Generate the html in two passes
-    content_tag(:ul, {class: 'nav nav-tabs', role: 'tablist'}.merge(list)) do
+    tabs_list = content_tag(:ul, {class: 'nav nav-tabs', role: 'tablist'}.merge(list)) do
       @_tab_mode = :tablist
       @_tab_active = tab_active
 
       yield # Yield to tab the first time
-    end +
-    content_tag(:div, {class: 'tab-content'}.merge(content)) do
+    end
+
+    tabs_divs = content_tag(:div, {class: 'tab-content'}.merge(content)) do
       @_tab_mode = :content
       @_tab_active = tab_active
 
       yield # Yield to tab the second time
     end
+
+    if benchmarks
+      total = @_tab_benchmarks.values.sum(&:real)
+
+      @_tab_benchmarks.each do |label, benchmark|
+        percent = (benchmark.real / total * 100).round(0)
+        amount = (benchmark.real * 1000).round(1)
+
+        badge_class = case amount
+        when (0.0..150.0) then ''
+        when (150.0..500.0) then 'badge-warning'
+        else 'badge-danger'
+        end
+
+        badge = content_tag(:span, "#{percent}% | #{amount}ms", class: "badge #{badge_class}")
+
+        tabs_list.sub!(label, label + '<br>' + badge)
+      end
+
+      tabs_list = tabs_list.html_safe
+    end
+
+    (tabs_list + tabs_divs)
   end
 
   NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -629,7 +654,11 @@ module EffectiveBootstrapHelper
     else # Inserting the content into the tab itself
       classes = ['tab-pane', 'fade', ('show active' if active), opts[:class].presence].compact.join(' ')
       content_tag(:div, id: controls, class: classes, role: 'tabpanel', 'aria-labelledby': ('tab-' + controls), 'data-tab-label': label) do
-        yield
+        if @_tab_benchmarks.kind_of?(Hash)
+          @_tab_benchmarks[label] = Benchmark.measure { yield }
+        else
+          yield
+        end
       end
     end
   end

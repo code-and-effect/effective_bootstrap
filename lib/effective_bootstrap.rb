@@ -6,7 +6,7 @@ require 'effective_bootstrap/version'
 module EffectiveBootstrap
 
   def self.config_keys
-    [:use_custom_data_confirm, :save_tabs]
+    [:use_custom_data_confirm, :save_tabs, :benchmarks]
   end
 
   include EffectiveGem
