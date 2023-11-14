@@ -609,7 +609,7 @@ module EffectiveBootstrapHelper
 
       @_tab_benchmarks.each do |label, benchmark|
         percent = (benchmark.real / total * 100).round(0)
-        amount = (benchmark.real * 1000).round(1)
+        amount = (benchmark.real * 1000).round(0)
 
         badge_class = case amount
         when (0.0..150.0) then ''
