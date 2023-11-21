@@ -37,8 +37,9 @@ module Effective
     end
 
     def label_content
-      hint = self.hint
-      (hint.present? ? "#{label}#{hint}" : label).html_safe
+      label.html_safe
+      # hint = self.hint
+      # (hint.present? ? "#{label}#{hint}" : label).html_safe
     end
 
     # Humanized label or the label from form
