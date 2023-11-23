@@ -44,7 +44,7 @@ module Effective
 
     # Humanized label or the label from form
     def label
-      text = options[:label] || builder.human_attribute_name(name)
+      text = options[:label] || EffectiveResources.et(builder.object, name)
       prefix = builder.options[:prefix]
 
       [*prefix, text].join(': ')

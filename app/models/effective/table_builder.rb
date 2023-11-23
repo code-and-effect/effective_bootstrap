@@ -68,6 +68,8 @@ module Effective
         next if except.present? && except.include?(name)
 
         case options.first
+        when :active_storage
+          file_field(name)
         when :belongs_to
           belongs_to(name)
         when :effective_address
