@@ -16,7 +16,7 @@ module EffectiveBootstrap
     end
 
     initializer 'effective_bootstrap.action_text' do |app|
-      if defined?(ActionText)
+      if defined?(ActionText) && ActionText::ContentHelper.allowed_attributes
         ActionText::ContentHelper.allowed_attributes << 'style'
       end
     end

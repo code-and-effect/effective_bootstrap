@@ -23,5 +23,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-rails'
   s.add_dependency 'coffee-rails'
   s.add_dependency 'sassc'
+  s.add_dependency 'sprockets-rails'
   s.add_dependency 'haml'
 end
