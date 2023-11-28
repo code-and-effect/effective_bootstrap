@@ -144,7 +144,7 @@ module Effective
           fields = block.call(form)
 
           remove += form.super_hidden_field(:_destroy) if remove? && can_remove && resource.persisted?
-          reorder += form.super_hidden_field(:position) if reorder? && !fields.include?('][position]')
+          reorder += form.super_hidden_field(:position) if reorder? && !fields.to_s.include?('][position]')
 
           fields
         end

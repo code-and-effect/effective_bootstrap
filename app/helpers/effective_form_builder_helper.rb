@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module EffectiveFormBuilderHelper
-  def effective_form_with(**options, &block)
+  def effective_form_with(model: nil, scope: nil, url: nil, format: nil, **options, &block)
     # This allows us to call effective_form_with inside an effective_table_with and just get the fields
     return @_effective_table_builder.capture(&block) if @_effective_table_builder
 
     # Compute the default ID
-    subject = Array(options[:model] || options[:scope]).last
-    class_name = (options[:scope] || subject.class.name.parameterize.underscore)
+    subject = Array(model || scope).last
+    class_name = (scope || subject.class.name.parameterize.underscore)
     unique_id = options.except(:model).hash.abs
 
     html_id = if subject.kind_of?(Symbol)
@@ -63,8 +63,8 @@ module EffectiveFormBuilderHelper
     options[:id] ||= (options[:html].delete(:id) || html_id) unless options.key?(:id)
 
     # Assign url if engine present
-    options[:url] ||= if options[:engine] && options[:model].present?
-      resource = Effective::Resource.new(options[:model])
+    url ||= if options[:engine] && model.present?
+      resource = Effective::Resource.new(model)
 
       if subject.respond_to?(:persisted?) && subject.persisted?
         resource.action_path(:update, subject)
@@ -74,7 +74,7 @@ module EffectiveFormBuilderHelper
     end
 
     without_error_proc do
-      form_with(**options.merge(builder: Effective::FormBuilder), &block)
+      form_with(model: model, scope: scope, url: url, format: format, **options.merge(builder: Effective::FormBuilder), &block)
     end
   end
 

@@ -245,29 +245,29 @@ module Effective
     def required_options?(opts)
       return true unless (opts.key?(:if) || opts.key?(:unless))
 
-      if opts[:if].respond_to?(:call)
-        return object.instance_exec(&opts[:if])
-      end
+      # if opts[:if].respond_to?(:call)
+      #   return object.instance_exec(object, &opts[:if])
+      # end
 
-      if opts[:if].kind_of?(Symbol)
-        return object.send(opts[:if])
-      end
+      # if opts[:if].kind_of?(Symbol)
+      #   return object.send(opts[:if])
+      # end
 
-      if opts.key?(:if)
-        return opts[:if]
-      end
+      # if opts.key?(:if)
+      #   return opts[:if]
+      # end
 
-      if opts[:unless].respond_to?(:call)
-        return !object.instance_exec(&opts[:unless])
-      end
+      # if opts[:unless].respond_to?(:call)
+      #   return !object.instance_exec(&opts[:unless])
+      # end
 
-      if opts[:unless].kind_of?(Symbol)
-        return !object.send(opts[:unless])
-      end
+      # if opts[:unless].kind_of?(Symbol)
+      #   return !object.send(opts[:unless])
+      # end
 
-      if opts.key?(:unless)
-        return !opts[:unless]
-      end
+      # if opts.key?(:unless)
+      #   return !opts[:unless]
+      # end
 
       false
     end
