@@ -131,8 +131,16 @@ module Effective
           elsif grouped?
             first = Array(options_collection.values.first).first
 
+            string_of_strings = (
+              options_collection.kind_of?(Hash) && 
+              options_collection.keys.all? { |key| key.kind_of?(String) } && 
+              options_collection.values.all? { |values| values.kind_of?(Array) && values.all? { |value| value.kind_of?(String) } }
+            )
+
             if first.kind_of?(ActiveRecord::Base)
               { group_method: :last, group_label_method: :first, option_value_method: :to_s, option_key_method: :id }
+            elsif string_of_strings
+              { group_method: :last, group_label_method: :first, option_value_method: :to_s, option_key_method: :to_s }
             else
               { group_method: :last, group_label_method: :first, option_value_method: :first, option_key_method: :second }
             end
