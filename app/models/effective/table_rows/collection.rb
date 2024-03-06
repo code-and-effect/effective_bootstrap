@@ -21,6 +21,7 @@ module Effective
 
       def item_content(value)
         item = @collection.find { |k, v| (k && k == value) || (v && v == value) || k.try(:id) == value }
+        item = item.first if item.kind_of?(Array)
         (item || value).to_s
       end
 
