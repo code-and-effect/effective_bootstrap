@@ -9,7 +9,8 @@ $(document).on('change', "[data-load-ajax-url][data-load-ajax-div]", function(ev
   let $container = $input.closest('form').find(div);
   if(div.length == 0) { console.error("Unable to find load ajax div " + div); return; }
 
-  let name = ($input.attr('name').split(/\[|\]/)[1] || '');
+  let name = $input.data('load-ajax-name') || '';
+  if(name.length == 0) { name = ($input.attr('name').split(/\[|\]/)[1] || ''); }
   if(name.length == 0) { console.error("Unable to parse load ajax input name " + $input.attr('name')); return; }
 
   let value = ($input.val() || '');
