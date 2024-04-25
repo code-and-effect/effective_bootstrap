@@ -5,7 +5,7 @@ module Effective
     class PercentField < Effective::TableRow
 
       def content
-        template.number_to_percent(value) if value.present?
+        template.number_to_percentage(value) if value.present?
       end
 
     end
