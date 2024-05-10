@@ -5,7 +5,7 @@ module Effective
     class TextField < Effective::FormInput
 
       def input_html_options
-        { class: 'form-control', maxlength: 250, id: tag_id }
+        { class: 'form-control', maxlength: 250, size: nil, id: tag_id }
       end
 
     end
