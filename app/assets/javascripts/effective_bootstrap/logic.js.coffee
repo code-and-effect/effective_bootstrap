@@ -1,7 +1,12 @@
 elementSelector = 'input,textarea,select,button,div.form-has-many'
 
 (this.EffectiveBootstrap || {}).effective_hide_if = ($element, options) ->
-  $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  if options.nested
+    $container = $element.parent('div.effective-form-logic') || $element.closest('form,div.effective-datatables-filters')
+  else
+    $container = $element.closest('form,div.effective-datatables-filters')
+
+  $affects = $container.find("input[name='#{options.name}'],select[name='#{options.name}'],input[name='#{options.name}[]']")
 
   $affects.on 'change', (event) ->
     $target = $(event.target)
@@ -24,7 +29,12 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
     $element.find(elementSelector).prop('disabled', true)
 
 (this.EffectiveBootstrap || {}).effective_show_if = ($element, options) ->
-  $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}'],input[name='#{options.name}[]']")
+  if options.nested
+    $container = $element.parent('div.effective-form-logic') || $element.closest('form,div.effective-datatables-filters')
+  else
+    $container = $element.closest('form,div.effective-datatables-filters')
+
+  $affects = $container.find("input[name='#{options.name}'],select[name='#{options.name}'],input[name='#{options.name}[]']")
 
   $affects.on 'change', (event) ->
     $target = $(event.target)
@@ -51,7 +61,13 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
     $element.find(elementSelector).prop('disabled', true)
 
 (this.EffectiveBootstrap || {}).effective_show_if_any = ($element, options) ->
-  $affects = $element.closest('form,div.effective-datatables-filters').find("input[name='#{options.name}'],select[name='#{options.name}']")
+  if options.nested
+    $container = $element.parent('div.effective-form-logic') || $element.closest('form,div.effective-datatables-filters')
+  else
+    $container = $element.closest('form,div.effective-datatables-filters')
+
+  $affects = $container.find("input[name='#{options.name}'],select[name='#{options.name}'],input[name='#{options.name}[]']")
+
   values = JSON.parse(options.value)
 
   $affects.on 'change', (event) ->

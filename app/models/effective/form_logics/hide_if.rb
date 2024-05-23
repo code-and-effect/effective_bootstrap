@@ -17,7 +17,7 @@ module Effective
       end
 
       def options
-        { style: ('display: none;' if hide?) }
+        { style: ('display: none;' if hide?), class: 'effective-form-logic' }
       end
 
       def logic_options
