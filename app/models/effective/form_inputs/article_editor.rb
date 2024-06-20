@@ -151,10 +151,12 @@ module Effective
         case mode
         when :default, :admin
           default_mode.merge(active_storage: active_storage, css: css, custom: { css: custom_css })
+        when :email
+          restricted_mode.merge(active_storage: false, css: css, custom: { css: custom_css })
         when :restricted
           restricted_mode.merge(active_storage: false, css: css, custom: { css: custom_css })
         else
-          raise("unexpected mode: #{mode}. Try :default or :restricted")
+          raise("unexpected mode: #{mode}. Try :default, :email, or :restricted")
         end
       end
 
