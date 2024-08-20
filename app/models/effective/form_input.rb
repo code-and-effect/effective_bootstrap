@@ -367,7 +367,7 @@ module Effective
       if readonly?
         options[:input][:readonly] = 'readonly'
 
-        unless options[:input][:class].to_s.include?('form-control-plaintext')
+        if options[:input][:class].to_s.include?('form-control-plaintext') == false && options[:input][:plaintext] != false
           options[:input][:class] = (options[:input][:class] || '').sub('form-control', 'form-control-plaintext')
         end
       end
