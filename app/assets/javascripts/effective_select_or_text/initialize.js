@@ -16,6 +16,12 @@ $(document).on('click', '[data-effective-select-or-text]', function(event) {
   $visible_input = $visible.find('input,textarea,select').first()
   $hidden_input = $hidden.find('input,textarea,select').first()
 
+  if ($visible.find('select').length > 0) {
+    $obj.removeClass('select-enabled').addClass('text-enabled')
+  } else {
+    $obj.removeClass('text-enabled').addClass('select-enabled')
+  }
+
   required = $visible_input.prop('required') || $hidden_input.prop('required')
 
   $hidden_input.prop('required', required)

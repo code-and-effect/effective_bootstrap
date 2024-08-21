@@ -15,11 +15,19 @@ module Effective
         @name_text = options.delete(:name_text) || raise('Please include a text method name')
         @select_collection = options.delete(:collection) || raise('Please include a collection')
 
-        @select_options = { placeholder: 'Please choose, or...', required: false }
-          .merge(options[:select] || options.presence || {})
+        @shared_options = (options[:input_html] || {})
 
-        @text_options = { placeholder: 'Enter freeform', required: false }
-          .merge(options[:text] || options[:text_field] || options.presence || {})
+        @select_options = { 
+          placeholder: '', 
+          hint: "Can't find your #{(options[:name] || name).to_s.chomp('_id')}? <a class='effective-select-or-text-switch' title='Switch to enter freeform' data-effective-select-or-text='true' href='#'>Click here</a> to add one",
+          required: false,
+        }.merge(options[:select] || options.presence || {}).merge(@shared_options)
+
+        @text_options = { 
+          placeholder: '', 
+          hint: "Looking for an existing #{(options[:name] || name).to_s.chomp('_id')}? <a class='effective-select-or-text-switch' title='Switch to search for existing' data-effective-select-or-text='true' href='#'>Click here</a> to search",
+          required: false 
+        }.merge(options[:text] || options[:text_field] || options.presence || {}).merge(@shared_options)
 
         @email_field = options.fetch(:email, name_text.to_s.include?('email'))
 
@@ -27,15 +35,14 @@ module Effective
       end
 
       def to_html(&block)
-        content_tag(:div, class: 'effective-select-or-text') do
+        content_tag(:div, class: ['effective-select-or-text', (select? ? 'select-enabled' : 'text-enabled')].join(' ')) do
           if select?
             @builder.send(email_field? ? :email_field : :text_field, name_text, text_options) +
             @builder.select(name, select_collection, select_options)
           else
             @builder.select(name, select_collection, select_options) +
             @builder.send(email_field? ? :email_field : :text_field, name_text, text_options)
-          end +
-          link_to(icon('rotate-ccw'), '#', class: 'effective-select-or-text-switch', title: 'Switch between choice and freeform', 'data-effective-select-or-text': true)
+          end
         end
       end
 
