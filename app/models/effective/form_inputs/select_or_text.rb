@@ -35,7 +35,9 @@ module Effective
       end
 
       def to_html(&block)
-        content_tag(:div, class: ['effective-select-or-text', (select? ? 'select-enabled' : 'text-enabled')].join(' ')) do
+        wrapper_class = ['effective-select-or-text', (select? ? 'select-enabled' : 'text-enabled'), options.dig(:wrapper, :class)].compact.join(' ')
+
+        content_tag(:div, (options[:wrapper] || {}).merge(class: wrapper_class)) do
           if select?
             @builder.send(email_field? ? :email_field : :text_field, name_text, text_options) +
             @builder.select(name, select_collection, select_options)
