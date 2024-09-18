@@ -65,6 +65,12 @@ module Effective
       def assign_options_collection!
         super
 
+        if ajax? && !include_null
+          if options_collection.kind_of?(Array) && options_collection.first.respond_to?(:to_select2)
+            @options_collection = options_collection.map { |obj| [obj.to_select2, obj.to_param] }
+          end
+        end
+
         return unless include_null
 
         # Check for singles - transform the array
