@@ -5,9 +5,10 @@ module Effective
     class PercentField < Effective::TableRow
 
       def content
-        template.number_to_percentage(value) if value.present?
+        return unless value.present?
+        str = value.kind_of?(Integer) ? ('%.3f' % (value / 1000.0)) : value.to_s
+        str.gsub('.000', '') + '%'
       end
-
     end
   end
 end
