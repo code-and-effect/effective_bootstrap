@@ -157,7 +157,13 @@ module Effective
           insert = render_insert() if add? && reorder?
         end
 
-        content_tag(:div, insert + render_fields(content, remove + reorder), class: 'has-many-fields')
+        opts = if resource.marked_for_destruction? && resource.errors.blank?
+          { class: 'has-many-fields marked-for-destruction', style: 'display: none;' }
+        else
+          { class: 'has-many-fields' }
+        end
+        
+        content_tag(:div, insert + render_fields(content, remove + reorder), opts)
       end
 
       def render_fields(content, remove)
