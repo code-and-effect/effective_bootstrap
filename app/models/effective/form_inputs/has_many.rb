@@ -252,7 +252,7 @@ module Effective
         content_tag(
           :button,
           icon('reorder') + 'Reorder',
-          class: 'has-many-reorder btn btn-secondary',
+          class: 'has-many-reorder btn btn-sm btn-secondary',
           title: 'Reorder',
           data: {
             'effective-form-has-many-reorder': true,
