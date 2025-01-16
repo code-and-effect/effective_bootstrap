@@ -632,7 +632,8 @@ module EffectiveBootstrapHelper
 
   def tab(resource, opts = {}, &block)
     return if resource.kind_of?(Class) && !EffectiveResources.authorized?(self, :index, resource)
-    label = opts[:label] || effective_bootstrap_human_name(resource, plural: opts.fetch(:plural, true), prefer_model_name: true)
+    plural = resource.kind_of?(ActiveRecord::Base) == false
+    label = opts[:label] || effective_bootstrap_human_name(resource, plural: opts.fetch(:plural, plural), prefer_model_name: true)
 
     (@_tab_labels.push(label) and return) if @_tab_mode == :validate
 
