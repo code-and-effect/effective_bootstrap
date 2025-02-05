@@ -340,8 +340,7 @@ module EffectiveBootstrapHelper
     end
   end
 
-
-  def nav_dropdown(label, right: false, groups: false, link_class: [], list_class: [], &block)
+  def nav_dropdown(label, right: false, groups: false, sort: false, link_class: [], list_class: [], &block)
     raise 'expected a block' unless block_given?
 
     id = "dropdown-#{effective_bootstrap_unique_id}"
@@ -354,11 +353,16 @@ module EffectiveBootstrapHelper
 
     return ''.html_safe if content.blank?
 
+    if sort && !content.include?('dropdown-divider')
+      lines = content.gsub("\n", '').split("</a>").reject(&:blank?).map { |line| line + "</a>" }
+      content = lines.sort_by { |line| line.match(/<a[^>]*>([^<]*)<\/a>/)[1] || '' }.join("</a>\n")
+    end
+
     content_tag(:li, class: 'nav-item dropdown') do
       content_tag(:a, class: 'nav-link dropdown-toggle', href: '#', id: id, role: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
         label.html_safe
       end + content_tag(:div, class: div_class, 'aria-labelledby': id) do
-        content
+        content.html_safe
       end
     end
   end
