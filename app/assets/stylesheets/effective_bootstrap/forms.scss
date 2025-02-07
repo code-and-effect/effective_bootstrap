@@ -5,6 +5,8 @@
   position: relative;
 }
 
+.effective-form-flash { z-index: 1; }
+
 form[data-remote="true"]:not(.show-flash-success) {
   .effective-form-flash.alert-success { display: none; }
 }
