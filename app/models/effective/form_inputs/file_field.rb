@@ -21,7 +21,7 @@ module Effective
           class: 'form-control form-control-file btn-outline-secondary',
           multiple: multiple?,
           direct_upload: true,
-          'data-direct-upload-url': @template.main_app.rails_direct_uploads_url,
+          'data-direct-upload-url': (@template.main_app.rails_direct_uploads_url unless options[:direct_upload] == false),
           'data-progress-template': progress_template,
           'data-click-submit': (true if click_submit?),
         }.compact
