@@ -34,7 +34,10 @@ module Effective
       end
 
       def show?
-        (object.try(args.first) == args.second) || (object.try(args.first).to_s == args.second.to_s)
+        first = object.try(args.first)
+        second = args.second
+
+        first == second || first.to_s == second.to_s || Array(first) == Array(second) || Array(first.to_s) == Array(second.to_s)
       end
 
     end

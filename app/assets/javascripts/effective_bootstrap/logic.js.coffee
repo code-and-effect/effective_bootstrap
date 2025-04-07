@@ -8,7 +8,7 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
 
   $affects = $container.find("input[name='#{options.name}'],select[name='#{options.name}'],input[name='#{options.name}[]']")
 
-  $affects.on 'change', (event) ->
+  $affects.on 'change dp.change', (event) ->
     $target = $(event.target)
     matches = ($target.val() == options.value)
 
@@ -36,7 +36,7 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
 
   $affects = $container.find("input[name='#{options.name}'],select[name='#{options.name}'],input[name='#{options.name}[]']")
 
-  $affects.on 'change', (event) ->
+  $affects.on 'change dp.change', (event) ->
     $target = $(event.target)
     matches = ($target.val() == options.value)
 
@@ -70,7 +70,7 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
 
   values = JSON.parse(options.value)
 
-  $affects.on 'change', (event) ->
+  $affects.on 'change dp.change', (event) ->
     selected = $(event.target).val()
     found = values.find((value) => (value == selected || "#{value}" == "#{selected}"))
 
