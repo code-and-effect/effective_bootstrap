@@ -43,4 +43,19 @@ table.effective_file_attachments {
   img { max-width: 128px; max-height: 128px;}
 }
 
-input.form-control-file { padding-bottom: 2.75rem; }
+input.form-control-file {
+  border: solid 1px;
+  padding: 1rem 0 1rem 1rem !important;
+  height: auto !important;
+  color: inherit !important;
+  border-color: inherit !important;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+#file-upload-button:hover {
+  cursor: pointer;
+}
+

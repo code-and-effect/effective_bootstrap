@@ -18,7 +18,7 @@ module Effective
       def input_html_options
         {
           id: tag_id,
-          class: 'form-control form-control-file btn-outline-secondary',
+          class: 'form-control form-control-file',
           multiple: multiple?,
           direct_upload: true,
           'data-direct-upload-url': (@template.main_app.rails_direct_uploads_url unless options[:direct_upload] == false),
@@ -119,18 +119,20 @@ module Effective
 
         return unless url
 
-        content_tag(:div, class: 'col') do
+        content_tag(:div, class: 'col-lg-4') do
           content_tag(:div, class: 'card mb-3') do
             if attachment.image?
-              content_tag(:div, class: 'card-body') do
-                image_tag(url, alt: attachment.filename.to_s, class: 'img-fluid') +
-                link_to(attachment.filename, url, class: 'card-link')
+              content_tag(:div, class: 'card-body text-center') do
+                content_tag(:div, image_tag(url, alt: attachment.filename.to_s, class: 'img-fluid mb-2')) +
+                content_tag(:div, link_to(attachment.filename, url, class: 'card-link'))
               end
             else
               content_tag(:div, class: 'card-body') do
-                content_tag(:p, link_to(attachment.filename, url, class: 'card-link'), class: 'card-text') +
                 content_tag(:p, class: 'card-text') do
-                  (attachment.content_type + '<br>' + @template.number_to_human_size(attachment.byte_size)).html_safe
+                  link_to(attachment.filename, url, class: 'card-link stretched-link') +
+                  ('<br />' +
+                    @template.number_to_human_size(attachment.byte_size
+                  )).html_safe
                 end
               end
 
@@ -141,8 +143,8 @@ module Effective
 
       def build_uploads_and_purge(super_file_field)
         if purge? && attachments_present?
-          content_tag(:div, class: 'd-flex align-items-center') do
-            content_tag(:div, (build_uploads + super_file_field), class: 'flex-grow-1 mr-3') +
+          content_tag(:div) do
+            content_tag(:div, (build_uploads + super_file_field), class: 'mb-3') +
             content_tag(:div, build_purge)
           end
         else
