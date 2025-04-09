@@ -70,9 +70,6 @@ div.form-group > label + .btn-group { display: block; }
 .invalid-feedback { text-transform: capitalize; }
 .valid-feedback { display: none; }
 
-// File Control
-.form-control-file { border: none !important; }
-
 // Radios
 form fieldset.effective-radios legend {
   font-size: 1rem;

@@ -148,7 +148,7 @@ module Effective
 
       def item_label_options
         if buttons?
-          { class: 'btn btn-outline-secondary' }
+          { class: 'btn btn-sm btn-outline-secondary' }
         elsif cards?
           { class: 'form-card-label' }
         elsif custom?
