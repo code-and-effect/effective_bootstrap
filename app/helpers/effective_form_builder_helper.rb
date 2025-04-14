@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module EffectiveFormBuilderHelper
-  def effective_form_with(model: nil, scope: nil, url: nil, format: nil, **options, &block)
+  def effective_form_with(model: false, scope: nil, url: nil, format: nil, **options, &block)
     # This allows us to call effective_form_with inside an effective_table_with and just get the fields
     return @_effective_table_builder.capture(&block) if @_effective_table_builder
 
