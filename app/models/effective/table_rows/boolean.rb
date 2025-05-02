@@ -14,9 +14,9 @@ module Effective
 
       def content
         if value
-          template.badge('Yes', class: 'badge badge-primary mr-2')
+          template.badge('Yes', class: 'badge badge-success mr-2')
         else
-          template.badge('No', class: 'badge badge-secondary mr-2')
+          template.badge('No', class: 'badge badge-danger mr-2')
         end
       end
 
