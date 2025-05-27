@@ -233,7 +233,7 @@ module Effective
     # Has Many
     def has_many(name, collection = nil, options = {}, &block)
       value(name).each_with_index do |object, index|
-        builder = TableBuilder.new(object, template, options.reverse_merge(prefix: human_attribute_name(name).singularize + " ##{index+1}"))
+        builder = TableBuilder.new(object, template, options.reverse_merge(prefix: template.et(object) + " ##{index+1}"))
         builder.render(&block)
         builder.rows.each { |child, content| rows["#{name}_#{child}_#{index}".to_sym] = content }
       end
