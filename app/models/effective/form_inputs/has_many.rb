@@ -158,9 +158,9 @@ module Effective
         end
 
         opts = if resource.marked_for_destruction? && resource.errors.blank?
-          { class: 'has-many-fields marked-for-destruction', style: 'display: none;' }
+          { class: ['has-many-fields', "has-many-fields-#{display}", 'marked-for-destruction'].join(' '), style: 'display: none;' }
         else
-          { class: 'has-many-fields' }
+          { class: ['has-many-fields', "has-many-fields-#{display}"].join(' ') }
         end
         
         content_tag(:div, insert + render_fields(content, remove + reorder), opts)

@@ -14,13 +14,19 @@
   .form-has-many { display: none; }
 }
 
-.form-has-many.tight {
+.form-has-many.tight, .form-has-many[tight=true] {
   .has-many-remove { margin-top: 0; }
   .has-many-move { margin-top: 0.5rem; }
 }
 
+.form-has-many[cards=true]{
+  .has-many-remove { margin-top: 0; margin-bottom: 0; }
+  .has-many-move { margin-top: 0.5rem; }
+  h4 { margin-top: 0.25rem; }
+}
+
 .form-has-many .has-many-remove {
-  margin-top: 0;
+  margin-top: 1.75rem;
   margin-bottom: 1rem;
   .eb-icon { height: 1.0rem; width: 1.0rem; margin-bottom: 2px; }
 }

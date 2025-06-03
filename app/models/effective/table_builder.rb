@@ -237,19 +237,7 @@ module Effective
       if options[:cards]
         value(name).each_with_index do |object, index|
           builder = TableBuilder.new(object, template, options)
-          table = builder.render(&block)
-
-          card = content_tag(:tr, class: "row-#{name}-#{index+1}") do
-            content_tag(:td, colspan: 2) do
-              content_tag(:div, class: 'card my-3') do
-                content_tag(:div, table, class: 'card-body') do
-                  content_tag(:h5, template.et(object) + " ##{index+1}", class: 'card-title') + table
-                end
-              end
-            end
-          end
-
-          rows["#{name}_#{index}".to_sym] = card
+          rows["#{name}_#{index}".to_sym] = TableRows::HasManyCard.new(name, options.merge(index: index), builder: builder).to_html(&block)
         end
       else
         value(name).each_with_index do |object, index|
