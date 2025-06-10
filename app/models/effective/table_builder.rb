@@ -243,10 +243,13 @@ module Effective
         value(name).each_with_index do |object, index|
           builder = TableBuilder.new(object, template, options.reverse_merge(prefix: template.et(object) + " ##{index+1}"))
           builder.render(&block)
-
           builder.rows.each { |child, content| rows["#{name}_#{child}_#{index}".to_sym] = content }
         end
       end
+
+      rows[name] = "None" if value(name).blank?
+
+      nil
     end
 
     def fields_for(name, object, options = {}, &block)
