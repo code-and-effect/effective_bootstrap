@@ -132,6 +132,10 @@ module Effective
         end
       end
 
+      def reject_proc_present?(name)
+        @builder.object.class.reflect_on_association(name)&.active_record&.nested_attributes_options&.dig(name)&.key?(:reject_if)
+      end
+
       def render_resource(resource, block, skip_disabled: nil)
         remove = BLANK
         reorder = BLANK
@@ -140,6 +144,7 @@ module Effective
 
         content = @builder.fields_for(name, resource) do |form|
           form.disabled = disabled? unless skip_disabled
+          form.options[:skip_required] = resource.try(:new_record?) && reject_proc_present?(name)
 
           fields = block.call(form)
 

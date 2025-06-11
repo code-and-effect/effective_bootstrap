@@ -222,6 +222,7 @@ module Effective
 
     def required?(name)
       return false unless object && name
+      return false if @builder.options[:skip_required] # Set by a f.has_many
 
       obj = (object.class == Class) ? object : object.class
       return false unless obj.respond_to?(:validators_on)
