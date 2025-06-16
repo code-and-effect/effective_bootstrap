@@ -192,6 +192,18 @@ module Effective
         EffectiveResources.authorized?(@template, :admin, :effective_article_editor) ? :default : :restricted
       end
 
+      def build_human_label
+        name = self.name.to_s
+  
+        label = if object
+          object.class.human_attribute_name(name).sub(/^Rich text /, '').capitalize
+        else
+          BLANK
+        end
+  
+        label
+      end
+
     end
   end
 end
