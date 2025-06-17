@@ -37,7 +37,7 @@ module Effective
       # Using = f.content_for does not create a row.
       # So rows wille be blank when using the default syntax
       # And rows will be present when we render a form, or any form fields
-      build_resource_rows(only: only, except: except) if rows.blank?
+      build_resource_rows(only: only, except: except) unless block_given?
 
       # This gives us a second run through the rows, if you pass additionally
       build_resource_rows(only: additionally) if additionally.present?
@@ -47,10 +47,16 @@ module Effective
 
       # Filter out some hardcoded ones
       content = content.except(*filtered) if filtered.present?
-      content = content.except(*except) if except.present?
 
-      content_tag(:table, class: options.fetch(:class, 'table table-sm table-striped table-hover effective-table-summary')) do
-        content_tag(:tbody, content.values.join.html_safe)
+      if except.present?
+        content = content.except(*except)
+        content = content.reject { |key, _| except.any? { |ex| key.to_s.start_with?(ex.to_s + '_') } }
+      end
+
+      if content.present?
+        content_tag(:table, class: options.fetch(:class, 'table table-sm table-striped table-hover effective-table-summary')) do
+          content_tag(:tbody, content.values.join.html_safe)
+        end
       end
     end
 
@@ -252,7 +258,9 @@ module Effective
       nil
     end
 
-    def fields_for(name, object, options = {}, &block)
+    def fields_for(name, collection = nil, options = {}, &block)
+      options = collection if options.blank? && collection.kind_of?(Hash)
+
       values = value(name)
 
       if values.respond_to?(:each_with_index)
@@ -262,7 +270,7 @@ module Effective
           builder.rows.each { |child, content| rows["#{name}_#{child}_#{index}".to_sym] = content }
         end
       else
-        builder = TableBuilder.new(object, template, options.merge(prefix: human_attribute_name(name)))
+        builder = TableBuilder.new(object.send(name), template, options)
         builder.render(&block)
         builder.rows.each { |child, content| rows["#{name}_#{child}".to_sym] = content }
       end

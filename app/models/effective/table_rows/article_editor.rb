@@ -16,6 +16,14 @@ module Effective
         end
       end
 
+      # Humanized label or the label from form
+      def label
+        text = options[:label] || EffectiveResources.et(builder.object, name).sub(/^Rich text /, '').capitalize
+        prefix = builder.options[:prefix]
+
+        [*prefix, text].join(': ')
+      end
+
     end
   end
 end
