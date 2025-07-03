@@ -6,7 +6,7 @@ module Effective
 
       def input_html_options
         {
-          class: 'form-control',
+          class: 'form-control effective_url',
           placeholder: 'https://www.example.com',
           id: tag_id,
           pattern: '(http:\/|https:\/)?\/[^\/+].+',
