@@ -134,11 +134,11 @@ module EffectiveBootstrapHelper
     card_class = opts.delete(:card_class) || 'card card-body my-2'
 
     # Two link labels
-    label_expand = opts.delete(:expand) || label.to_s.tap do |label|
+    label_expand = opts.delete(:expand) || label.to_s.dup.tap do |label|
       COLLAPSE_SUBSTITUTIONS.each { |show, hide| label.sub!(hide, show) }
     end + icon('chevron-down')
 
-    label_collapse = opts.delete(:collapse) || label.to_s.tap do |label|
+    label_collapse = opts.delete(:collapse) || label.to_s.dup.tap do |label|
       COLLAPSE_SUBSTITUTIONS.each { |show, hide| label.sub!(show, hide) }
     end + icon('chevron-up')
 
