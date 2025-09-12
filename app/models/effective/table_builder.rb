@@ -163,6 +163,10 @@ module Effective
     end
     alias_method :email_cc_field, :email_field
 
+    def error(name, options = {})
+      # Nothing to do
+    end
+
     def file_field(name, options = {})
       rows[name] = TableRows::FileField.new(name, options, builder: self).to_html
     end
