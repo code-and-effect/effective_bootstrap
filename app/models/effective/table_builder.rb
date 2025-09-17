@@ -237,7 +237,7 @@ module Effective
     end
 
     def show_if_any(name, options, &block)
-      template.capture(self, &block) if Array(options).include?(value(name))
+      template.capture(self, &block) if (Array(options) & Array(value(name))).present?
     end
 
     # Has Many

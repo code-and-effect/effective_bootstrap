@@ -36,7 +36,7 @@ module Effective
       def show?
         Array(args.second).any? do |value|
           selected = object.try(args.first)
-          selected == value || selected.to_s == value.to_s || selected == Array(value) || selected.to_s == Array(value.to_s)
+          selected == value || selected.to_s == value.to_s || selected == Array(value) || selected.to_s == Array(value.to_s) || (Array(selected) & Array(value)).present?
         end
       end
 
