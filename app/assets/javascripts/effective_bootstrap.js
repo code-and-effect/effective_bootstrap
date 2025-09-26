@@ -7,6 +7,7 @@
 //= require ./effective_bootstrap/reveal_mail_to
 //= require ./effective_bootstrap/tabs
 
+//= require ./effective_clipboard/input
 //= require ./effective_datetime/input
 //= require ./effective_date/input
 //= require ./effective_time/input
