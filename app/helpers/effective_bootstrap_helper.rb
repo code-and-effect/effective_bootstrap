@@ -93,7 +93,7 @@ module EffectiveBootstrapHelper
 
   def clipboard_copy(text, opts = {})
     opts[:label] ||= 'Copy to Clipboard'
-    opts[:class] ||= 'btn btn-link'
+    opts[:class] ||= 'btn btn-secondary'
 
     label = (icon('clipboard', class: 'small-1') + ' ' + opts[:label]).html_safe
 
@@ -294,6 +294,13 @@ module EffectiveBootstrapHelper
     @_dropdown_link_tos << link_to(label, path, options)
 
     nil
+  end
+
+  def dropdown_clipboard_copy(text, opts = {})
+    opts[:label] ||= 'Copy to Clipboard'
+
+    options = { 'data-clipboard': text, 'data-clipboard-label': opts[:label], class: 'btn-clipboard-copy' }
+    dropdown_link_to(opts[:label], '#', options.merge(opts))
   end
 
   # Works with dots ao and dropdown do

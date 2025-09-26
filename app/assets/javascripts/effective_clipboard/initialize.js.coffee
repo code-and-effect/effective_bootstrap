@@ -10,6 +10,8 @@ initialize = ->
     $obj = $(event.trigger).text('Copied!').focus().blur()
     setTimeout((-> $obj.html($obj.data('clipboard-label'))), 1500)
 
+  $buttons.on 'click', (event) -> event.preventDefault()
+
   $buttons.addClass('initialized')
 
 $ -> initialize()
