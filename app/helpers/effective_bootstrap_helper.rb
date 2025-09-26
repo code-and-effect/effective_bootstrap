@@ -91,6 +91,21 @@ module EffectiveBootstrapHelper
     end
   end
 
+  def clipboard_copy(text, opts = {})
+    opts[:label] ||= 'Copy to Clipboard'
+    opts[:class] ||= 'btn btn-link'
+
+    label = (icon('clipboard', class: 'small-1') + ' ' + opts[:label]).html_safe
+
+    content_tag(
+      :button, 
+      label, 
+      class: ['btn-clipboard-copy', opts[:class]].compact.join(' '), 
+      type: 'button', 
+      'data-clipboard': text, 
+      'data-clipboard-label': label
+    )
+  end
 
   # https://getbootstrap.com/docs/4.0/components/collapse/
 
