@@ -131,7 +131,7 @@ module Effective
           editor: { csscache: true, https: true, drop: false },
           embed: false,
           image: false,
-          plugins: ['blockcode', 'cellcolor', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style']
+          plugins: ['blockcode', 'cellcolor', 'inlineformat', 'listitem', 'removeformat', 'reorder', 'style'].compact
         )
       end
 
@@ -148,7 +148,7 @@ module Effective
       end
 
       def input_js_options
-        case mode
+        options = case mode
         when :default, :admin
           default_mode.merge(active_storage: active_storage, css: css, custom: { css: custom_css })
         when :email
@@ -158,6 +158,12 @@ module Effective
         else
           raise("unexpected mode: #{mode}. Try :default, :email, or :restricted")
         end
+
+        if counter
+          options[:plugins] << 'counter'
+        end
+
+        options
       end
 
       def css
@@ -185,6 +191,15 @@ module Effective
           options.delete(:mode)
         else
           select_mode()
+        end
+      end
+
+      def counter
+        return @counter unless @counter.nil?
+
+        @counter = if options.key?(:counter)
+          options.delete(:counter)
+        else
         end
       end
 
