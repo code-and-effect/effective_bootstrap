@@ -26,6 +26,7 @@ module Effective
       def wrapper_options
         { class: [
             'form-group effective-checks',
+            ('effective-checks-required' if required?(name) || options[:required]),
             ('no-feedback' unless feedback_options),
             tag_id,
             ('is-invalid' if feedback_options && has_error?(name)),

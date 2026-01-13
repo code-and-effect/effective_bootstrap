@@ -7,13 +7,21 @@ this.EffectiveForm ||= new class
   remote_form_redirect: ''            # String containing the redirect path (optional)
 
   validate: (form) ->
-    valid = form.checkValidity()
     $form = $(form)
+    valid = form.checkValidity() && @allChecksValid($form)
 
     @clearFlash()
     @reset($form) if $form.hasClass('was-validated')
 
     if valid then @submitting($form) else @invalidate($form)
+    valid
+
+  allChecksValid: ($form) ->
+    valid = true
+
+    $form.find('.effective-checks-required').each ->
+      valid = false unless $(@).find('input:checked').length > 0
+    
     valid
 
   submitting: ($form) ->
@@ -33,6 +41,12 @@ this.EffectiveForm ||= new class
     # These controls need a little bit of help with client side validations
     $form.find('.effective-radios:not(.no-feedback),.effective-checks:not(.no-feedback)').each ->
       $(@).addClass(if $(@).find('input:invalid').length > 0 then 'is-invalid' else 'is-valid')
+
+    $form.find('.effective-checks-required').each ->
+      if $(@).find('input:checked').length > 0 
+        $(@).addClass('is-valid').removeClass('is-invalid') 
+      else 
+        $(@).addClass('is-invalid').removeClass('is-valid')
 
     @flash($form, 'danger')
 
