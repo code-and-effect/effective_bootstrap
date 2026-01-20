@@ -1,7 +1,7 @@
 // Implements the jQuery load div pattern
 // See effective_reports admin screen
-$(document).on('change', "[data-load-ajax-url][data-load-ajax-div]", function(event) {
-  let $input = $(event.currentTarget);
+function loadEffectiveAjax(target) {
+  let $input = $(target);
 
   let url = $input.data('load-ajax-url');
   let div = $input.data('load-ajax-div');
@@ -42,9 +42,26 @@ $(document).on('change', "[data-load-ajax-url][data-load-ajax-div]", function(ev
     if(status == 'error') {
       $container.append("<div class='load-ajax-error'><p>Error: please refresh the page and try again.</p></div>");
     } else {
-      $container.replaceWith($content.children(div));
+      $container.replaceWith($content.children(div).first());
       EffectiveBootstrap.initialize();
       $(document).trigger('effective-datatables:initialize');
     }
   });
-});
+}
+
+function delayChange(callback, ms) {
+  var timer = 0;
+
+  return function() {
+    var context = this;
+    var args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function() { callback.apply(context, args); }, ms || 0);
+  };
+}
+
+$(document).on('change', "select[data-load-ajax-url][data-load-ajax-div]", function(event) { loadEffectiveAjax(event.currentTarget); });
+$(document).on('reload', "[data-load-ajax-url][data-load-ajax-div]", function(event) { loadEffectiveAjax(event.currentTarget); });
+
+$(document).on('keyup', "[data-load-ajax-url][data-load-ajax-div]", delayChange(function(event) { loadEffectiveAjax(event.target); }, 400));
+$(document).on('paste', "[data-load-ajax-url][data-load-ajax-div]", delayChange(function(event) { loadEffectiveAjax(event.target); }, 100));
