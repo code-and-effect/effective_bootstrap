@@ -21,15 +21,19 @@ triggerNestedLogic = ($element, $container) ->
     matches = ($target.val() == options.value)
 
     if $target.is("[type='checkbox']")
-      matches = matches || ($target.is(':checked') && "#{options.value}" == 'true')
-      matches = matches || (!$target.is(':checked') && ("#{options.value}" == 'false' || "#{options.value}" == ''))
+      if $target.attr('name').indexOf('[]') == -1
+        matches = matches || ($target.is(':checked') && "#{options.value}" == 'true')
+        matches = matches || (!$target.is(':checked') && ("#{options.value}" == 'false' || "#{options.value}" == ''))
+      else
+        selected = $target.closest('fieldset').find("[name='#{options.name}[]']:checked").map((i, el) -> $(el).val()).get()
+        matches = selected.find((value) => (value == options.value || "#{value}" == "#{options.value}"))
 
     if matches
       $element.hide()
       $element.find(elementSelector).prop('disabled', true)
     else
       $element.fadeIn()
-      $element.find(elementSelector).removeAttr('disabled')
+      $element.find(elementSelector).not($element.find('.effective-form-logic:hidden').find(elementSelector)).removeAttr('disabled')
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
 
   # Maybe disable it now
@@ -58,7 +62,7 @@ triggerNestedLogic = ($element, $container) ->
 
     if matches
       $element.fadeIn()
-      $element.find(elementSelector).removeAttr('disabled')
+      $element.find(elementSelector).not($element.find('.effective-form-logic:hidden').find(elementSelector)).removeAttr('disabled')
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
       triggerNestedLogic($element, $container)
     else
@@ -80,12 +84,21 @@ triggerNestedLogic = ($element, $container) ->
   values = JSON.parse(options.value)
 
   $affects.on 'change dp.change', (event) ->
-    selected = $(event.target).val()
+    $target = $(event.target)
+    selected = $target.val()
     found = values.find((value) => (value == selected || "#{value}" == "#{selected}"))
+
+    if $target.is("[type='checkbox']")
+      if $target.attr('name').indexOf('[]') == -1
+        found = found || ($target.is(':checked') && values.find((value) => "#{value}" == 'true'))
+        found = found || (!$target.is(':checked') && values.find((value) => ("#{value}" == 'false' || "#{value}" == '')))
+      else
+        checked = $target.closest('fieldset').find("[name='#{options.name}[]']:checked").map((i, el) -> $(el).val()).get()
+        found = values.find((value) => checked.find((sel) => (sel == value || "#{sel}" == "#{value}")))
 
     if found
       $element.fadeIn()
-      $element.find(elementSelector).removeAttr('disabled')
+      $element.find(elementSelector).not($element.find('.effective-form-logic:hidden').find(elementSelector)).removeAttr('disabled')
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
       triggerNestedLogic($element, $container)
 
