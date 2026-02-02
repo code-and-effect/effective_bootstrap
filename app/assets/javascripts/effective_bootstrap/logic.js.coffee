@@ -1,5 +1,13 @@
 elementSelector = 'input,textarea,select,button,div.form-has-many'
 
+# When showing a parent block that contains nested show_if (e.g. scored card contains category
+# blocks), trigger change on the inputs those nested blocks depend on so they run and only
+# the visible nested block's same-named controls stay enabled (fixes blank operation on first submit).
+triggerNestedLogic = ($element, $container) ->
+  $element.find('.effective-form-logic').not($element).each (i, el) ->
+    name = $(el).data('input-js-options').name
+    $container.find('input, select').filter(-> $(this).attr('name') == name).first().trigger('change')
+
 (this.EffectiveBootstrap || {}).effective_hide_if = ($element, options) ->
   if options.nested
     $container = $element.parent('div.effective-form-logic') || $element.closest('form,div.effective-datatables-filters')
@@ -52,6 +60,7 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
       $element.fadeIn()
       $element.find(elementSelector).removeAttr('disabled')
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
+      triggerNestedLogic($element, $container)
     else
       $element.hide()
       $element.find(elementSelector).prop('disabled', true)
@@ -78,6 +87,7 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
       $element.fadeIn()
       $element.find(elementSelector).removeAttr('disabled')
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
+      triggerNestedLogic($element, $container)
 
     else
       $element.hide()
