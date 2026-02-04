@@ -60,7 +60,7 @@ function delayChange(callback, ms) {
   };
 }
 
-$(document).on('change', "select[data-load-ajax-url][data-load-ajax-div]", function(event) { loadEffectiveAjax(event.currentTarget); });
+$(document).on('change', "select[data-load-ajax-url][data-load-ajax-div], input[type='radio'][data-load-ajax-url][data-load-ajax-div]", function(event) { loadEffectiveAjax(event.currentTarget); });
 $(document).on('reload', "[data-load-ajax-url][data-load-ajax-div]", function(event) { loadEffectiveAjax(event.currentTarget); });
 
 $(document).on('keyup', "[data-load-ajax-url][data-load-ajax-div]", delayChange(function(event) { loadEffectiveAjax(event.target); }, 400));
