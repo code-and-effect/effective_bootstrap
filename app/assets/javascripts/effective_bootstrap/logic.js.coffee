@@ -1,5 +1,14 @@
 elementSelector = 'input,textarea,select,button,div.form-has-many'
 
+# When multiple show_if blocks contain radio buttons with the same name, the browser only keeps the last one checked. 
+# If that radio is in a # hidden/disabled block, the visible block's radio won't be checked.
+# This syncs the checked state from disabled radios to their enabled counterparts.
+syncDisabledRadioButtons = ($container) ->
+  $container.find('input[type="radio"]:checked:disabled').each ->
+    name = $(this).attr('name')
+    value = $(this).val()
+    $container.find("input[type='radio'][name='#{name}'][value='#{value}']:enabled").prop('checked', true)
+
 (this.EffectiveBootstrap || {}).effective_hide_if = ($element, options) ->
   if options.nested
     $container = $element.parent('div.effective-form-logic') || $element.closest('form,div.effective-datatables-filters')
@@ -31,6 +40,7 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
   # Maybe disable it now
   if options.needDisable
     $element.find(elementSelector).prop('disabled', true)
+    syncDisabledRadioButtons($container)
 
 (this.EffectiveBootstrap || {}).effective_show_if = ($element, options) ->
   if options.nested
@@ -63,6 +73,7 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
   # Maybe disable it now
   if options.needDisable
     $element.find(elementSelector).prop('disabled', true)
+    syncDisabledRadioButtons($container)
 
 (this.EffectiveBootstrap || {}).effective_show_if_any = ($element, options) ->
   if options.nested
@@ -99,3 +110,4 @@ elementSelector = 'input,textarea,select,button,div.form-has-many'
   # Maybe disable it now
   if options.needDisable
     $element.find(elementSelector).prop('disabled', true)
+    syncDisabledRadioButtons($container)
