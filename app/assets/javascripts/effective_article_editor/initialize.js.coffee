@@ -51,6 +51,11 @@ uploadActiveStorage = (editor, data) ->
         .addClass(classes)
 
       doc
+        .find("img[data-hover-src^='#{rails_url}']:not(.effective-article-editor-hover-attachment)")
+        .after(attachment)
+        .addClass('effective-article-editor-hover-attachment')
+
+      doc
         .find("a[data-file][data-name='#{file.name}']:not(.action-text-attachment)")
         .after(attachment)
         .addClass(classes)
