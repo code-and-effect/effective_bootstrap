@@ -142,13 +142,15 @@ module Effective
       end
 
       def build_uploads_and_purge(super_file_field)
+        wrapped_input = content_tag(:div, super_file_field, class: 'effective-file-drop-zone')
+
         if purge? && attachments_present?
           content_tag(:div) do
-            content_tag(:div, (build_uploads + super_file_field), class: 'mb-3') +
+            content_tag(:div, (build_uploads + wrapped_input), class: 'mb-3') +
             content_tag(:div, build_purge)
           end
         else
-          build_uploads + super_file_field
+          build_uploads + wrapped_input
         end
       end
 
