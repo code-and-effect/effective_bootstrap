@@ -43,6 +43,16 @@ table.effective_file_attachments {
   img { max-width: 128px; max-height: 128px;}
 }
 
+.effective-file-drop-zone {
+  position: relative;
+
+  &.drag-over input.form-control-file {
+    border-color: $primary;
+    border-style: dashed;
+    background-color: rgba($primary, 0.05);
+  }
+}
+
 input.form-control-file {
   border: solid 1px;
   padding: 1rem 0 1rem 1rem !important;
