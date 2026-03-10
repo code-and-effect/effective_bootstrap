@@ -257,7 +257,7 @@ module Effective
         end
       end
 
-      rows[name] = "None" if value(name).blank?
+      #rows[name] = "" if value(name).blank?
 
       nil
     end
