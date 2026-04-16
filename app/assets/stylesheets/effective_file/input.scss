@@ -69,3 +69,10 @@ input.form-control-file {
   cursor: pointer;
 }
 
+.effective-file-attachment--pending-removal {
+  opacity: 0.5;
+
+  .card-link, a { text-decoration: line-through; }
+  img { filter: grayscale(100%); }
+}
+
