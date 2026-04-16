@@ -73,17 +73,19 @@ module Effective
       end
 
       def build_table_attachments(attachments)
-        content_tag(:table, class: 'table table-hover effective_file_attachments') do
+        content_tag(:table, class: 'table table-hover effective_file_attachments mt-2') do
           content_tag(:thead) do
             content_tag(:tr) do
-              content_tag(:th, 'Image') +
+              content_tag(:th, '') +
               content_tag(:th, 'Title') +
               content_tag(:th, 'Size') +
               content_tag(:th, '')
             end
           end +
           content_tag(:tbody) do
-            attachments.map { |attachment| content_tag(:tr, build_table_attachment(attachment)) }.join.html_safe
+            attachments.map do |attachment|
+              content_tag(:tr, build_table_attachment(attachment), class: 'effective-file-attachment', data: { signed_id: attachment.signed_id })
+            end.join.html_safe
           end
         end
       end
@@ -96,7 +98,7 @@ module Effective
 
         image_tag = content_tag(:img, '', class: '', src: url, alt: attachment.filename.to_s) if attachment.image?
         link_tag = link_to(attachment.filename, url)
-        size_tag = (attachment.content_type + '<br>' + @template.number_to_human_size(attachment.byte_size)).html_safe
+        size_tag = @template.number_to_human_size(attachment.byte_size)
 
         content_tag(:td, image_tag) +
         content_tag(:td, link_tag) +
@@ -105,6 +107,8 @@ module Effective
         content_tag(:td) do
           if attachments_style == :ck_assets
             link_to('Attach', url, class: 'btn btn-primary', 'data-insert-ck-asset': true, alt: attachment.filename.to_s)
+          else
+            build_attachment_remove(attachment)
           end
         end
       end
@@ -119,9 +123,9 @@ module Effective
 
         return unless url
 
-        content_tag(:div, class: 'col-lg-4') do
+        content_tag(:div, class: 'col-lg-4 effective-file-attachment', data: { signed_id: attachment.signed_id }) do
           content_tag(:div, class: 'card mb-3') do
-            if attachment.image?
+            body = if attachment.image?
               content_tag(:div, class: 'card-body text-center') do
                 content_tag(:div, image_tag(url, alt: attachment.filename.to_s, class: 'img-fluid mb-2')) +
                 content_tag(:div, link_to(attachment.filename, url, class: 'card-link'))
@@ -129,29 +133,18 @@ module Effective
             else
               content_tag(:div, class: 'card-body') do
                 content_tag(:p, class: 'card-text') do
-                  link_to(attachment.filename, url, class: 'card-link stretched-link') +
-                  ('<br />' +
-                    @template.number_to_human_size(attachment.byte_size
-                  )).html_safe
+                  link_to(attachment.filename, url, class: 'card-link') + '<br>'.html_safe + @template.number_to_human_size(attachment.byte_size)
                 end
               end
+            end
 
-            end.html_safe
+            body + build_attachment_remove(attachment, footer: true)
           end
         end
       end
 
       def build_uploads_and_purge(super_file_field)
-        wrapped_input = content_tag(:div, super_file_field, class: 'effective-file-drop-zone')
-
-        if purge? && attachments_present?
-          content_tag(:div) do
-            content_tag(:div, (build_uploads + wrapped_input), class: 'mb-3') +
-            content_tag(:div, build_purge)
-          end
-        else
-          build_uploads + wrapped_input
-        end
+        build_uploads + content_tag(:div, super_file_field, class: 'effective-file-drop-zone')
       end
 
       def build_uploads
@@ -165,11 +158,17 @@ module Effective
         end
       end
 
-      def build_purge
-        return ''.html_safe unless purge? && !disabled?
+      def build_attachment_remove(attachment, footer: false)
+        return ''.html_safe if disabled? || !purge?
 
-        label = (multiple? ? 'Delete existing files on save' : 'Delete existing file on save')
-        @builder.check_box('_purge', multiple: true, label: label, id: "#{tag_id}_purge", checked_value: name)
+        hidden = @template.hidden_field_tag("#{@builder.object_name}[_purge][]", attachment.signed_id, disabled: true, class: 'effective-file-remove-input', id: nil)
+        button = @template.content_tag(:button, 'Remove', type: 'button', class: 'btn btn-sm btn-outline-danger effective-file-remove')
+
+        if footer
+          content_tag(:div, hidden + button, class: 'card-footer bg-transparent text-right')
+        else
+          hidden + button
+        end
       end
 
       def purge?

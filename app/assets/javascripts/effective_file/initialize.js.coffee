@@ -67,3 +67,19 @@ $(document).on 'drop', '.effective-file-drop-zone', (event) ->
     $input[0].files = dt.files
 
   $input.trigger('change')
+
+# Per-file Remove / Undo toggle on existing attachments
+$(document).on 'click', '.effective-file-remove', (event) ->
+  event.preventDefault()
+  $button = $(event.currentTarget)
+  $attachment = $button.closest('.effective-file-attachment')
+  $input = $attachment.find('.effective-file-remove-input')
+
+  if $input.prop('disabled')
+    $input.prop('disabled', false)
+    $attachment.addClass('effective-file-attachment--pending-removal')
+    $button.text('Undo').removeClass('btn-outline-danger').addClass('btn-outline-secondary')
+  else
+    $input.prop('disabled', true)
+    $attachment.removeClass('effective-file-attachment--pending-removal')
+    $button.text('Remove').removeClass('btn-outline-secondary').addClass('btn-outline-danger')
