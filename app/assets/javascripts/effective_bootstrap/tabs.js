@@ -1,6 +1,6 @@
 // Set the document hash to the tab href
 $(document).on('show.bs.tab', function (e) {
-  history.replaceState(null, null, '#' + e.target.getAttribute('id'));
+  history.replaceState(history.state, null, '#' + e.target.getAttribute('id'));
 });
 
 // Display the tab based on form errors, the document hash, or ?tab= params
