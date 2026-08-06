@@ -64,12 +64,16 @@ module EffectiveBootstrapHelper
   # = card('title do')
   #   %p Stuff
   # = card('Stuff', header: 'header title')
+  # = card(partial: 'lares/dashboard')
   def card(resource = nil, opts = {}, &block)
-    raise('expected a block') unless block_given?
-
     if resource.kind_of?(Hash)
       opts = resource; resource = nil
     end
+
+    partial = opts.delete(:partial)
+    locals = opts.delete(:locals) || {}
+
+    raise('expected a block or a partial') unless block_given? || partial.present?
 
     return if resource.kind_of?(Class) && !EffectiveResources.authorized?(self, :index, resource)
 
@@ -80,15 +84,23 @@ module EffectiveBootstrapHelper
       header = content_tag(:div, header, class: 'card-header') if header.present?
 
       body = content_tag(:div, class: 'card-body') do
+        content = (partial.present? ? render(partial, locals) : capture(&block))
+
         if title.present?
-          content_tag(:h5, title, class: 'card-title') + capture(&block)
+          content_tag(:h5, title, class: 'card-title') + content
         else
-          capture(&block)
+          content
         end
       end
 
       header ? (header + body) : body
     end
+  end
+
+  # A card_dashboard card that renders one dashboard partial
+  # = dashboard_card('effective/polls/dashboard')
+  def dashboard_card(partial, opts = {})
+    card(merge_class_key(opts, 'card-dashboard').merge(partial: partial))
   end
 
   def clipboard_copy(text, opts = {})
@@ -375,10 +387,7 @@ module EffectiveBootstrapHelper
 
     return ''.html_safe if content.blank?
 
-    if sort && !content.include?('dropdown-divider')
-      lines = content.gsub("\n", '').split("</a>").reject(&:blank?).map { |line| line + "</a>" }
-      content = lines.sort_by { |line| line.match(/<a[^>]*>([^<]*)<\/a>/)[1] || '' }.join("</a>\n")
-    end
+    content = effective_bootstrap_sort_dropdown_content(content) if sort
 
     content_tag(:li, class: 'nav-item dropdown') do
       content_tag(:a, class: 'nav-link dropdown-toggle', href: '#', id: id, role: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': true, 'aria-expanded': false) do
@@ -737,6 +746,24 @@ module EffectiveBootstrapHelper
     else
       resource.to_s
     end
+  end
+
+  # Sorts the dropdown items of a nav_dropdown(sort: true) alphabetically by their label
+  # Each nav_divider starts a new section, and every section is sorted on its own, so the
+  # dividers keep grouping the menu just as they were written
+  # Any section with more than dropdown items in it is left exactly as-is
+  def effective_bootstrap_sort_dropdown_content(content)
+    divider = nav_divider
+
+    sections = content.split(divider).map do |section|
+      links = section.scan(/<a\b[^>]*>.*?<\/a>/m)
+      remaining = links.inject(section) { |result, link| result.sub(link, '') }
+
+      next section if remaining.present?
+      links.sort_by { |link| link.gsub(/<[^>]*>/, '').strip.downcase }.join("\n")
+    end
+
+    sections.join("\n#{divider}\n").html_safe
   end
 
   def effective_bootstrap_unique_id
