@@ -226,12 +226,27 @@ module Effective
 
       obj = (object.class == Class) ? object : object.class
       return false unless obj.respond_to?(:validators_on)
+      return true if required_belongs_to?(obj, name)
 
       if name.to_s.ends_with?('_id')
         return required_presence?(obj, name) || required_presence?(obj, name[0...-3])
       end
 
       required_presence?(obj, name)
+    end
+
+    def required_belongs_to?(obj, name)
+      return false unless obj.respond_to?(:reflect_on_all_associations)
+
+      reflection = obj.reflect_on_association(name.to_s.delete_suffix('_id'))
+      reflection ||= obj.reflect_on_all_associations(:belongs_to).find do |belongs_to|
+        Array(belongs_to.foreign_key).map(&:to_s).include?(name.to_s)
+      end
+
+      return false unless reflection&.macro == :belongs_to
+
+      optional = reflection.options[:optional]
+      optional.nil? ? obj.belongs_to_required_by_default : !optional
     end
 
     def required_presence?(obj, name)
