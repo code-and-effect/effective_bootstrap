@@ -492,13 +492,14 @@ module EffectiveBootstrapHelper
   #
   # https://getbootstrap.com/docs/4.0/components/pagination/
   # Builds a pagination based on the given collection, current url and params[:page]
+  # Raises ActiveRecord::RecordNotFound when the requested page is invalid or exceeds the collection.
   #
   # = paginate(@posts, per_page: 10)
   #
   # Add this to your model
   # scope :paginate, -> (page: nil, per_page: 10) {
-  #   page = (page || 1).to_i
-  #   offset = [(page - 1), 0].max * per_page
+  #   page = EffectiveResources.normalize_page(page) || 1
+  #   offset = (page - 1) * per_page
 
   #   limit(per_page).offset(offset)
   # }
@@ -514,7 +515,11 @@ module EffectiveBootstrapHelper
 
     collection_count ||= collection.limit(nil).offset(nil).count # You can pass the total count, or not.
 
-    page = (params[:page] || 1).to_i
+    page = EffectiveResources.validate_page!(
+      params[:page],
+      collection_count: collection_count,
+      per_page: per_page
+    )
     last = (collection_count.to_f / per_page).ceil
 
     return unless (last > 1 || render_single_page) # If there's only 1 page, don't render a pagination at all.
