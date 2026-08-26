@@ -1,6 +1,6 @@
 # Effective Bootstrap
 
-Everything your Ruby on Rails 5.1+ application needs to get working with [Twitter Bootstrap 4](https://getbootstrap.com/).
+Everything your Ruby on Rails 7.0+ application needs to get working with [Twitter Bootstrap 4](https://getbootstrap.com/).
 
 - Bootstrap4 component view helpers.
 - SVG icons based on [Inline SVG](https://github.com/jamesmartin/inline_svg), with [Feather Icons](https://feathericons.com) and [FontAwesome](https://fontawesome.com) svg icons to replace the old glyphicons.
@@ -124,6 +124,8 @@ Builds a pagination based on the given collection, current url and params[:page]
 
 The collection must be an ActiveRecord relation.
 
+Requests for a page beyond the collection raise `ActiveRecord::RecordNotFound` and return HTTP 404.
+
 ```haml
 = paginate(@posts, per_page: 10)
 ```
@@ -132,8 +134,8 @@ Add this to your model:
 
 ```ruby
 scope :paginate, -> (page: nil, per_page:) {
-  page = (page || 1).to_i
-  offset = [(page - 1), 0].max * per_page
+  page = EffectiveResources.normalize_page(page)
+  offset = (page - 1) * per_page
 
   limit(per_page).offset(offset)
 }
@@ -623,7 +625,7 @@ class Select2AjaxController < ApplicationController
 
     # Paginate
     per_page = 20
-    page = (params[:page] || 1).to_i
+    page = EffectiveResources.normalize_page(params[:page])
     last = (collection.reselect(:id).count.to_f / per_page).ceil
     more = page < last
 
