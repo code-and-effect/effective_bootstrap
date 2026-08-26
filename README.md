@@ -124,7 +124,7 @@ Builds a pagination based on the given collection, current url and params[:page]
 
 The collection must be an ActiveRecord relation.
 
-Requests for a page beyond the collection raise `ActiveRecord::RecordNotFound` and return HTTP 404.
+Requests for an invalid page or a page beyond the collection raise `ActiveRecord::RecordNotFound` and return HTTP 404.
 
 ```haml
 = paginate(@posts, per_page: 10)
@@ -134,7 +134,7 @@ Add this to your model:
 
 ```ruby
 scope :paginate, -> (page: nil, per_page:) {
-  page = EffectiveResources.normalize_page(page)
+  page = EffectiveResources.normalize_page(page) || 1
   offset = (page - 1) * per_page
 
   limit(per_page).offset(offset)
@@ -625,7 +625,7 @@ class Select2AjaxController < ApplicationController
 
     # Paginate
     per_page = 20
-    page = EffectiveResources.normalize_page(params[:page])
+    page = EffectiveResources.normalize_page(params[:page]) || 1
     last = (collection.reselect(:id).count.to_f / per_page).ceil
     more = page < last
 
