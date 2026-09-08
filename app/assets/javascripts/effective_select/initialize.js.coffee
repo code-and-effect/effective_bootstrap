@@ -62,7 +62,7 @@ effectiveMatch = (params, data) ->
   $select.data('select2').$container.addClass(options['containerClass']) if options['containerClass']
   $select.data('select2').$dropdown.addClass(options['dropdownClass']) if options['dropdownClass']
 
-$(document).on 'turbolinks:before-cache', ->
+$(document).on 'turbolinks:before-cache turbo:before-cache', ->
   $('select.effective_select.initialized').each (i, element) ->
     $input = $(element)
     $input.select2('destroy') if $input.data('select2')
