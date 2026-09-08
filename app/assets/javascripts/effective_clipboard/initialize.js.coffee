@@ -15,4 +15,5 @@ initialize = ->
   $buttons.addClass('initialized')
 
 $ -> initialize()
-$(document).on 'turbolinks:load', -> initialize()
+$(document).on 'turbolinks:load turbo:load', -> initialize()
+$(document).on 'turbolinks:before-cache turbo:before-cache', -> $('.btn-clipboard-copy.initialized').removeClass('initialized')

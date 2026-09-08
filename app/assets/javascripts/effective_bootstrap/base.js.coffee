@@ -17,7 +17,7 @@ this.EffectiveBootstrap ||= new class
       $element.addClass('initialized')
 
 $ -> EffectiveBootstrap.initialize()
-$(document).on 'turbolinks:load', -> EffectiveBootstrap.initialize()
+$(document).on 'turbolinks:load turbo:load', -> EffectiveBootstrap.initialize()
 $(document).on 'cocoon:after-insert', -> EffectiveBootstrap.initialize()
 $(document).on 'effective-bootstrap:initialize', (event) -> EffectiveBootstrap.initialize(event.currentTarget)
 

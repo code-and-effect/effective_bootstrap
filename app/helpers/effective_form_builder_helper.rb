@@ -19,6 +19,7 @@ module EffectiveFormBuilderHelper
     end
 
     options[:html] = (options[:html] || {}).merge(novalidate: true, onsubmit: 'return EffectiveForm.validate(this)')
+    options[:html]['data-turbo'] = false
     options[:local] = true unless options.key?(:local)
 
     if respond_to?(:inline_datatable?) && inline_datatable?
