@@ -1,4 +1,5 @@
 //= require ./effective_bootstrap/base
+//= require ./effective_bootstrap/carousel
 //= require ./effective_bootstrap/confirm
 //= require ./effective_bootstrap/form
 //= require ./effective_bootstrap/load_ajax
