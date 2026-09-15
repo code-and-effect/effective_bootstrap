@@ -4,7 +4,7 @@ $(document).on('show.bs.tab', function (e) {
 });
 
 // Display the tab based on form errors, the document hash, or ?tab= params
-$(document).ready(function() {
+function initializeEffectiveTabs() {
   var href = '';
 
   var $tab_with_error = $(".form-control.is-invalid").first().closest('.tab-pane')
@@ -28,7 +28,10 @@ $(document).ready(function() {
 
     $tab.tab('show')
   }
-});
+}
+
+$(initializeEffectiveTabs);
+$(document).on('turbolinks:load turbo:load', initializeEffectiveTabs);
 
 
 // Click tab button

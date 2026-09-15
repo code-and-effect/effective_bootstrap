@@ -97,3 +97,13 @@ insertUploadByDrop = (response, e) ->
 
   editor = ArticleEditor($element, options)
   editor.app.image.insertByDrop = insertUploadByDrop
+
+$(document).on 'turbolinks:before-cache turbo:before-cache', ->
+  $('textarea.effective_article_editor.initialized').each (i, element) ->
+    $element = $(element)
+    editor = ArticleEditor($element)
+
+    # Preserve unsynced edits, including edits in source mode, before destroying the iframe.
+    $element.val(editor.editor.getContent())
+    editor.destroy()
+    $element.removeClass('initialized')
