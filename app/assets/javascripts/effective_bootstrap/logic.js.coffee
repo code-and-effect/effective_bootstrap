@@ -48,11 +48,12 @@ syncDisabledRadioButtons = ($container) ->
   else
     $container = $element.closest('form,div.effective-datatables-filters')
 
-  $affects = $container.find("input[name='#{options.name}'],select[name='#{options.name}'],input[name='#{options.name}[]']")
+  $affects = $container.find("input[name='#{options.name}'],select[name='#{options.name}'],select[name='#{options.name}[]'],input[name='#{options.name}[]']")
 
   $affects.on 'change dp.change', (event) ->
     $target = $(event.target)
-    matches = ($target.val() == options.value)
+    selected = $target.val()
+    matches = if Array.isArray(selected) then selected.indexOf(options.value) != -1 else selected == options.value
 
     if $target.is("[type='checkbox']")
       if $target.attr('name').indexOf('[]') == -1

@@ -37,7 +37,11 @@ module Effective
         first = object.try(args.first)
         second = args.second
 
-        first == second || first.to_s == second.to_s || Array(first) == Array(second) || Array(first.to_s) == Array(second.to_s)
+        first == second ||
+          first.to_s == second.to_s ||
+          Array(first) == Array(second) ||
+          Array(first.to_s) == Array(second.to_s) ||
+          Array(first).any? { |value| value.to_s == second.to_s }
       end
 
     end
