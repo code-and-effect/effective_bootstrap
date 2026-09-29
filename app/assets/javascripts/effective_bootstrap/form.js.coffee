@@ -56,6 +56,7 @@ this.EffectiveForm ||= new class
     @flash($form, 'danger')
 
   disable: ($form) ->
+    if window.Rails then Rails.disableElement($form[0]) else $.rails?.disableFormElements($form)
     $form.find('[type=submit]').prop('disabled', true)
 
   reset: ($form) ->
@@ -69,6 +70,7 @@ this.EffectiveForm ||= new class
     $form.find('.is-invalid').removeClass('is-invalid')
     $form.find('.is-valid').removeClass('is-valid')
 
+    if window.Rails then Rails.enableElement($form[0]) else $.rails?.enableFormElements($form)
     $form.find('[type=submit]').removeAttr('disabled')
     $form
 

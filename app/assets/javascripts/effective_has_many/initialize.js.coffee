@@ -70,13 +70,15 @@ $(document).on 'click', '[data-effective-form-has-many-insert]', (event) ->
 $(document).on 'click', '[data-effective-form-has-many-remove-disabled]', (event) ->
   event.preventDefault()
 
-$(document).on 'click', '[data-effective-form-has-many-remove]', (event) ->
-  event.preventDefault()
-
+$(document).on 'click confirm:complete', '[data-effective-form-has-many-remove]', (event, answer) ->
   $obj = $(event.currentTarget)
 
-  if (window.Rails && window.Rails.effective_bootstrap_custom_data_confirm) || ($.rails && $.rails.effective_bootstrap_custom_data_confirm)
-    return unless $obj.data('confirmed') if $obj.data('confirm')
+  if event.type == 'click'
+    event.preventDefault()
+    # Let Rails finish confirmation before disabling the row, including this button.
+    return if $obj.data('confirm') && (window.Rails || $.rails)
+  else
+    return unless answer || event.originalEvent?.detail?[0]
 
   $hasMany = $obj.closest('.form-has-many')
   return unless $hasMany.length > 0
