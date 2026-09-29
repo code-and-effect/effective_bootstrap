@@ -110,11 +110,11 @@ module EffectiveBootstrapHelper
     label = (icon('clipboard', class: 'small-1') + ' ' + opts[:label]).html_safe
 
     content_tag(
-      :button, 
-      label, 
-      class: ['btn-clipboard-copy', opts[:class]].compact.join(' '), 
-      type: 'button', 
-      'data-clipboard': text, 
+      :button,
+      label,
+      class: ['btn-clipboard-copy', opts[:class]].compact.join(' '),
+      type: 'button',
+      'data-clipboard': text,
       'data-clipboard-label': label
     )
   end
@@ -175,13 +175,13 @@ module EffectiveBootstrapHelper
     link_class += ' collapsed' unless show
 
     # Figure out all the button / link options
-    link_opts = { 
-      'data-toggle': 'collapse', 
-      role: 'button', 
-      href: "##{id}", 
-      'aria-controls': "##{id}", 
-      'aria-expanded': show, 
-      class: link_class 
+    link_opts = {
+      'data-toggle': 'collapse',
+      role: 'button',
+      href: "##{id}",
+      'aria-controls': "##{id}",
+      'aria-expanded': show,
+      class: link_class
     }.merge(opts)
 
     # Normal collapse
@@ -711,14 +711,14 @@ module EffectiveBootstrapHelper
     @_tab_active = (active || :first)
     @_tab_unique = effective_bootstrap_unique_id if unique
 
-    content_tag(:div, class: 'row border') do
-      content_tag(:div, class: 'col-3 border-right') do
+    content_tag(:div, class: 'row') do
+      content_tag(:div, class: 'col-3') do
         content_tag(:div, {class: 'nav flex-column nav-pills my-2', role: 'tablist', 'aria-orientation': :vertical}.merge(list)) do
           yield # Yield to tab the first time
         end
       end +
       content_tag(:div, class: 'col-9') do
-        content_tag(:div, {class: 'tab-content my-2'}.merge(content)) do
+        content_tag(:div, {class: 'tab-content border'}.merge(content)) do
           @_tab_mode = :content
           @_tab_active = (active || :first)
           yield # Yield to tab the second time
