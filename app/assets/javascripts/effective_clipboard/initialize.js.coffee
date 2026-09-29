@@ -1,4 +1,12 @@
+clipboard = null
+
+destroy = ->
+  clipboard?.destroy()
+  clipboard = null
+  $('.btn-clipboard-copy.initialized').off('click.effective-clipboard').removeClass('initialized')
+
 initialize = ->
+  destroy()
   $buttons = $('.btn-clipboard-copy:not(.initialized)')
   return if $buttons.length == 0
 
@@ -10,10 +18,10 @@ initialize = ->
     $obj = $(event.trigger).text('Copied!').focus().blur()
     setTimeout((-> $obj.html($obj.data('clipboard-label'))), 1500)
 
-  $buttons.on 'click', (event) -> event.preventDefault()
+  $buttons.on 'click.effective-clipboard', (event) -> event.preventDefault()
 
   $buttons.addClass('initialized')
 
 $ -> initialize()
 $(document).on 'turbolinks:load turbo:load', -> initialize()
-$(document).on 'turbolinks:before-cache turbo:before-cache', -> $('.btn-clipboard-copy.initialized').removeClass('initialized')
+$(document).on 'turbolinks:before-cache turbo:before-cache', -> destroy()

@@ -6,7 +6,7 @@ this.EffectiveForm ||= new class
   remote_form_flash: ''               # Array of Arrays
   remote_form_redirect: ''            # String containing the redirect path (optional)
 
-  validate: (form) ->
+  validate: (form, event) ->
     $form = $(form)
     valid = form.checkValidity() && @allChecksValid($form)
 
@@ -14,6 +14,7 @@ this.EffectiveForm ||= new class
     @reset($form) if $form.hasClass('was-validated')
 
     if valid then @submitting($form) else @invalidate($form)
+    event?.stopImmediatePropagation() unless valid # Keep Rails UJS from disabling an invalid form.
     valid
 
   allChecksValid: ($form) ->
