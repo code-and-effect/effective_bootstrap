@@ -3,7 +3,8 @@ clipboard = null
 destroy = ->
   clipboard?.destroy()
   clipboard = null
-  $('.btn-clipboard-copy.initialized').off('click.effective-clipboard').removeClass('initialized')
+  $('.btn-clipboard-copy.initialized').off('click.effective-clipboard').removeClass('initialized').each ->
+    $(@).html($(@).data('clipboard-label'))
 
 initialize = ->
   destroy()
