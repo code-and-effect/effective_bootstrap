@@ -21,7 +21,8 @@ this.EffectiveForm ||= new class
     valid = true
 
     $form.find('.effective-checks-required').each ->
-      valid = false unless $(@).find('input:checked').length > 0
+      $checks = $(@).find('input[type=checkbox]:enabled')
+      valid = false if $checks.length > 0 && $checks.filter(':checked').length == 0
     
     valid
 
@@ -44,7 +45,10 @@ this.EffectiveForm ||= new class
       $(@).addClass(if $(@).find('input:invalid').length > 0 then 'is-invalid' else 'is-valid')
 
     $form.find('.effective-checks-required').each ->
-      if $(@).find('input:checked').length > 0 
+      $checks = $(@).find('input[type=checkbox]:enabled')
+      if $checks.length == 0
+        $(@).removeClass('is-valid is-invalid')
+      else if $checks.filter(':checked').length > 0
         $(@).addClass('is-valid').removeClass('is-invalid') 
       else 
         $(@).addClass('is-invalid').removeClass('is-valid')

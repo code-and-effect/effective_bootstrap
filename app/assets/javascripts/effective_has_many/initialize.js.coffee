@@ -1,3 +1,7 @@
+disableRemovedFields = ($fields) ->
+  # Rails still needs the record ID and destruction flag to delete persisted rows.
+  $fields.find('input,textarea,select,button').not("input[type=hidden][name$='[id]'],input[type=hidden][name$='[_destroy]']").prop('disabled', true)
+
 assignPositions = (target) ->
   $hasMany = $(target)
   return unless $hasMany.length > 0
@@ -16,6 +20,8 @@ assignPositions = (target) ->
   true
 
 (this.EffectiveBootstrap || {}).effective_has_many = ($element, options) ->
+  disableRemovedFields($element.find('.has-many-fields.marked-for-destruction'))
+
   if options.sortable
     # https://github.com/SortableJS/Sortable
     $element.sortable({
@@ -77,6 +83,8 @@ $(document).on 'click', '[data-effective-form-has-many-remove]', (event) ->
 
   $input = $obj.siblings("input[name$='[_destroy]']").first()
   $fields = $obj.closest('.has-many-fields').first()
+
+  disableRemovedFields($fields)
 
   if $input.length > 0
     $input.val('true')
