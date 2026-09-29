@@ -1,5 +1,13 @@
 elementSelector = 'input,textarea,select,button,div.form-has-many'
 
+enableFields = ($element) ->
+  $element.find(elementSelector).not($element.find('.effective-form-logic:hidden').find(elementSelector)).each ->
+    $input = $(this)
+    return if $input.closest('.marked-for-destruction').length > 0 && !$input.is("input[type=hidden][name$='[id]'],input[type=hidden][name$='[_destroy]']")
+    return if $input.is('.effective-file-remove-input') && !$input.closest('.effective-file-attachment--pending-removal').length
+    $input.removeAttr('disabled')
+
+
 # When multiple show_if blocks contain radio buttons with the same name, the browser only keeps the last one checked. 
 # If that radio is in a # hidden/disabled block, the visible block's radio won't be checked.
 # This syncs the checked state from disabled radios to their enabled counterparts.
@@ -34,7 +42,7 @@ syncDisabledRadioButtons = ($container) ->
       $element.find(elementSelector).prop('disabled', true)
     else
       $element.fadeIn()
-      $element.find(elementSelector).not($element.find('.effective-form-logic:hidden').find(elementSelector)).removeAttr('disabled')
+      enableFields($element)
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
 
   # Maybe disable it now
@@ -65,7 +73,7 @@ syncDisabledRadioButtons = ($container) ->
 
     if matches
       $element.fadeIn()
-      $element.find(elementSelector).not($element.find('.effective-form-logic:hidden').find(elementSelector)).removeAttr('disabled')
+      enableFields($element)
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
     else
       $element.hide()
@@ -101,7 +109,7 @@ syncDisabledRadioButtons = ($container) ->
 
     if found
       $element.fadeIn()
-      $element.find(elementSelector).not($element.find('.effective-form-logic:hidden').find(elementSelector)).removeAttr('disabled')
+      enableFields($element)
       $element.find('textarea.effective_article_editor').each (i, editor) -> ArticleEditor('#' + $(editor).attr('id')).enable()
 
     else
