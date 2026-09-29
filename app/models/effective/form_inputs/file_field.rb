@@ -52,7 +52,7 @@ module Effective
           if multiple?
             @builder.hidden_field(name, multiple: true, id: (tag_id + "_#{index}"), value: attachment.signed_id)
           else
-            @builder.hidden_field(name, id: tag_id, value: attachment.signed_id)
+            @builder.hidden_field(name, id: "#{tag_id}_attachment", value: attachment.signed_id)
           end
         end.join.html_safe
       end
